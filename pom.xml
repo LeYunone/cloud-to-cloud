@@ -25,4 +25,14 @@
         <java.version>8</java.version>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.leyunone</groupId>
+                <artifactId>cloud-cloud-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
 </project>

@@ -8,7 +8,6 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <artifactId>cloud-cloud-api</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
     <name>cloud-cloud-api</name>
     <description>云云接入-api</description>
     <properties>

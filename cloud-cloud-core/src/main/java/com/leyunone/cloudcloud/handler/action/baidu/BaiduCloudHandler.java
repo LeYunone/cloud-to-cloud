@@ -43,6 +43,7 @@ public class BaiduCloudHandler extends AbstractCloudCloudHandler {
         return JSONObject.toJSONString(action);
     }
 
+    @Override
     public String getKey() {
         return ThirdPartyCloudEnum.BAIDU.name();
     }

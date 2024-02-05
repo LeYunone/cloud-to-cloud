@@ -14,7 +14,7 @@ import java.util.UUID;
  * @email 365627310@qq.com
  * @date 2024/1/25
  */
-public abstract class AbstractStrategyBaiduHandler <P,R> extends AbstractStrategyProtocolHandler<P,R> {
+public abstract class AbstractStrategyBaiduHandler <R,P> extends AbstractStrategyProtocolHandler<R,P> {
 
     protected AbstractStrategyBaiduHandler(StrategyFactory factory, DeviceRelationManager deviceManager) {
         super(factory, deviceManager);

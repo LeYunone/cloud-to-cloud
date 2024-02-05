@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  * @email 365627310@qq.com
  * @date 2024/1/25
  */
-public abstract class AbstractStrategyProtocolHandler<P, R> extends AbstractStrategyAutoRegisterComponent implements CloudProtocolHandler<R>, InitializingBean {
+public abstract class AbstractStrategyProtocolHandler<R,P> extends AbstractStrategyAutoRegisterComponent implements CloudProtocolHandler<R>, InitializingBean {
 
     protected final DeviceRelationManager deviceRelationManager;
 

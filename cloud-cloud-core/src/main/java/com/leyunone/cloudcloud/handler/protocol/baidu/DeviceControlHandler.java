@@ -1,10 +1,15 @@
 package com.leyunone.cloudcloud.handler.protocol.baidu;
+
 import com.leyunone.cloudcloud.bean.baidu.*;
+import com.leyunone.cloudcloud.bean.dto.DeviceFunctionDTO;
 import com.leyunone.cloudcloud.bean.info.ActionContext;
+import com.leyunone.cloudcloud.bean.info.DeviceInfo;
 import com.leyunone.cloudcloud.enums.BaiduProtocolEnum;
-import com.leyunone.cloudcloud.handler.factory.ConvertHandlerFactory;
+import com.leyunone.cloudcloud.handler.convert.baidu.BaiduActionConvert;
+import com.leyunone.cloudcloud.handler.convert.baidu.BaiduStatusConverter;
 import com.leyunone.cloudcloud.handler.factory.StrategyFactory;
 import com.leyunone.cloudcloud.mangaer.DeviceRelationManager;
+import com.leyunone.cloudcloud.mangaer.DeviceServiceHttpManager;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,17 +24,25 @@ import java.util.List;
  * @date 2024/1/25
  */
 @Service
-public class DeviceControlHandler extends AbstractStrategyBaiduHandler<DeviceControlRequest, DeviceControlResponse> {
-    private final ConvertHandlerFactory converterFactory;
+public class DeviceControlHandler extends AbstractStrategyBaiduHandler<DeviceControlResponse, DeviceControlRequest> {
 
-    protected DeviceControlHandler(ConvertHandlerFactory converterFactory, StrategyFactory factory, DeviceRelationManager deviceManager) {
+    private final BaiduActionConvert baiduActionConvert;
+    private final DeviceServiceHttpManager deviceServiceHttpManager;
+    private final BaiduStatusConverter baiduStatusConverter;
+
+    protected DeviceControlHandler(StrategyFactory factory, DeviceRelationManager deviceManager, BaiduActionConvert baiduActionConvert, DeviceServiceHttpManager deviceServiceHttpManager, BaiduStatusConverter baiduStatusConverter) {
         super(factory, deviceManager);
-        this.converterFactory = converterFactory;
+        this.baiduActionConvert = baiduActionConvert;
+        this.deviceServiceHttpManager = deviceServiceHttpManager;
+        this.baiduStatusConverter = baiduStatusConverter;
     }
+
 
     @Override
     protected DeviceControlResponse action1(DeviceControlRequest request, ActionContext context) {
-        List<BaiduAttributes> baiduAttributes = null;
+        DeviceFunctionDTO convert = baiduActionConvert.convert(request);
+        DeviceInfo deviceInfo = deviceServiceHttpManager.command(context.getAccessTokenInfo().getUser().getUserId(), convert, context.getThirdPartyCloudConfigInfo());
+        List<BaiduAttributes> baiduAttributes = baiduStatusConverter.convert(deviceInfo);
         String name = request.getHeader().getName();
         String action = name.replaceAll("request", "");
         String responseName = action + "Confirmation";

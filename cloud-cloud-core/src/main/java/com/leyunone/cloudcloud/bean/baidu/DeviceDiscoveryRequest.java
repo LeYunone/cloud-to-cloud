@@ -15,4 +15,15 @@ import lombok.Setter;
 public class DeviceDiscoveryRequest {
 
     private BaiduHeader header;
+    
+    private Payload payload;
+    
+    @Getter
+    @Setter
+    public static class Payload{
+
+        private String accessToken;
+
+        private String openUid;
+    }
 }

@@ -13,6 +13,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class DeviceFunctionDTO {
+    
+    private String deviceId;
 
     private String signCode;
 

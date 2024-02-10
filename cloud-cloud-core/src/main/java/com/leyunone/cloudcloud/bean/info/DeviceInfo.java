@@ -31,7 +31,6 @@ public class DeviceInfo {
     
     private boolean online;
     
-    public static class Status{
-        
-    }
+    private String groupName;
+    
 }

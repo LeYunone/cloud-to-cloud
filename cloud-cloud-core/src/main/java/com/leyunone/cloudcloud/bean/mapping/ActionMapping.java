@@ -1,5 +1,6 @@
 package com.leyunone.cloudcloud.bean.mapping;
 
+import com.leyunone.cloudcloud.enums.OperationEnum;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -34,4 +35,6 @@ public class ActionMapping {
      * 示例 {"1":"on","0":"off"} 
      */
     private Map<String, Object> valueMapping;
+    
+    private OperationEnum operation;
 }

@@ -21,6 +21,9 @@ public class DeviceQueryResponse {
 
     @Getter
     @Setter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class Payload{
 
         private List<BaiduAttributes> attributes;

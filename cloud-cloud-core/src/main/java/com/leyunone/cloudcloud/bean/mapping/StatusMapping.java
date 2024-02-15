@@ -1,5 +1,6 @@
 package com.leyunone.cloudcloud.bean.mapping;
 
+import com.leyunone.cloudcloud.bean.enums.ConvertFunctionEnum;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,5 +26,7 @@ public class StatusMapping {
     private String thirdSignCode;
 
     private String legalValue;
+
+    private ConvertFunctionEnum convertFunctionEnum;;
 
 }

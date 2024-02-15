@@ -1,8 +1,7 @@
 package com.leyunone.cloudcloud.bean.info;
 
 import com.leyunone.cloudcloud.bean.dto.DeviceFunctionDTO;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -15,6 +14,9 @@ import java.util.List;
  */
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class DeviceInfo {
 
     private String deviceId;

@@ -13,5 +13,5 @@ public interface StrategyFactory {
 
     void register(String key, StrategyComponent t);
 
-    StrategyComponent getStrategy(String key);
+    <T> T getStrategy(String key, Class<T> tClass);
 }

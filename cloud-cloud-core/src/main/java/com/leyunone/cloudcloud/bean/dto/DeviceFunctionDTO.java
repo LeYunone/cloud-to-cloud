@@ -1,7 +1,6 @@
 package com.leyunone.cloudcloud.bean.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 /**
  * :)
@@ -12,6 +11,9 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class DeviceFunctionDTO {
     
     private String deviceId;

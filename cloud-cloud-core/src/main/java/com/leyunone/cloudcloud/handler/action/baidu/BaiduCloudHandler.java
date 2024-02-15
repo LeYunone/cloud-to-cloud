@@ -38,7 +38,7 @@ public class BaiduCloudHandler extends AbstractCloudCloudHandler {
         BaiduHeader header = baiduStandardRequest.getHeader();
         //根据namespace调用处理器
         String namespace = header.getNamespace();
-        CloudProtocolHandler cloudProtocolHandler = (CloudProtocolHandler) factory.getStrategy(namespace);
+        CloudProtocolHandler cloudProtocolHandler = factory.getStrategy(namespace, CloudProtocolHandler.class);
         Object action = cloudProtocolHandler.action(request, new ActionContext());
         return JSONObject.toJSONString(action);
     }

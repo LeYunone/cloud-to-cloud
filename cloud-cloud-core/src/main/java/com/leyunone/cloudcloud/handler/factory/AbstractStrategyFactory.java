@@ -21,7 +21,7 @@ public abstract class AbstractStrategyFactory implements StrategyFactory {
     }
 
     @Override
-    public StrategyComponent getStrategy(String key) {
-        return strategyStore().get(key);
+    public <T>T getStrategy(String key, Class<T> tClass) {
+        return (T)strategyStore().get(key);
     }
 }

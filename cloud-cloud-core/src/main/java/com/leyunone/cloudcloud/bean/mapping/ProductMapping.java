@@ -1,5 +1,6 @@
 package com.leyunone.cloudcloud.bean.mapping;
 
+import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,4 +22,6 @@ public class ProductMapping {
     private List<StatusMapping> statusMappings;
     
     private List<String> thirdProductIds;
+    
+    private ThirdPartyCloudEnum thirdPartyCloud;
 }

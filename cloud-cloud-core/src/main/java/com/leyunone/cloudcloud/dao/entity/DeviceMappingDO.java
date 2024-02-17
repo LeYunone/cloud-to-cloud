@@ -36,7 +36,7 @@ public class DeviceMappingDO  {
 
     private Long deviceId;
 
-    private Long userId;
+    private String userId;
 
     private String thirdPartyCloud;
 

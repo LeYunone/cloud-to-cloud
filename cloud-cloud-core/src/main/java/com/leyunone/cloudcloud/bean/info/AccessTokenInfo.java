@@ -31,15 +31,15 @@ public class AccessTokenInfo {
     private String tokenType;
 
     private User user;
-    
+
     @Getter
     @Setter
-    public static class User{
+    public static class User {
         private Long tenantId;
 
         private Long appId;
 
-        private Long userId;
+        private String userId;
 
         private String thirdInfo;
 

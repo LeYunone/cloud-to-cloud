@@ -24,10 +24,10 @@ public interface DeviceServiceHttpManager {
      * @param cloudConfig
      * @return 设备列表
      */
-    List<DeviceInfo> getDeviceListByUserId(Long userId, ThirdPartyCloudConfigInfo cloudConfig);
+    List<DeviceInfo> getDeviceListByUserId(String userId, ThirdPartyCloudConfigInfo cloudConfig);
 
 
-    DeviceInfo getDeviceStatusByDeviceId(Long userId, Long deviceId, ThirdPartyCloudConfigInfo cloudConfig);
+    DeviceInfo getDeviceStatusByDeviceId(String userId, Long deviceId, ThirdPartyCloudConfigInfo cloudConfig);
 
     /**
      * 批量获取状态
@@ -36,10 +36,10 @@ public interface DeviceServiceHttpManager {
      * @param cloudConfig
      * @return
      */
-    List<DeviceInfo> getDevicesStatusByDeviceIds(Long userId, List<Long> deviceIds, ThirdPartyCloudConfigInfo cloudConfig);
+    List<DeviceInfo> getDevicesStatusByDeviceIds(String userId, List<Long> deviceIds, ThirdPartyCloudConfigInfo cloudConfig);
 
 
-    DeviceInfo command(Long userId, DeviceFunctionDTO deviceCommand, ThirdPartyCloudConfigInfo cloudConfig);
+    DeviceInfo command(String userId, DeviceFunctionDTO deviceCommand, ThirdPartyCloudConfigInfo cloudConfig);
 
     /**
      * 批量控制
@@ -49,5 +49,5 @@ public interface DeviceServiceHttpManager {
      * @param cloudConfig
      * @return
      */
-    List<DeviceInfo> commands(Long userId, List<DeviceFunctionDTO> deviceCommands, ThirdPartyCloudConfigInfo cloudConfig);
+    List<DeviceInfo> commands(String userId, List<DeviceFunctionDTO> deviceCommands, ThirdPartyCloudConfigInfo cloudConfig);
 }

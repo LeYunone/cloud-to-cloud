@@ -23,7 +23,7 @@ public interface CacheManager {
      * @param value value
      * @return  boolean
      */
-    boolean addDate(String key, String value);
+    boolean addData(String key, String value);
 
 
     /**
@@ -32,7 +32,7 @@ public interface CacheManager {
      * @param value value
      * @return  boolean
      */
-    boolean addDate(String key, Object value,Long time);
+    boolean addData(String key, Object value, Long time);
 
 
     /**
@@ -49,6 +49,6 @@ public interface CacheManager {
                               Function<List<T>,List<T>> getMissData,
                               Function<T,String>  generateKey);
 
-    boolean deleteDate(String key);
+    boolean deleteData(String key);
 
 }

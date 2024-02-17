@@ -16,7 +16,7 @@ public interface DeviceMappingRepository extends IBaseRepository<DeviceMappingDO
 
     List<DeviceMappingDO> selectByDeviceIds(List<Long> deviceIds);
 
-    List<DeviceMappingDO> selectByUserIdAndCloudId(Long userId,String cloud);
+    List<DeviceMappingDO> selectByUserIdAndCloudId(String userId,String cloud);
 
     List<DeviceMappingDO> selectByDeviceId(Long deviceId);
 
@@ -24,6 +24,6 @@ public interface DeviceMappingRepository extends IBaseRepository<DeviceMappingDO
 
     void updateBatchByDeviceIdAndCloudAndUserId(List<DeviceMappingDO> dos);
 
-    void deleteByCloudAndUserId(Long userId,String cloud);
+    void deleteByCloudAndUserId(String userId,String cloud);
 
 }

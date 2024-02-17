@@ -21,7 +21,7 @@ public interface UserAuthorizeRepository extends IBaseRepository<UserAuthorizeDO
      * @param cloud
      * @return
      */
-    UserAuthorizeDO selectByUserIdAndThirdPartyCloud(Long userId, ThirdPartyCloudEnum cloud);
+    UserAuthorizeDO selectByUserIdAndThirdPartyCloud(String userId, ThirdPartyCloudEnum cloud);
 
     /**
      * 根据主键更新

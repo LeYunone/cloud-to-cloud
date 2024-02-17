@@ -188,7 +188,7 @@ public class CustomConvert extends AbstractDataConvertHandler<JSONObject, Custom
                 runPath = tempFile.getPath();
             } catch (Exception e) {
             }
-            cacheManager.addDate(shortString, runPath);
+            cacheManager.addData(shortString, runPath);
         }
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         compiler.run(null, null, null, runPath);

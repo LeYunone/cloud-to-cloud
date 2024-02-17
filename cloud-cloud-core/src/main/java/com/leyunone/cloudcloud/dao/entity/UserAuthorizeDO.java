@@ -31,7 +31,7 @@ public class UserAuthorizeDO {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    private Long userId;
+    private String userId;
 
     private Long tenantId;
 

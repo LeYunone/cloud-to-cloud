@@ -15,4 +15,9 @@ public class ActionContext {
     private AccessTokenInfo accessTokenInfo;
     
     private ThirdPartyCloudConfigInfo thirdPartyCloudConfigInfo;
+
+    public ActionContext(AccessTokenInfo accessTokenInfo, ThirdPartyCloudConfigInfo thirdPartyCloudConfigInfo) {
+        this.accessTokenInfo = accessTokenInfo;
+        this.thirdPartyCloudConfigInfo = thirdPartyCloudConfigInfo;
+    }
 }

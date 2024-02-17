@@ -35,7 +35,7 @@ public class ThirdPartyClientRepositoryImpl extends BaseRepository<ThirdPartyCli
         if (null == outwardClientDO) {
             outwardClientDO = thirdPartyClientMapper.selectById(clientId);
             if (null != outwardClientDO) {
-                cacheManager.addDate(key, outwardClientDO, 300L);
+                cacheManager.addData(key, outwardClientDO, 300L);
             }
         }
         return outwardClientDO;

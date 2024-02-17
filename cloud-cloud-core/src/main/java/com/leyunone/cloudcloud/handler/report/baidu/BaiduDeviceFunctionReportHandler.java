@@ -72,7 +72,7 @@ public class BaiduDeviceFunctionReportHandler extends AbstractStatusCommonReport
         String data = cacheManager.getData(key, String.class);
         cooling = StrUtil.isBlank(data);
         if (cooling) {
-            cacheManager.addDate(key, "1", 3L);
+            cacheManager.addData(key, "1", 3L);
         }
         return cooling;
     }

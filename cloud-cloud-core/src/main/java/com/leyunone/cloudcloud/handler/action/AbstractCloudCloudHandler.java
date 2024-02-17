@@ -1,6 +1,7 @@
 package com.leyunone.cloudcloud.handler.action;
 
 import com.leyunone.cloudcloud.bean.info.AccessTokenInfo;
+import com.leyunone.cloudcloud.handler.factory.CloudCloudHandlerFactory;
 import com.leyunone.cloudcloud.handler.factory.StrategyFactory;
 import com.leyunone.cloudcloud.mangaer.AccessTokenManager;
 import com.leyunone.cloudcloud.strategy.AbstractStrategyAutoRegisterComponent;
@@ -16,7 +17,7 @@ public abstract class AbstractCloudCloudHandler extends AbstractStrategyAutoRegi
 
     private final AccessTokenManager accessTokenManager;
 
-    protected AbstractCloudCloudHandler(StrategyFactory factory,AccessTokenManager accessTokenManager) {
+    protected AbstractCloudCloudHandler(CloudCloudHandlerFactory factory, AccessTokenManager accessTokenManager) {
         super(factory);
         this.accessTokenManager = accessTokenManager;
     }

@@ -37,12 +37,12 @@ public class DeviceMappingRepositoryImpl extends BaseRepository<DeviceMappingMap
     }
 
     @Override
-    public List<DeviceMappingDO> selectByUserIdAndCloudId(Long userId, String cloud) {
+    public List<DeviceMappingDO> selectByUserIdAndCloudId(String userId, String cloud) {
         return deviceMappingMapper.selectList(new LambdaQueryWrapper<DeviceMappingDO>().eq(DeviceMappingDO::getUserId, userId).eq(DeviceMappingDO::getThirdPartyCloud, cloud));
     }
 
     @Override
-    public void deleteByCloudAndUserId(Long userId, String cloud) {
+    public void deleteByCloudAndUserId(String userId, String cloud) {
         deviceMappingMapper.delete(new LambdaQueryWrapper<DeviceMappingDO>().eq(DeviceMappingDO::getUserId, userId).eq(DeviceMappingDO::getThirdPartyCloud, cloud));
     }
 

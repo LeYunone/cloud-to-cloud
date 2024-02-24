@@ -44,7 +44,7 @@ public abstract class AbstractBaiduDataConverterTemplate<R, P> extends AbstractD
                         return null;
                     }
                     String value = s.getValue();
-                    value = valueOf(value, statusMapping);
+                    value = valueOf(value, statusMapping).toString();
                     return BaiduAttributes
                             .builder()
                             .name(statusMapping.getSignCode())

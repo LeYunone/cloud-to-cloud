@@ -1,6 +1,7 @@
 package com.leyunone.cloudcloud.handler.protocol.baidu;
 
 import com.leyunone.cloudcloud.bean.baidu.BaiduHeader;
+import com.leyunone.cloudcloud.handler.factory.CloudProtocolHandlerFactory;
 import com.leyunone.cloudcloud.handler.factory.StrategyFactory;
 import com.leyunone.cloudcloud.handler.protocol.AbstractStrategyProtocolHandler;
 import com.leyunone.cloudcloud.mangaer.DeviceRelationManager;
@@ -16,7 +17,7 @@ import java.util.UUID;
  */
 public abstract class AbstractStrategyBaiduHandler <R,P> extends AbstractStrategyProtocolHandler<R,P> {
 
-    protected AbstractStrategyBaiduHandler(StrategyFactory factory, DeviceRelationManager deviceManager) {
+    protected AbstractStrategyBaiduHandler(CloudProtocolHandlerFactory factory, DeviceRelationManager deviceManager) {
         super(factory, deviceManager);
     }
 

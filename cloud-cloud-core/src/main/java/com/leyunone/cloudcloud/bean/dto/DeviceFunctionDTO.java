@@ -1,5 +1,6 @@
 package com.leyunone.cloudcloud.bean.dto;
 
+import com.leyunone.cloudcloud.enums.OperationEnum;
 import lombok.*;
 
 /**
@@ -20,7 +21,11 @@ public class DeviceFunctionDTO {
 
     private String signCode;
 
+    private Integer functionId;
+
     private String value;
     
     private Long timestamp;
+
+    private OperationEnum operation;
 }

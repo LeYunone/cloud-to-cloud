@@ -24,7 +24,7 @@ public abstract class AbstractDataConvertHandler<R,P> extends AbstractStrategyAu
         super(factory);
     }
 
-    protected String valueOf(String value, StatusMapping mapping){
+    protected Object valueOf(String value, StatusMapping mapping){
         String newValue = value;
         if (mapping.isValueOf()) {
             Map<String, Object> valueMappingsMap = mapping

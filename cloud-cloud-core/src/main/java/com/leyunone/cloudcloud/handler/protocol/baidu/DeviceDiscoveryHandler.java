@@ -11,6 +11,7 @@ import com.leyunone.cloudcloud.bean.info.AccessTokenInfo;
 import com.leyunone.cloudcloud.bean.info.ActionContext;
 import com.leyunone.cloudcloud.bean.info.DeviceInfo;
 import com.leyunone.cloudcloud.handler.convert.baidu.BaiduDeviceConvert;
+import com.leyunone.cloudcloud.handler.factory.CloudProtocolHandlerFactory;
 import com.leyunone.cloudcloud.handler.factory.StrategyFactory;
 import com.leyunone.cloudcloud.mangaer.DeviceRelationManager;
 import com.leyunone.cloudcloud.mangaer.DeviceServiceHttpManager;
@@ -32,7 +33,7 @@ public class DeviceDiscoveryHandler extends AbstractStrategyBaiduHandler<BaiduDi
     private final DeviceServiceHttpManager deviceServiceHttpManager;
     private final BaiduDeviceConvert baiduDeviceConvert;
 
-    protected DeviceDiscoveryHandler(StrategyFactory factory, DeviceRelationManager deviceManager, DeviceServiceHttpManager deviceServiceHttpManager, BaiduDeviceConvert baiduDeviceConvert) {
+    protected DeviceDiscoveryHandler(CloudProtocolHandlerFactory factory, DeviceRelationManager deviceManager, DeviceServiceHttpManager deviceServiceHttpManager, BaiduDeviceConvert baiduDeviceConvert) {
         super(factory, deviceManager);
         this.deviceServiceHttpManager = deviceServiceHttpManager;
         this.baiduDeviceConvert = baiduDeviceConvert;

@@ -7,9 +7,8 @@ import com.leyunone.cloudcloud.dao.entity.ThirdPartyActionDO;
 /**
  * :)
  *
- * @author LeYunone
- * @email 365627310@qq.com
- * @date 2024-02-14
+ * @Author LeYunone
+ * @Date 2024/1/31 9:14
  */
 public interface ThirdPartyActionRepository extends IBaseRepository<ThirdPartyActionDO> {
 }

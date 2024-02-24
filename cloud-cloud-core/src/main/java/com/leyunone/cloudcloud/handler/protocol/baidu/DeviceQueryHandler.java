@@ -13,6 +13,7 @@ import com.leyunone.cloudcloud.dao.CustomMappingRepository;
 import com.leyunone.cloudcloud.dao.entity.CustomMappingDO;
 import com.leyunone.cloudcloud.handler.convert.CustomConvert;
 import com.leyunone.cloudcloud.handler.convert.baidu.BaiduStatusConverter;
+import com.leyunone.cloudcloud.handler.factory.CloudProtocolHandlerFactory;
 import com.leyunone.cloudcloud.handler.factory.StrategyFactory;
 import com.leyunone.cloudcloud.mangaer.DeviceRelationManager;
 import com.leyunone.cloudcloud.mangaer.DeviceServiceHttpManager;
@@ -35,7 +36,7 @@ public class DeviceQueryHandler extends AbstractStrategyBaiduHandler<JSONObject,
     private final CustomConvert customConvert;
     private final BaiduStatusConverter baiduStatusConverter;
     
-    protected DeviceQueryHandler(StrategyFactory factory, DeviceRelationManager deviceManager, CustomMappingRepository customMappingRepository, DeviceServiceHttpManager deviceServiceHttpManager, CustomConvert customConvert, BaiduStatusConverter baiduStatusConverter) {
+    protected DeviceQueryHandler(CloudProtocolHandlerFactory factory, DeviceRelationManager deviceManager, CustomMappingRepository customMappingRepository, DeviceServiceHttpManager deviceServiceHttpManager, CustomConvert customConvert, BaiduStatusConverter baiduStatusConverter) {
         super(factory, deviceManager);
         this.customMappingRepository = customMappingRepository;
         this.deviceServiceHttpManager = deviceServiceHttpManager;

@@ -17,19 +17,24 @@ public enum ThirdPartyCloudEnum {
     /**
      * https://developers.xiaoai.mi.com/documents/Home?type=/api/doc/render_markdown/SkillAccess/skill/CustomSkillsMain
      */
-    XIAOAI,
+    XIAOMI,
     /**
-     * https://developer.huawei.com/consumer/cn/service/bot/web/#/index/help/helpIntro
+     * https://developer.huawei.com/consumer/cn/doc/smarthome-Guides/yunaccount-0000001075288087
      */
-    XIAOYI,
+    HUAWEI,
 
     /**
      * https://www.aligenie.com/doc/357554/cmhq2c
      */
     TMALL,
+    /**
+     * https://developer.amazon.com/en-US/docs/alexa/device-apis/alexa-discovery.html
+     */
+    ALEXA,
 
-    AMAZON,
-
+    /**
+     * https://developers.home.google.com/cloud-to-cloud/integration/sync?hl=zh-cn
+     */
     GOOGLE,
     ;
 }

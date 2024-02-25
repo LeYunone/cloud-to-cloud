@@ -2,7 +2,7 @@ package com.leyunone.cloudcloud.constant;
 
 /**
  *
- * @author Huang Qiang
+ * @author LeYunOne
  * @date 2023-12-06 19:09:11
 **/
 public class BaiduActionConstants {

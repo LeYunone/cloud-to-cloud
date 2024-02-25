@@ -33,7 +33,9 @@ public class BaiduCloudHandler extends AbstractCloudCloudHandler {
 
     @Override
     protected String getAccessToken(String request) {
-        return null;
+        //获取token
+        BaiduStandardRequest baiduStandardRequest = JSONObject.parseObject(request, BaiduStandardRequest.class);
+        return baiduStandardRequest.getPayload().getAccessToken();
     }
 
     @Override

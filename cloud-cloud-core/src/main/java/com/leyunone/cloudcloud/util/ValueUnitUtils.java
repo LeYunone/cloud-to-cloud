@@ -5,7 +5,7 @@ import com.leyunone.cloudcloud.bean.Celsius;
 
 public class ValueUnitUtils {
 
-    public static String celsiusUnit(String value) {
-        return JSONObject.toJSONString(new Celsius(Float.parseFloat(value)));
+    public static Object celsiusUnit(String value) {
+        return new Celsius(Float.parseFloat(value));
     }
 }

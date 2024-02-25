@@ -29,8 +29,8 @@ import java.util.stream.Collectors;
 @Service
 public class AlexaActionConverter extends AbstractAlexaDataConverterTemplate<List<DeviceFunctionDTO>, AlexaControlRequest> {
 
-    public AlexaActionConverter(ConvertHandlerFactory strategyFactory, ProductMappingService productMappingService) {
-        super(strategyFactory, productMappingService);
+    public AlexaActionConverter(ProductMappingService productMappingService) {
+        super(productMappingService);
     }
 
     /**

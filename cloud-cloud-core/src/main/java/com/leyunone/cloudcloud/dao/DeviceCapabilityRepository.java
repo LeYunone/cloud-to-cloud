@@ -15,5 +15,5 @@ import java.util.List;
  */
 public interface DeviceCapabilityRepository extends IBaseRepository<DeviceCapabilityDO> {
 
-    List<DeviceCapabilityDO> selectByPids(List<String> pids, ThirdPartyCloudEnum cloud);
+    List<DeviceCapabilityDO> selectByCloud(ThirdPartyCloudEnum cloud);
 }

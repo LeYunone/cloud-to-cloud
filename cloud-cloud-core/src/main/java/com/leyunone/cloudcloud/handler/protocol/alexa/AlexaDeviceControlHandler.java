@@ -5,8 +5,10 @@ import com.leyunone.cloudcloud.bean.alexa.AlexaControlRequest;
 import com.leyunone.cloudcloud.bean.alexa.AlexaControlResponse;
 import com.leyunone.cloudcloud.bean.alexa.AlexaDeviceProperty;
 import com.leyunone.cloudcloud.bean.dto.DeviceFunctionDTO;
+import com.leyunone.cloudcloud.bean.enums.ActionTypeEnum;
 import com.leyunone.cloudcloud.bean.info.ActionContext;
 import com.leyunone.cloudcloud.bean.info.DeviceInfo;
+import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.handler.convert.alexa.AlexaActionConverter;
 import com.leyunone.cloudcloud.handler.convert.alexa.AlexaStatusConverter;
 import com.leyunone.cloudcloud.handler.factory.CloudProtocolHandlerFactory;
@@ -26,7 +28,7 @@ import java.util.List;
  */
 @DependsOn("thirdPartyLoadConfigServiceImpl")
 @Service
-public class AlexaDeviceControlHandler extends AbstractStrategyAlexaHandler<AlexaControlResponse,AlexaControlRequest > {
+public class AlexaDeviceControlHandler extends AbstractStrategyAlexaHandler<AlexaControlResponse, AlexaControlRequest> {
 
     private final ThirdPartyLoadConfigService thirdPartyLoadConfigService;
     private final AlexaActionConverter alexaActionConverter;
@@ -57,17 +59,17 @@ public class AlexaDeviceControlHandler extends AbstractStrategyAlexaHandler<Alex
         //单控
         List<AlexaDeviceProperty> properties = alexaStatusConverter.convert(CollectionUtil.getFirst(commands));
         return new AlexaControlResponse(AlexaControlResponse.Event.builder()
-                                            .endpoint(alexaControlRequest.getDirective().getEndpoint())
-                                            .header(super.buildHeader(alexaControlRequest.getDirective().getHeader()))
-                                            .payload(AlexaControlResponse.Payload.builder().build())
-                                            .build(),
-                                        AlexaControlResponse.Context.builder()
-                                            .properties(properties).build());
+                .endpoint(alexaControlRequest.getDirective().getEndpoint())
+                .header(super.buildHeader(alexaControlRequest.getDirective().getHeader()))
+                .payload(AlexaControlResponse.Payload.builder().build())
+                .build(),
+                AlexaControlResponse.Context.builder()
+                        .properties(properties).build());
     }
 
     @Override
-    protected String getKey() {
-        return null;
+    public List<String> getKeys() {
+        return thirdPartyLoadConfigService.getKeys(ThirdPartyCloudEnum.ALEXA, ActionTypeEnum.CONTROL);
     }
 
 }

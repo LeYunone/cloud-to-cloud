@@ -30,33 +30,29 @@ public class DeviceCapabilityDO  {
     private Integer id;
 
     /**
-     * 产品id
+     * 能力语义
      */
-    private String productId;
-
-    /**
-     * 能力
-     */
-    private String capability;
+    private String capabilitySemantics;
 
     /**
      * 资源配置
+     * https://developer.amazon.com/en-US/docs/alexa/device-apis/resources-and-assets.html#capability-resources
      */
     private String capabilityConfiguration;
 
     /**
-     * 语音平台  
+     * 语音平台
      */
     private String thirdPartyCloud;
-
-    /**
-     * 赋予能力接口欧
-     */
-    private String thirdActionCode;
 
     /**
      * 实例名
      */
     private String instanceName;
+
+    /**
+     * 值语义
+     */
+    private String valueSemantics;
 
 }

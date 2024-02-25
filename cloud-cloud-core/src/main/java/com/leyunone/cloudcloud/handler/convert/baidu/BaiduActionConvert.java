@@ -27,8 +27,8 @@ import java.util.stream.Collectors;
 @Service
 public class BaiduActionConvert extends AbstractBaiduDataConverterTemplate<DeviceFunctionDTO, DeviceControlRequest> {
 
-    protected BaiduActionConvert(ConvertHandlerFactory factory, ProductMappingService productMappingService) {
-        super(factory, productMappingService);
+    protected BaiduActionConvert( ProductMappingService productMappingService) {
+        super(productMappingService);
     }
 
     @Override

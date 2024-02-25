@@ -1,10 +1,12 @@
 package com.leyunone.cloudcloud.strategy;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.leyunone.cloudcloud.annotate.Strategist;
 import com.leyunone.cloudcloud.handler.factory.StrategyFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.annotation.AnnotationUtils;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -31,9 +33,13 @@ public abstract class AbstractStrategyAutoRegisterComponent implements Initializ
         return annotation.strategy();
     }
 
+    protected List<String> getKeys() {
+        return CollectionUtil.newArrayList(getKey());
+    }
+
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        factory.register(getKey(), this);
+        getKeys().forEach(key -> factory.register(getKey(), this));
     }
 }

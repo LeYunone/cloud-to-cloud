@@ -53,8 +53,8 @@ public class CustomConvert extends AbstractDataConvertHandler<JSONObject, Custom
 
     private final Logger logger = LoggerFactory.getLogger(CustomConvert.class);
 
-    protected CustomConvert(ConvertHandlerFactory factory, ProductMappingService productMappingService) {
-        super(factory, productMappingService);
+    protected CustomConvert( ProductMappingService productMappingService) {
+        super(productMappingService);
     }
 
     /**

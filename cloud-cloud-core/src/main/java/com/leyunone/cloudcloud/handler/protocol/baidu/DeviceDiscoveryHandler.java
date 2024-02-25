@@ -10,6 +10,7 @@ import com.leyunone.cloudcloud.bean.baidu.DeviceDiscoveryRequest;
 import com.leyunone.cloudcloud.bean.info.AccessTokenInfo;
 import com.leyunone.cloudcloud.bean.info.ActionContext;
 import com.leyunone.cloudcloud.bean.info.DeviceInfo;
+import com.leyunone.cloudcloud.constant.BaiduActionConstants;
 import com.leyunone.cloudcloud.handler.convert.baidu.BaiduDeviceConvert;
 import com.leyunone.cloudcloud.handler.factory.CloudProtocolHandlerFactory;
 import com.leyunone.cloudcloud.handler.factory.StrategyFactory;
@@ -63,5 +64,10 @@ public class DeviceDiscoveryHandler extends AbstractStrategyBaiduHandler<BaiduDi
                         .discoveredAppliances(convert)
                         .discoveredGroups(groups).build())
                 .build();
+    }
+
+    @Override
+    protected String getKey() {
+        return BaiduActionConstants.NAMESPACE_DISCOVERY;
     }
 }

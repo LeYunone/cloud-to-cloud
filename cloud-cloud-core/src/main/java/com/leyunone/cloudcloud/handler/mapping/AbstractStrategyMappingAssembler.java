@@ -57,10 +57,6 @@ public abstract class AbstractStrategyMappingAssembler<R extends ProductMapping>
                         map = jsonObject.getInnerMap();
                     }
                     statusMapping.setValueMapping(map);
-                    try {
-                        statusMapping.setConvertFunctionEnum(ConvertFunctionEnum.valueOf(fm.getConvertFunction()));
-                    } catch (Exception ignored) {
-                    }
                     return statusMapping;
                 })
                 .collect(Collectors.toList());

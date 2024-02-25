@@ -6,6 +6,7 @@ import com.leyunone.cloudcloud.bean.alexa.AlexaStateReportRequest;
 import com.leyunone.cloudcloud.bean.alexa.AlexaStateReportResponse;
 import com.leyunone.cloudcloud.bean.info.ActionContext;
 import com.leyunone.cloudcloud.bean.info.DeviceInfo;
+import com.leyunone.cloudcloud.constant.AlexaActionConstants;
 import com.leyunone.cloudcloud.handler.convert.alexa.AlexaStatusConverter;
 import com.leyunone.cloudcloud.handler.factory.CloudProtocolHandlerFactory;
 import com.leyunone.cloudcloud.mangaer.DeviceRelationManager;
@@ -21,7 +22,7 @@ import java.util.List;
  * @Date 2024/2/19 9:22
  */
 @Service
-public class AlexaStateReportHandler extends AbstractStrategyAlexaHandler<AlexaStateReportResponse,AlexaStateReportRequest > {
+public class AlexaStateReportHandler extends AbstractStrategyAlexaHandler<AlexaStateReportResponse, AlexaStateReportRequest> {
 
     private final AlexaStatusConverter alexaStatusConverter;
     private final DeviceServiceHttpManager deviceServiceHttpManager;
@@ -46,5 +47,10 @@ public class AlexaStateReportHandler extends AbstractStrategyAlexaHandler<AlexaS
                 , AlexaStateReportResponse.Context.builder()
                 .properties(properties)
                 .build());
+    }
+
+    @Override
+    public String getKey() {
+        return AlexaActionConstants.NAMESPACE_STATE_REPORT;
     }
 }

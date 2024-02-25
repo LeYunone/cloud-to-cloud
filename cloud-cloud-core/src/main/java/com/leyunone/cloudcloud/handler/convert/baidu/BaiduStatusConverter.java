@@ -28,8 +28,8 @@ public class BaiduStatusConverter extends AbstractBaiduDataConverterTemplate<Lis
 
     private final Logger logger = LoggerFactory.getLogger(BaiduStatusConverter.class);
 
-    protected BaiduStatusConverter(ConvertHandlerFactory factory, ProductMappingService productMappingService) {
-        super(factory, productMappingService);
+    protected BaiduStatusConverter( ProductMappingService productMappingService) {
+        super( productMappingService);
     }
 
     /**

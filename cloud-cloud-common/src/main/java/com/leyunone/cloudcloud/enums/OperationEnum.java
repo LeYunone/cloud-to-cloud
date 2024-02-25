@@ -9,5 +9,15 @@ package com.leyunone.cloudcloud.enums;
  */
 public enum OperationEnum {
 
+
+    /**
+     * +
+     */
+    SUM,
+
+    /**
+     *
+     */
+    DECREASE
     ;
 }

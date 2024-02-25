@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.leyunone.cloudcloud.bean.enums.ConvertFunctionEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -77,11 +78,12 @@ public class FunctionMappingDO {
      */
     private String legalValue;
     
-    private String convertFunction;
+    private ConvertFunctionEnum convertFunction;
     
     private LocalDateTime updateTime;
     
     private LocalDateTime createTime;
 
+    private Integer capabilityConfigId;
 
 }

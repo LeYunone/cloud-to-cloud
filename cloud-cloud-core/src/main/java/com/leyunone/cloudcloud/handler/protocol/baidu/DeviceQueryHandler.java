@@ -9,6 +9,7 @@ import com.leyunone.cloudcloud.bean.baidu.DeviceQueryRequest;
 import com.leyunone.cloudcloud.bean.baidu.DeviceQueryResponse;
 import com.leyunone.cloudcloud.bean.info.ActionContext;
 import com.leyunone.cloudcloud.bean.info.DeviceInfo;
+import com.leyunone.cloudcloud.constant.BaiduActionConstants;
 import com.leyunone.cloudcloud.dao.CustomMappingRepository;
 import com.leyunone.cloudcloud.dao.entity.CustomMappingDO;
 import com.leyunone.cloudcloud.handler.convert.CustomConvert;
@@ -71,5 +72,10 @@ public class DeviceQueryHandler extends AbstractStrategyBaiduHandler<JSONObject,
             result = JSONObject.parseObject(JSONObject.toJSONString(deviceQueryResponse));
         }
         return result;
+    }
+
+    @Override
+    protected String getKey() {
+        return BaiduActionConstants.NAMESPACE_QUERY;
     }
 }

@@ -1,8 +1,13 @@
 package com.leyunone.cloudcloud.bean.mapping;
 
 import com.leyunone.cloudcloud.bean.enums.ConvertFunctionEnum;
+import com.leyunone.cloudcloud.dao.entity.FunctionMappingDO;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.ibatis.annotations.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
+import org.mapstruct.factory.Mappers;
 
 import java.util.Map;
 
@@ -22,6 +27,8 @@ public class StatusMapping {
     private Map<String,Object> valueMapping;
     
     private String signCode;
+
+    private Integer functionId;
     
     private String thirdSignCode;
 
@@ -29,4 +36,16 @@ public class StatusMapping {
 
     private ConvertFunctionEnum convertFunctionEnum;;
 
+
+    @Mapper
+    public interface Converter {
+
+        Converter INSTANCE  = Mappers.getMapper(Converter.class);
+
+        @Mappings({
+                @Mapping(target = "valueMapping",ignore = true)
+        })
+        StatusMapping convert(FunctionMappingDO functionMappingDO);
+
+    }
 }

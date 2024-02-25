@@ -2,6 +2,7 @@ package com.leyunone.cloudcloud.mangaer;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 public interface CacheManager {
@@ -33,6 +34,9 @@ public interface CacheManager {
      * @return  boolean
      */
     boolean addData(String key, Object value, Long time);
+
+    boolean addData(String key, Object value, Long time, TimeUnit unit);
+
 
 
     /**

@@ -28,8 +28,8 @@ import java.util.stream.Collectors;
 @Service
 public class AlexaDeviceInfoConverter extends AbstractAlexaDataConverterTemplate<List<AlexaDevice>, List<DeviceInfo>> {
 
-    public AlexaDeviceInfoConverter(ConvertHandlerFactory strategyFactory, ProductMappingService productMappingService) {
-        super(strategyFactory, productMappingService);
+    public AlexaDeviceInfoConverter( ProductMappingService productMappingService) {
+        super( productMappingService);
     }
 
 

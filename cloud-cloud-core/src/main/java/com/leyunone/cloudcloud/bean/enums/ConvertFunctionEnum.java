@@ -16,14 +16,14 @@ public enum ConvertFunctionEnum {
     //颜色
     RGB_TO_HEX {
         @Override
-        public String convert(String value) {
+        public Object convert(String value) {
             RGBColor rgbColor = JSONObject.parseObject(value, RGBColor.class);
             return FunctionMethodUtils.rgbToHsb(rgbColor.getR(), rgbColor.getG(), rgbColor.getB());
         }
     },
     HEX_TO_RGB {
         @Override
-        public String convert(String value) {
+        public Object convert(String value) {
             JSONObject jsonObject = JSONObject.parseObject(value);
             return FunctionMethodUtils.hsbToRgb(jsonObject.getFloat("hue"), jsonObject.getFloat("saturation"), jsonObject.getFloat("brightness"));
         }
@@ -31,7 +31,7 @@ public enum ConvertFunctionEnum {
     //线性映射
     LINEAR_1000_TO_10000 {
         @Override
-        public String convert(String value) {
+        public Object convert(String value) {
             return FunctionMethodUtils.linearMapping1000To10000(value);
         }
     },
@@ -40,11 +40,11 @@ public enum ConvertFunctionEnum {
     //单位赋予
     CELSIUS_UNIT {
         @Override
-        public String convert(String value) {
+        public Object convert(String value) {
             return ValueUnitUtils.celsiusUnit(value);
         }
     };
 
 
-    public abstract String convert(String value);
+    public abstract Object convert(String value);
 }

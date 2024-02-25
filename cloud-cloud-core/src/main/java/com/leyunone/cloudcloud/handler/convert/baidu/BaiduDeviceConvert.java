@@ -28,8 +28,8 @@ import java.util.stream.Collectors;
 @Service
 public class BaiduDeviceConvert extends AbstractBaiduDataConverterTemplate<List<BaiduDevice>, List<DeviceInfo>> {
 
-    protected BaiduDeviceConvert(ConvertHandlerFactory factory, ProductMappingService productMappingService) {
-        super(factory, productMappingService);
+    protected BaiduDeviceConvert( ProductMappingService productMappingService) {
+        super( productMappingService);
     }
 
     @Override

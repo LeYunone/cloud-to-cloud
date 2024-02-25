@@ -3,18 +3,23 @@ package com.leyunone.cloudcloud.handler.action.alexa;
 import cn.hutool.core.bean.BeanUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.leyunone.cloudcloud.annotate.Strategist;
 import com.leyunone.cloudcloud.bean.alexa.*;
 import com.leyunone.cloudcloud.bean.info.AccessTokenInfo;
 import com.leyunone.cloudcloud.bean.info.ActionContext;
 import com.leyunone.cloudcloud.bean.info.ThirdPartyCloudConfigInfo;
+import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.handler.action.AbstractCloudCloudHandler;
 import com.leyunone.cloudcloud.handler.factory.CloudCloudHandlerFactory;
 import com.leyunone.cloudcloud.handler.protocol.CloudProtocolHandler;
 import com.leyunone.cloudcloud.mangaer.AccessTokenManager;
 import com.leyunone.cloudcloud.service.ThirdPartyConfigService;
+import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.stereotype.Service;
 import org.springframework.validation.ValidationUtils;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -24,6 +29,7 @@ import java.util.stream.Collectors;
  * @email 365627310@qq.com
  * @date 2024/2/25
  */
+@Service
 public class AlexaCloudHandler extends AbstractCloudCloudHandler {
 
     private final ThirdPartyConfigService thirdPartyConfigService;
@@ -31,6 +37,13 @@ public class AlexaCloudHandler extends AbstractCloudCloudHandler {
     protected AlexaCloudHandler(CloudCloudHandlerFactory factory, AccessTokenManager accessTokenManager, ThirdPartyConfigService thirdPartyConfigService) {
         super(factory, accessTokenManager);
         this.thirdPartyConfigService = thirdPartyConfigService;
+    }
+
+    /**
+     * @return 策略key
+     */
+    protected String getKey() {
+        return ThirdPartyCloudEnum.ALEXA.name();
     }
 
     @Override

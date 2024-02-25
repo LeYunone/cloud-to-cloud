@@ -23,9 +23,8 @@ import java.util.stream.Collectors;
  */
 public abstract class AbstractBaiduDataConverterTemplate<R, P> extends AbstractDataConvertHandler<R, P> {
 
-
-    protected AbstractBaiduDataConverterTemplate(ConvertHandlerFactory factory, ProductMappingService productMappingService) {
-        super(factory, productMappingService);
+    protected AbstractBaiduDataConverterTemplate(ProductMappingService productMappingService) {
+        super(productMappingService);
     }
 
     protected List<BaiduAttributes> convert(List<StatusMapping> statusMappings, List<DeviceFunctionDTO> status) {

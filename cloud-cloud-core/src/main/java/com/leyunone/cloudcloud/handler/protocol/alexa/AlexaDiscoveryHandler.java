@@ -6,6 +6,7 @@ import com.leyunone.cloudcloud.bean.alexa.AlexaDiscoveryResponse;
 import com.leyunone.cloudcloud.bean.alexa.AlexaHeader;
 import com.leyunone.cloudcloud.bean.info.ActionContext;
 import com.leyunone.cloudcloud.bean.info.DeviceInfo;
+import com.leyunone.cloudcloud.constant.AlexaActionConstants;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.handler.convert.alexa.AlexaDeviceInfoConverter;
 import com.leyunone.cloudcloud.handler.factory.CloudProtocolHandlerFactory;
@@ -23,7 +24,7 @@ import java.util.List;
  * @Date 2024/1/31 10:53
  */
 @Service
-public class AlexaDiscoveryHandler extends AbstractStrategyAlexaHandler<AlexaDiscoveryResponse,AlexaDiscoveryRequest > {
+public class AlexaDiscoveryHandler extends AbstractStrategyAlexaHandler<AlexaDiscoveryResponse, AlexaDiscoveryRequest> {
 
     private final AlexaDeviceInfoConverter alexaDeviceInfoConverter;
     private final DeviceServiceHttpManager deviceServiceHttpManager;
@@ -59,5 +60,10 @@ public class AlexaDiscoveryHandler extends AbstractStrategyAlexaHandler<AlexaDis
                 .name("Discover.Response")
                 .namespace(header.getNamespace())
                 .build();
+    }
+
+    @Override
+    public String getKey() {
+        return AlexaActionConstants.NAMESPACE_DISCOVERY;
     }
 }

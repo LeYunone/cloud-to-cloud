@@ -95,11 +95,6 @@ public class BaiduMappingAssembler extends AbstractStrategyMappingAssembler<Baid
                     ActionMapping actionMapping = new ActionMapping();
                     BeanUtil.copyProperties(am, actionMapping);
                     String valueMapping = am.getValueMapping();
-                    String operation = am.getOperation();
-                    if (!StringUtils.isEmpty(operation)) {
-                        OperationEnum functionOperation = OperationEnum.valueOf(operation);
-                        actionMapping.setOperation(functionOperation);
-                    }
                     if (!StringUtils.isEmpty(valueMapping)) {
                         JSONObject jsonObject = JSON.parseObject(valueMapping);
                         actionMapping.setValueMapping(jsonObject.getInnerMap());

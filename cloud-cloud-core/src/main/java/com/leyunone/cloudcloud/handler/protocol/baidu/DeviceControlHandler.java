@@ -4,11 +4,10 @@ import com.leyunone.cloudcloud.bean.baidu.*;
 import com.leyunone.cloudcloud.bean.dto.DeviceFunctionDTO;
 import com.leyunone.cloudcloud.bean.info.ActionContext;
 import com.leyunone.cloudcloud.bean.info.DeviceInfo;
-import com.leyunone.cloudcloud.enums.BaiduProtocolEnum;
+import com.leyunone.cloudcloud.constant.BaiduActionConstants;
 import com.leyunone.cloudcloud.handler.convert.baidu.BaiduActionConvert;
 import com.leyunone.cloudcloud.handler.convert.baidu.BaiduStatusConverter;
 import com.leyunone.cloudcloud.handler.factory.CloudProtocolHandlerFactory;
-import com.leyunone.cloudcloud.handler.factory.StrategyFactory;
 import com.leyunone.cloudcloud.mangaer.DeviceRelationManager;
 import com.leyunone.cloudcloud.mangaer.DeviceServiceHttpManager;
 import org.springframework.stereotype.Service;
@@ -54,7 +53,7 @@ public class DeviceControlHandler extends AbstractStrategyBaiduHandler<DeviceCon
 
     @Override
     protected String getKey() {
-        return BaiduProtocolEnum.NAMESPACE_CONTROL.getName();
+        return BaiduActionConstants.NAMESPACE_CONTROL;
     }
 
 }

@@ -3,7 +3,6 @@ package com.leyunone.cloudcloud.handler.convert.alexa;
 import com.leyunone.cloudcloud.bean.mapping.AlexaProductMapping;
 import com.leyunone.cloudcloud.bean.mapping.ProductMapping;
 import com.leyunone.cloudcloud.handler.convert.AbstractDataConvertHandler;
-import com.leyunone.cloudcloud.handler.factory.ConvertHandlerFactory;
 import com.leyunone.cloudcloud.service.mapping.ProductMappingService;
 
 import java.util.List;
@@ -18,8 +17,8 @@ import java.util.stream.Collectors;
  */
 public abstract class AbstractAlexaDataConverterTemplate<R, P> extends AbstractDataConvertHandler<R, P> {
 
-    public AbstractAlexaDataConverterTemplate(ConvertHandlerFactory strategyFactory, ProductMappingService productMappingManager) {
-        super(strategyFactory, productMappingManager);
+    public AbstractAlexaDataConverterTemplate(ProductMappingService productMappingManager) {
+        super( productMappingManager);
     }
 
     protected Map<String, AlexaProductMapping> convertToMapByProductId(List<ProductMapping> productMappings) {

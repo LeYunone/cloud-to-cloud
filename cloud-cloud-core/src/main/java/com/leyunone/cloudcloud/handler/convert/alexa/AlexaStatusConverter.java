@@ -31,8 +31,8 @@ import java.util.stream.Collectors;
 @Service
 public class AlexaStatusConverter extends AbstractAlexaDataConverterTemplate<List<AlexaDeviceProperty>, DeviceInfo> {
 
-    public AlexaStatusConverter(ConvertHandlerFactory strategyFactory, ProductMappingService productMappingService) {
-        super(strategyFactory, productMappingService);
+    public AlexaStatusConverter( ProductMappingService productMappingService) {
+        super( productMappingService);
     }
 
     @Override

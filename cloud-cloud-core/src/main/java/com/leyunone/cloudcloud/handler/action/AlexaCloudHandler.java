@@ -1,4 +1,4 @@
-package com.leyunone.cloudcloud.handler.action.alexa;
+package com.leyunone.cloudcloud.handler.action;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.alibaba.fastjson.JSONArray;

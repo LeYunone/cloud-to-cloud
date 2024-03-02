@@ -1,4 +1,4 @@
-package com.leyunone.cloudcloud.handler.action.tmall;
+package com.leyunone.cloudcloud.handler.action;
 
 import com.alibaba.fastjson.JSONObject;
 import com.leyunone.cloudcloud.bean.info.AccessTokenInfo;

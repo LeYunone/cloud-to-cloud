@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.leyunone.cloudcloud.bean.enums.ConvertFunctionEnum;
 import com.leyunone.cloudcloud.enums.OperationEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -48,5 +49,7 @@ public class ActionMappingDO{
     private OperationEnum operation;
     
     private String thirdActionCode;
+
+    private ConvertFunctionEnum convertFunction;
 
 }

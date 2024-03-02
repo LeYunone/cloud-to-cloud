@@ -84,6 +84,6 @@ public class FunctionMappingDO {
     
     private LocalDateTime createTime;
 
-    private Integer capabilityConfigId;
+    private String capabilityConfigId;
 
 }

@@ -6,9 +6,11 @@ import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.leyunone.cloudcloud.bean.enums.ConvertFunctionEnum;
+import com.leyunone.cloudcloud.bean.mapping.ActionMapping;
 import com.leyunone.cloudcloud.bean.mapping.ProductMapping;
 import com.leyunone.cloudcloud.bean.mapping.StatusMapping;
 import com.leyunone.cloudcloud.dao.FunctionMappingRepository;
+import com.leyunone.cloudcloud.dao.entity.ActionMappingDO;
 import com.leyunone.cloudcloud.dao.entity.FunctionMappingDO;
 import com.leyunone.cloudcloud.handler.factory.MappingAssemblerFactory;
 import com.leyunone.cloudcloud.handler.factory.StrategyFactory;
@@ -100,6 +102,26 @@ public abstract class AbstractStrategyMappingAssembler<R extends ProductMapping>
                 (data) -> generateProductMappingKey(data.getProductId(), getKey()));
 
         return rs.orElse(new ArrayList<>());
+    }
+
+    protected List<ActionMapping> convertActionMapping(List<ActionMappingDO> actionMappingDos) {
+        if (CollectionUtils.isEmpty(actionMappingDos)) {
+            return new ArrayList<>();
+        }
+        return actionMappingDos
+                .stream()
+                .map(am -> {
+                    ActionMapping actionMapping = ActionMapping.Converter.INSTANCE.convert(am);
+                    String valueMapping = am.getValueMapping();
+                    if (!org.springframework.util.StringUtils.isEmpty(valueMapping)) {
+                        JSONObject jsonObject = JSON.parseObject(valueMapping);
+                        actionMapping.setValueMapping(jsonObject.getInnerMap());
+                    } else {
+                        actionMapping.setValueMapping(new HashMap<>());
+                    }
+                    return actionMapping;
+                })
+                .collect(Collectors.toList());
     }
 
     protected abstract List<R> dataGet(List<String> pids);

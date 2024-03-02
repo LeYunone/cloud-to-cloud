@@ -1,4 +1,4 @@
-package com.leyunone.cloudcloud.handler.action.baidu;
+package com.leyunone.cloudcloud.handler.action;
 
 import com.alibaba.fastjson.JSONObject;
 import com.leyunone.cloudcloud.bean.baidu.BaiduHeader;

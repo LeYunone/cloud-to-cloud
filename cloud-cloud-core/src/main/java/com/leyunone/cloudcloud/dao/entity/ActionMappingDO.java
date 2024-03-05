@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.leyunone.cloudcloud.bean.enums.ConvertFunctionEnum;
 import com.leyunone.cloudcloud.enums.OperationEnum;
+import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -44,7 +45,7 @@ public class ActionMappingDO{
 
     private String valueMapping;
 
-    private String thirdPartyCloud;
+    private ThirdPartyCloudEnum thirdPartyCloud;
 
     private OperationEnum operation;
     

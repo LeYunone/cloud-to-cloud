@@ -1,9 +1,6 @@
 package com.leyunone.cloudcloud.bean.alexa;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.List;
 import java.util.Map;
@@ -47,9 +44,21 @@ public class AlexaDevice {
     /**
      * json字符串
      */
-    private String cookie;
+    private Object cookie;
     /**
      * 技能配置
      */
     private List<AlexaDeviceCapability> capabilities;
+
+
+    private List<Connection> connections;
+
+    @Data
+    @Builder
+    public static class Connection{
+
+        private String type;
+
+        private String macAddress;
+    }
 }

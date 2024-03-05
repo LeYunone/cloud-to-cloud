@@ -25,6 +25,15 @@ public class AlexaStandardRequest {
 
         private Payload payload;
 
+        private Endpoint endpoint;
+
+    }
+
+    @Getter
+    @Setter
+    public static class Endpoint {
+
+        private Scope scope;
     }
 
     @Getter

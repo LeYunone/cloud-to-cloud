@@ -49,7 +49,13 @@ public class AlexaCloudHandler extends AbstractCloudCloudHandler {
     @Override
     protected String getAccessToken(String request) {
         AlexaStandardRequest alexaStandardRequest = JSONObject.parseObject(request, AlexaStandardRequest.class);
-        return alexaStandardRequest.getDirective().getPayload().getScope().getToken();
+        String token;
+        try {
+            token = alexaStandardRequest.getDirective().getPayload().getScope().getToken();
+        } catch (Exception e) {
+            token = alexaStandardRequest.getDirective().getEndpoint().getScope().getToken();
+        }
+        return token;
     }
 
     @Override
@@ -65,25 +71,18 @@ public class AlexaCloudHandler extends AbstractCloudCloudHandler {
          * 发现设备响应需要处理 interface特殊字段
          */
         if (action.getClass().isAssignableFrom(AlexaDiscoveryResponse.class)) {
-            AlexaDiscoveryResponse alexaDiscoveryResponse = (AlexaDiscoveryResponse) action;
-            List<AlexaDevice> endpoints = alexaDiscoveryResponse.getEvent().getPayload().getEndpoints();
-            JSONArray devices = new JSONArray();
-            //capabilities->interface
-            endpoints.forEach(device -> {
-                JSONObject info = JSONObject.parseObject(JSONObject.toJSONString(device));
-                List<AlexaDeviceCapability> capabilities = device.getCapabilities();
-                List<JSONObject> anInterface = capabilities.stream().map(c -> {
-                    JSONObject jc = JSONObject.parseObject(JSONObject.toJSONString(c));
-                    jc.put("interface", c.getInterfaceStr());
-                    return jc;
-                }).collect(Collectors.toList());
-                info.put("capabilities", JSONObject.toJSONString(anInterface));
-                devices.add(info);
-            });
-            AlexaDiscoveryResponseImage alexaDiscoveryResponseImage = new AlexaDiscoveryResponseImage();
-            BeanUtil.copyProperties(alexaDiscoveryResponse, alexaDiscoveryResponseImage);
-            alexaDiscoveryResponseImage.getEvent().getPayload().setEndpoints(devices);
-            return JSONObject.toJSONString(action);
+            JSONObject json = JSONObject.parseObject(JSONObject.toJSONString(action));
+            JSONArray jsonArray = json.getJSONObject("event").getJSONObject("payload").getJSONArray("endpoints");
+            for (Object o : jsonArray) {
+                JSONObject jb = (JSONObject) o;
+                JSONArray capabilities = jb.getJSONArray("capabilities");
+                for (Object capability : capabilities) {
+                    JSONObject cb = (JSONObject) capability;
+                    cb.put("interface", cb.getString("interfaceStr"));
+                    cb.remove("interfaceStr");
+                }
+            }
+            return JSONObject.toJSONString(json);
         }
         return JSONObject.toJSONString(action);
     }

@@ -28,8 +28,8 @@ import java.util.stream.Collectors;
 @Service
 public class AlexaDeviceInfoConverter extends AbstractAlexaDataConverterTemplate<List<AlexaDevice>, List<DeviceInfo>> {
 
-    public AlexaDeviceInfoConverter( ProductMappingService productMappingService) {
-        super( productMappingService);
+    public AlexaDeviceInfoConverter(ProductMappingService productMappingService) {
+        super(productMappingService);
     }
 
 
@@ -44,20 +44,16 @@ public class AlexaDeviceInfoConverter extends AbstractAlexaDataConverterTemplate
             AlexaProductMapping productMapping = productMappings.get(pid);
 
             Map<String, String> additionalAttributes = new HashMap<>();
-            additionalAttributes.put("productId", deviceShadowModel.getProductId());
             AlexaDevice alexaDevice = new AlexaDevice();
             alexaDevice.setEndpointId(String.valueOf(deviceShadowModel.getDeviceId()));
-            alexaDevice.setManufacturerName(deviceShadowModel.getDeviceName());
+            alexaDevice.setManufacturerName("DEV");
             alexaDevice.setDescription("");
-            alexaDevice.setFriendlyName(deviceShadowModel.getGroupName());
+            alexaDevice.setFriendlyName(deviceShadowModel.getDeviceName());
             alexaDevice.setAdditionalAttributes(additionalAttributes);
             alexaDevice.setDisplayCategories(productMapping.getThirdProductIds());
-            alexaDevice.setCookie(JSONObject.toJSONString(additionalAttributes));
-            /**
-             * 技能配置
-             */
-            Map<String, AlexaProductMapping.Capability> capabilityMap = CollectionFunctionUtils
-                    .mapTo(productMapping.getCapabilityList(), AlexaProductMapping.Capability::getSignCode);
+            Map<String, String> cookie = new HashMap<>();
+            cookie.put("productId", deviceShadowModel.getProductId());
+            alexaDevice.setCookie(cookie);
 
             /**
              * alexa设备 技能包含：涉及属性
@@ -66,8 +62,7 @@ public class AlexaDeviceInfoConverter extends AbstractAlexaDataConverterTemplate
              *                  语义和语义配置
              *  functionMapping 一个signCode 一个技能                
              */
-            List<AlexaDeviceCapability> deviceSkills = capabilityMap.keySet().stream().map(signCode -> {
-                AlexaProductMapping.Capability capability = capabilityMap.get(signCode);
+            List<AlexaDeviceCapability> deviceSkills = productMapping.getCapabilityList().stream().map(capability -> {
                 return AlexaDeviceCapability.builder()
                         .interfaceStr(capability.getThirdActionCode())
                         .type("AlexaInterface")
@@ -98,6 +93,13 @@ public class AlexaDeviceInfoConverter extends AbstractAlexaDataConverterTemplate
                                     .proactivelyReported(true)
                                     .retrievable(true)
                                     .build())
+                            .build()
+            );
+            deviceSkills.add(
+                    AlexaDeviceCapability.builder()
+                            .type("AlexaInterface")
+                            .interfaceStr("Alexa")
+                            .version("3")
                             .build()
             );
             alexaDevice.setCapabilities(deviceSkills);

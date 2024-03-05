@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js" type="application/javascript"></script>
+    <script src="https://code.hcharts.cn/plugins/zh_cn.js" type="application/javascript"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js" type="application/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" type="application/javascript"></script>
+</head>
+<body style="margin: 0; padding: 0; height: 100vh; display: flex;">
+<div id="app" style="height: 100%; display: flex;">
+    <el-aside height="100%" width="200px" style="background-color: #2d4059; color: white;">
+        <el-menu default-active="baidu" @select="handleSelect" background-color="#2d4059" text-color="white"
+                 active-text-color="#409EFF">
+            <div style="padding: 20px;">
+                <h1 style="font-size: 37px; font-weight: bold;">云云转换</h1>
+            </div>
+
+            <el-menu-item index="baidu">百度</el-menu-item>
+            <el-menu-item index="tmall">天猫精灵</el-menu-item>
+            <el-menu-item index="huawei">华为</el-menu-item>
+            <el-menu-item index="alexa">Alexa</el-menu-item>
+            <el-menu-item index="xiaomi">小米</el-menu-item>
+            <el-menu-item index="google">Google</el-menu-item>
+        </el-menu>
+    </el-aside>
+    <el-main style="flex: 1; padding: 20px;">
+        <component :is="selectedTabComponent"></component>
+    </el-main>
+</div>
+</body>
+</html>
+
+<script>
+    Vue.component('baidu-config', {
+        template: `
+    <div>
+      <h2>百度配置页面</h2>
+      <div class="tab-content">百度配置内容</div>
+    </div>
+  `
+    });
+
+    Vue.component('tmall-config', {
+        template: `
+    <div>
+      <h2>天猫精灵配置页面</h2>
+      <div class="tab-content">天猫精灵配置内容</div>
+    </div>
+  `
+    });
+
+    new Vue({
+        el: '#app',
+        data: {
+            selectedTab: 'baidu',
+            components: {
+                baidu: 'baidu-config',
+                tmall: 'tmall-config',
+                huawei: 'huawei-config',
+                alexa: 'alexa-config',
+                xiaomi: 'xiaomi-config',
+                google: 'google-config'
+            }
+        },
+        computed: {
+            selectedTabComponent() {
+                return this.components[this.selectedTab];
+            }
+        },
+        methods: {
+            handleSelect(key) {
+                this.selectedTab = key;
+            }
+        }
+    })
+</script>
+
+<style>
+    button {
+        background-color: #4d648d;
+        color: white;
+        border: none;
+        padding: 10px;
+        cursor: pointer;
+    }
+
+    .tab-content {
+        padding: 20px;
+        background-color: #f5f5f5;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-top: 20px;
+    }
+</style>

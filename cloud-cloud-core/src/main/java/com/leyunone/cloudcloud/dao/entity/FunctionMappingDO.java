@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.leyunone.cloudcloud.bean.enums.ConvertFunctionEnum;
+import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -56,7 +57,7 @@ public class FunctionMappingDO {
     /**
      * 语音平台  0：百度
      */
-    private String thirdPartyCloud;
+    private ThirdPartyCloudEnum thirdPartyCloud;
 
     /**
      * 0：透传 1：需要转换 

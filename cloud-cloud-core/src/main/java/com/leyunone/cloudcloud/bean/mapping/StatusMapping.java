@@ -34,7 +34,7 @@ public class StatusMapping {
 
     private String legalValue;
 
-    private ConvertFunctionEnum convertFunctionEnum;;
+    private ConvertFunctionEnum convertFunction;;
 
 
     @Mapper

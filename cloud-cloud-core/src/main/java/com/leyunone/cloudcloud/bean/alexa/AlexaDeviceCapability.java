@@ -60,6 +60,10 @@ public class AlexaDeviceCapability {
          * 可检索
          */
         private boolean retrievable;
+        /**
+         * 可修改
+         */
+        private boolean nonControllable;
     }
 
     @Data

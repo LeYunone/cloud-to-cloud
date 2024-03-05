@@ -24,10 +24,7 @@ import com.leyunone.cloudcloud.mangaer.CacheManager;
 import com.leyunone.cloudcloud.util.CollectionFunctionUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -127,33 +124,40 @@ public class AlexaMappingAssembler extends AbstractStrategyMappingAssembler<Alex
              * 如均衡控制器 存在一个操作支持多个属性
              */
             List<AlexaFunctionMapping> functionMapping = functionMap.get(key);
-            AlexaFunctionMapping function = CollectionUtil.getFirst(functionMapping);
 
             AlexaProductMapping.Capability capability = new AlexaProductMapping.Capability();
-            capability.setThirdActionCode(function.getInterfaceStr());
-            capability.setSignCode(function.getSignCode());
-            capability.setFunctionId(function.getFunctionId());
-
+            capability.setThirdActionCode(key);
             capability.setSupportAttr(functionMapping.stream().map(AlexaFunctionMapping::getThirdSignCode).collect(Collectors.toList()));
+            Map<String, AlexaProductMapping.CapabilityMapping> capabilityMapping = new HashMap<>();
             //TODO 技能的三方值 而非属性
-            if (actionMaps.containsKey(function.getSignCode())) {
+            functionMapping.forEach(f -> {
+                List<ActionMappingDO> actionMappingDOS = actionMaps.get(f.getSignCode());
+                if(CollectionUtil.isNotEmpty(actionMappingDOS)){
+                    actionMappingDOS.forEach(am -> {
+                        capabilityMapping.put(am.getThirdPartyCode(), AlexaProductMapping.CapabilityMapping.builder()
+                                .defaultValue(am.getDefaultValue())
+                                .signCode(am.getSignCode())
+                                .functionId(am.getFunctionId())
+                                .valueMapping(StrUtil.isNotBlank(am.getValueMapping()) ? JSONObject.parseObject(am.getValueMapping()).getInnerMap() : null)
+                                .operation(am.getOperation())
+                                .thirdSignCode(am.getThirdPartyCode())
+                                .valueOf(am.getValueOf())
+                                .build()
+                        );
+                    });
+                }
+            });
+            capability.setCapabilityMapping(capabilityMapping);
 
-                List<AlexaProductMapping.CapabilityMapping> capabilityMappings = actionMaps.get(function.getSignCode()).stream().map(actionMappingDO -> AlexaProductMapping.CapabilityMapping.builder()
-                        .defaultValue(actionMappingDO.getDefaultValue())
-                        .valueMapping(StrUtil.isNotBlank(actionMappingDO.getValueMapping()) ? JSONObject.parseObject(actionMappingDO.getValueMapping()).getInnerMap() : null)
-                        .operation(actionMappingDO.getOperation())
-                        .thirdSignCode(actionMappingDO.getThirdPartyCode())
-                        .valueOf(actionMappingDO.getValueOf())
-                        .build()).collect(Collectors.toList());
-                capability.setCapabilityMapping(CollectionFunctionUtils.mapTo(capabilityMappings, AlexaProductMapping.CapabilityMapping::getThirdSignCode));
-            }
-
-            DeviceCapabilityDO deviceCapabilityDO = capabilityMap.get(function.getCapabilityConfigId());
-            if (ObjectUtil.isNotNull(deviceCapabilityDO)) {
-                capability.setCapabilityResources(JSONObject.parseObject(deviceCapabilityDO.getCapabilitySemantics()));
-                capability.setConfiguration(JSONObject.parseObject(deviceCapabilityDO.getCapabilityConfiguration()));
-                capability.setInstance(deviceCapabilityDO.getInstanceName());
-                capability.setSemantics(JSONObject.parseObject(deviceCapabilityDO.getValueSemantics()));
+            Optional<AlexaFunctionMapping> first = functionMapping.stream().filter(f -> ObjectUtil.isNotNull(f.getCapabilityConfigId())).findFirst();
+            if (first.isPresent()) {
+                DeviceCapabilityDO deviceCapabilityDO = capabilityMap.get(first.get().getCapabilityConfigId());
+                if (ObjectUtil.isNotNull(deviceCapabilityDO)) {
+                    capability.setCapabilityResources(JSONObject.parseObject(deviceCapabilityDO.getCapabilitySemantics()));
+                    capability.setConfiguration(JSONObject.parseObject(deviceCapabilityDO.getCapabilityConfiguration()));
+                    capability.setInstance(deviceCapabilityDO.getInstanceName());
+                    capability.setSemantics(JSONObject.parseObject(deviceCapabilityDO.getValueSemantics()));
+                }
             }
             return capability;
         }).collect(Collectors.toList());
@@ -179,11 +183,18 @@ public class AlexaMappingAssembler extends AbstractStrategyMappingAssembler<Alex
                     String[] thirdCodes = functionMapping.getThirdSignCode().split("_");
                     alexaFunctionMapping.setThirdSignCode(thirdCodes[0]);
                     alexaFunctionMapping.setInterfaceStr(thirdCodes[1]);
-                    alexaFunctionMapping.setCapabilityConfigId(fm.getCapabilityConfigId());
+
+                    if (StrUtil.isNotBlank(fm.getCapabilityConfigId())) {
+                        alexaFunctionMapping.setCapabilityConfigId(Integer.parseInt(fm.getCapabilityConfigId()));
+                    }
 
                     alexaFunctionMapping.setValueMapping(map);
-                    if (capabilityMap.containsKey(fm.getCapabilityConfigId())) {
-                        alexaFunctionMapping.setInstance(capabilityMap.get(fm.getCapabilityConfigId()).getInstanceName());
+                    if (capabilityMap.containsKey(alexaFunctionMapping.getCapabilityConfigId())) {
+                        alexaFunctionMapping.setInstance(capabilityMap.get(alexaFunctionMapping.getCapabilityConfigId()).getInstanceName());
+                    }
+                    try {
+                        alexaFunctionMapping.setConvertFunction(fm.getConvertFunction());
+                    } catch (Exception ignored) {
                     }
                     return alexaFunctionMapping;
                 })

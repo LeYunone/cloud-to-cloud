@@ -41,10 +41,6 @@ public class AlexaProductMapping extends ProductMapping {
          */
         private String thirdActionCode;
 
-        private String signCode;
-
-        private Integer functionId;
-
         /**
          * https://developer.amazon.com/en-US/docs/alexa/device-apis/resources-and-assets.html#capability-resources
          * https://developer.amazon.com/en-US/docs/alexa/device-apis/alexa-modecontroller.html#semantics
@@ -97,5 +93,9 @@ public class AlexaProductMapping extends ProductMapping {
         private Boolean valueOf;
 
         private OperationEnum operation;
+
+        private String signCode;
+
+        private Integer functionId;
     }
 }

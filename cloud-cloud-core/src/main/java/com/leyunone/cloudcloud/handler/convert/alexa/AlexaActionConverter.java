@@ -65,14 +65,14 @@ public class AlexaActionConverter extends AbstractAlexaDataConverterTemplate<Lis
                 DeviceFunctionDTO codeCommand = new DeviceFunctionDTO();
                 //FIXME 出现value为空
                 String value = null;
-                if (CollectionUtil.isNotEmpty(capability.getCapabilityMapping()) || capability.getCapabilityMapping().containsKey(name)) {
+                if (CollectionUtil.isNotEmpty(capability.getCapabilityMapping()) && capability.getCapabilityMapping().containsKey(name)) {
                     AlexaProductMapping.CapabilityMapping capabilityMapping = capability.getCapabilityMapping().get(name);
                     value = byEnumName.valueConvert(r.getDirective().getPayload(), capabilityMapping);
                     codeCommand.setOperation(capabilityMapping.getOperation());
+                    codeCommand.setSignCode(capabilityMapping.getSignCode());
+                    codeCommand.setValue(value);
+                    codeCommand.setFunctionId(capabilityMapping.getFunctionId());
                 }
-                codeCommand.setSignCode(capability.getSignCode());
-                codeCommand.setValue(value);
-                codeCommand.setFunctionId(capability.getFunctionId());
                 codeCommand.setDeviceId(r.getDirective().getEndpoint().getEndpointId());
                 return codeCommand;
             }).collect(Collectors.toList());

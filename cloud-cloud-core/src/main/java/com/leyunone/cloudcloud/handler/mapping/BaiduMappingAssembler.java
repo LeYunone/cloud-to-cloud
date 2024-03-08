@@ -85,7 +85,8 @@ public class BaiduMappingAssembler extends AbstractStrategyMappingAssembler<Baid
         return ThirdPartyCloudEnum.BAIDU.name();
     }
 
-    private List<ActionMapping> convertActionMapping(List<ActionMappingDO> actionMappingDos) {
+    @Override
+    protected List<ActionMapping> convertActionMapping(List<ActionMappingDO> actionMappingDos) {
         if (CollectionUtils.isEmpty(actionMappingDos)) {
             return new ArrayList<>();
         }

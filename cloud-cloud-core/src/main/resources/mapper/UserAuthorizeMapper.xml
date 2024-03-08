@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.leyunone.cloudcloud.dao.mapper.UserAuthorizeMapper">
+
+    <select id="selectUserClientInfo" resultType="com.leyunone.cloudcloud.bean.UserClientInfoModel">
+                SELECT u.user_id, u.third_info, c.client_id, c.client_secret
+        FROM u_user_authorize u
+                 LEFT JOIN c_third_party_client c ON u.client_id = c.client_id
+        WHERE u.user_id = #{userId}
+          AND u.third_party_cloud = #{cloud}
+    </select>
 </mapper>

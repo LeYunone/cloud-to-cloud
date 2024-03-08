@@ -35,7 +35,7 @@ public class AlexaDeviceCapability {
      * 属性配置
      */
     private Property properties;
-    
+
     private String instance;
 
     /**
@@ -46,6 +46,8 @@ public class AlexaDeviceCapability {
      * 技能语言配置
      */
     private Object configuration;
+
+    private Object semantics;
 
     @Data
     @Builder

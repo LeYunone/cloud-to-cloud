@@ -69,6 +69,7 @@ public class AlexaDeviceInfoConverter extends AbstractAlexaDataConverterTemplate
                         .version("3")
                         .instance(capability.getInstance())
                         .capabilityResources(capability.getCapabilityResources())
+                        .semantics(capability.getSemantics())
                         .configuration(capability.getConfiguration())
                         .properties(AlexaDeviceCapability.Property
                                 .builder()

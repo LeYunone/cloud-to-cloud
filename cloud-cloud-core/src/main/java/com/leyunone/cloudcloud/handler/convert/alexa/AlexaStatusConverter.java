@@ -70,8 +70,8 @@ public class AlexaStatusConverter extends AbstractAlexaDataConverterTemplate<Lis
         /**
          * 需要进行函数转换的属性
          */
-        if (ObjectUtil.isNotNull(functionMapping.getConvertFunctionEnum())) {
-            ConvertFunctionEnum convertFunctionEnum = functionMapping.getConvertFunctionEnum();
+        if (ObjectUtil.isNotNull(functionMapping.getConvertFunction())) {
+            ConvertFunctionEnum convertFunctionEnum = functionMapping.getConvertFunction();
             return convertFunctionEnum.convert(value);
         }
         return super.valueOf(value, functionMapping);

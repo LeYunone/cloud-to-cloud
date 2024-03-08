@@ -23,6 +23,7 @@ public abstract class AbstractStrategyAlexaHandler<P, R> extends AbstractStrateg
                 .name("Response")
                 .messageId(header.getMessageId())
                 .payloadVersion(header.getPayloadVersion())
+                .correlationToken(header.getCorrelationToken())
                 .build();
     }
 }

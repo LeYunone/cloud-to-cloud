@@ -2,6 +2,7 @@ package com.leyunone.cloudcloud.dao;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.leyunone.cloudcloud.bean.UserClientInfoModel;
 import com.leyunone.cloudcloud.dao.base.repository.BaseRepository;
 import com.leyunone.cloudcloud.dao.entity.UserAuthorizeDO;
 import com.leyunone.cloudcloud.dao.mapper.UserAuthorizeMapper;
@@ -49,6 +50,12 @@ public class UserAuthorizeRepositoryImpl extends BaseRepository<UserAuthorizeMap
                 .eq(UserAuthorizeDO::getThirdPartyCloud, cloud.name())
         );
 
+    }
+
+
+    @Override
+    public UserClientInfoModel selectUserClientInfo(String userId, ThirdPartyCloudEnum cloud) {
+        return this.baseMapper.selectUserClientInfo(userId, cloud);
     }
 
     private String generateUserCacheKey(String userId, ThirdPartyCloudEnum cloud) {

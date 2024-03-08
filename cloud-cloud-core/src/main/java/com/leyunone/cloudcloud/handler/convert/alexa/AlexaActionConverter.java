@@ -41,8 +41,8 @@ public class AlexaActionConverter extends AbstractAlexaDataConverterTemplate<Lis
      */
     @Override
     public List<DeviceFunctionDTO> convert(AlexaControlRequest r) {
-        String cookie = r.getDirective().getEndpoint().getCookie();
-        String productId = JSONObject.parseObject(cookie).getString("productId");
+        JSONObject cookie = (JSONObject)r.getDirective().getEndpoint().getCookie();
+        String productId = cookie.getString("productId");
         if (StrUtil.isBlank(productId)) {
             //TODO 发现设备时未填充，或cookie丢失
         }

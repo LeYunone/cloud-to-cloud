@@ -63,7 +63,7 @@ public class AccessTokenManagerImpl implements AccessTokenManager {
         if (null == userAuthorizeDO) {
             userAuthorizeDO = new UserAuthorizeDO()
                     .setUserId(userId)
-                    .setThirdPartyCloud(cloudServiceConfig.getThirdPartyCloudEnum().name())
+                    .setThirdPartyCloud(cloudServiceConfig.getThirdPartyCloudEnum())
                     .setClientId(cloudServiceConfig.getClientId())
                     .setCreateTime(LocalDateTime.now());
             userAuthorizeRepository.save(userAuthorizeDO);
@@ -123,6 +123,14 @@ public class AccessTokenManagerImpl implements AccessTokenManager {
         accessTokenEntity.setUser(user);
         //刷新token
         cacheManager.addData(generateAccessTokenKey(accessToken), accessTokenEntity, TOKEN_EFFICIENT_TIME);
+        return accessTokenEntity;
+    }
+
+    @Override
+    public AccessTokenInfo getAccessToken(String token) {
+        AccessTokenInfo accessTokenEntity = cacheManager.getData(generateAccessTokenKey(token), AccessTokenInfo.class);
+        if (null == accessTokenEntity) {
+        }
         return accessTokenEntity;
     }
 

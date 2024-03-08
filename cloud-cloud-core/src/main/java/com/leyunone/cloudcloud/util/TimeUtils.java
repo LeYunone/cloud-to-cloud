@@ -18,7 +18,7 @@ public class TimeUtils {
      */
     public static String getUTCyyyyMMddTHHmmssSSSZ() {
         Date currentTime = new Date();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssSSS'Z'");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'.'SS'Z'");
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         return dateFormat.format(currentTime);
     }

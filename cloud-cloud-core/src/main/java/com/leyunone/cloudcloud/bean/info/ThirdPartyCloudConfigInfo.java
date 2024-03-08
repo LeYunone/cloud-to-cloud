@@ -41,4 +41,8 @@ public class ThirdPartyCloudConfigInfo {
     private LocalDateTime createTime;
 
     private LocalDateTime updateTime;
+
+    private String thirdSecret;
+
+    private String thirdClientId;
 }

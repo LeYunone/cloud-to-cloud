@@ -20,7 +20,7 @@ public class AlexaEndpoint {
 
     private String endpointId;
 
-    private String cookie;
+    private Object cookie;
 
     @Getter
     @Setter

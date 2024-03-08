@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.leyunone.cloudcloud.bean.alexa.AlexaControlRequest;
 import com.leyunone.cloudcloud.bean.alexa.AlexaControlResponse;
 import com.leyunone.cloudcloud.bean.alexa.AlexaDeviceProperty;
+import com.leyunone.cloudcloud.bean.alexa.AlexaEndpoint;
 import com.leyunone.cloudcloud.bean.dto.DeviceFunctionDTO;
 import com.leyunone.cloudcloud.bean.enums.ActionTypeEnum;
 import com.leyunone.cloudcloud.bean.info.ActionContext;
@@ -59,7 +60,11 @@ public class AlexaDeviceControlHandler extends AbstractStrategyAlexaHandler<Alex
         //单控
         List<AlexaDeviceProperty> properties = alexaStatusConverter.convert(CollectionUtil.getFirst(commands));
         return new AlexaControlResponse(AlexaControlResponse.Event.builder()
-                .endpoint(alexaControlRequest.getDirective().getEndpoint())
+                .endpoint(AlexaEndpoint.builder()
+                        .scope(alexaControlRequest.getDirective().getEndpoint().getScope())
+                        .endpointId(alexaControlRequest.getDirective().getEndpoint().getEndpointId())
+                        .build()
+                )
                 .header(super.buildHeader(alexaControlRequest.getDirective().getHeader()))
                 .payload(AlexaControlResponse.Payload.builder().build())
                 .build(),

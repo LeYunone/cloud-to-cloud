@@ -9,6 +9,7 @@ import com.leyunone.cloudcloud.bean.info.DeviceInfo;
 import com.leyunone.cloudcloud.dao.ThirdPartyClientRepository;
 import com.leyunone.cloudcloud.dao.entity.ThirdPartyClientDO;
 import com.leyunone.cloudcloud.handler.factory.DeviceReportHandlerFactory;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,8 +25,8 @@ public abstract class AbstractStatusCommonReportHandler extends AbstractDeviceMe
 
     private ThirdPartyClientRepository thirdPartyClientRepository;
 
-    public AbstractStatusCommonReportHandler(DeviceReportHandlerFactory factory) {
-        super(factory);
+    public AbstractStatusCommonReportHandler(DeviceReportHandlerFactory factory, RestTemplate restTemplate) {
+        super(factory,restTemplate);
     }
 
     @Override
@@ -45,8 +46,8 @@ public abstract class AbstractStatusCommonReportHandler extends AbstractDeviceMe
                         .timestamp(deviceMessage.getTimestamp())
                         .build()).collect(Collectors.toList()))
                 .build();
-        this.handler2(deviceInfo, thirdPartyClientDO, thirdMapping.getThirdId());
+        this.handler2(deviceInfo, thirdPartyClientDO, thirdMapping);
     }
 
-    public abstract void handler2(DeviceInfo deviceInfo, ThirdPartyClientDO config, String thirdId);
+    public abstract void handler2(DeviceInfo deviceInfo, ThirdPartyClientDO config, DeviceCloudInfo.ThirdMapping thirdMapping);
 }

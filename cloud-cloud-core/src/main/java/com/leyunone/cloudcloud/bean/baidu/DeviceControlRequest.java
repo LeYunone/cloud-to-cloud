@@ -167,6 +167,7 @@ public class DeviceControlRequest {
 
     @Getter
     @Setter
+    @Builder
     public static class Color{
 
         private float hue;

@@ -24,6 +24,8 @@ public class DeviceMessageDTO {
     
     private Long timestamp;
 
+    private boolean online;
+
     private List<DeviceFunctionDTO> deviceFunctions;
 
 }

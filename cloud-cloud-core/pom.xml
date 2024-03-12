@@ -69,6 +69,11 @@
             <artifactId>mapstruct</artifactId>
             <version>1.5.5.Final</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.apis</groupId>
+            <artifactId>google-api-services-homegraph</artifactId>
+            <version>v1-rev20230707-2.0.0</version>
+        </dependency>
     </dependencies>
 
 </project>

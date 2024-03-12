@@ -7,6 +7,7 @@ import com.leyunone.cloudcloud.bean.baidu.BaiduAttributes;
 import com.leyunone.cloudcloud.bean.baidu.BaiduHeader;
 import com.leyunone.cloudcloud.bean.baidu.BaiduStatusReportRequest;
 import com.leyunone.cloudcloud.bean.dto.DeviceMessageDTO;
+import com.leyunone.cloudcloud.bean.info.DeviceCloudInfo;
 import com.leyunone.cloudcloud.bean.info.DeviceInfo;
 import com.leyunone.cloudcloud.dao.entity.ThirdPartyClientDO;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
@@ -17,6 +18,7 @@ import com.leyunone.cloudcloud.mangaer.CacheManager;
 import com.leyunone.cloudcloud.util.ThirdHttpUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -35,14 +37,14 @@ public class BaiduDeviceFunctionReportHandler extends AbstractStatusCommonReport
 
     private final CacheManager cacheManager;
 
-    public BaiduDeviceFunctionReportHandler(DeviceReportHandlerFactory factory, BaiduStatusConverter baiduStatusConverter, CacheManager cacheManager) {
-        super(factory);
+    public BaiduDeviceFunctionReportHandler(DeviceReportHandlerFactory factory, RestTemplate restTemplate, BaiduStatusConverter baiduStatusConverter, CacheManager cacheManager) {
+        super(factory,restTemplate);
         this.baiduStatusConverter = baiduStatusConverter;
         this.cacheManager = cacheManager;
     }
 
     @Override
-    public void handler2(DeviceInfo deviceInfo, ThirdPartyClientDO config, String thirdId) {
+    public void handler2(DeviceInfo deviceInfo, ThirdPartyClientDO config, DeviceCloudInfo.ThirdMapping thirdMapping) {
 
         List<BaiduAttributes> baiduAttributes = baiduStatusConverter.convert(deviceInfo);
         baiduAttributes.forEach(a -> {
@@ -50,7 +52,7 @@ public class BaiduDeviceFunctionReportHandler extends AbstractStatusCommonReport
             BaiduStatusReportRequest.Payload payload = BaiduStatusReportRequest.Payload
                     .builder()
                     .botId(config.getSkillId())
-                    .openUid(thirdId)
+                    .openUid(thirdMapping.getThirdId())
                     .appliance(appliance).build();
             BaiduHeader baiduHeader = BaiduHeader.builder().messageId(IdUtil.fastUUID()).payloadVersion("1").name("ChangeReportRequest").namespace("DuerOS.ConnectedHome.Control").build();
             BaiduStatusReportRequest request = BaiduStatusReportRequest.builder().header(baiduHeader).payload(payload).build();

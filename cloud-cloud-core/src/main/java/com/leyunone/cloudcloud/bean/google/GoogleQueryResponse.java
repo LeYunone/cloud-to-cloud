@@ -35,6 +35,6 @@ public class GoogleQueryResponse {
          * attr:attrValue
          * }
          */
-        private Map<String, Object> devices;
+        private Map<String, Map<String,Object>> devices;
     }
 }

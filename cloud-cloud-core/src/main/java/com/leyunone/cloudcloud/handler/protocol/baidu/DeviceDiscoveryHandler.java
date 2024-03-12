@@ -43,10 +43,10 @@ public class DeviceDiscoveryHandler extends AbstractStrategyBaiduHandler<BaiduDi
     @Override
     protected BaiduDiscoverAppliancesResponse action1(DeviceDiscoveryRequest deviceDiscoveryRequest, ActionContext context) {
         AccessTokenInfo.User user = context.getAccessTokenInfo().getUser();
-        List<DeviceInfo> deviceShadowModels = deviceServiceHttpManager.getDeviceListByUserId(user.getUserId(), context.getThirdPartyCloudConfigInfo());
-        List<BaiduDevice> convert = baiduDeviceConvert.convert(deviceShadowModels);
+        List<DeviceInfo> deviceInfos = deviceServiceHttpManager.getDeviceListByUserId(user.getUserId(), context.getThirdPartyCloudConfigInfo());
+        List<BaiduDevice> convert = baiduDeviceConvert.convert(deviceInfos);
         //分组
-        List<BaiduDiscoverAppliancesResponse.DiscoveredGroup> groups = deviceShadowModels.stream()
+        List<BaiduDiscoverAppliancesResponse.DiscoveredGroup> groups = deviceInfos.stream()
                 .filter(t -> StrUtil.isNotBlank(t.getGroupName()))
                 .collect(Collectors.groupingBy(DeviceInfo::getGroupName))
                 .values().stream().map(group -> {

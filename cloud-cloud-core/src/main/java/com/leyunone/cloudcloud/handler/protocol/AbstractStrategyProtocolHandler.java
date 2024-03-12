@@ -85,17 +85,17 @@ public abstract class AbstractStrategyProtocolHandler<R,P> extends AbstractStrat
     }
 
     /**
-     * @param deviceShadowModels 设备信息
+     * @param deviceInfos 设备信息
      * @param userId             用户id
      * @param clientId           客户端id
      * @param thirdFunction      三方云的值关系绑定函数
      */
-    protected void doRelationStore(List<DeviceInfo> deviceShadowModels, String userId, String clientId, ThirdPartyCloudEnum cloud, Consumer<DeviceCloudInfo.ThirdMapping> thirdFunction) {
-        if (CollectionUtils.isEmpty(deviceShadowModels)) {
+    protected void doRelationStore(List<DeviceInfo> deviceInfos, String userId, String clientId, ThirdPartyCloudEnum cloud, Consumer<DeviceCloudInfo.ThirdMapping> thirdFunction) {
+        if (CollectionUtils.isEmpty(deviceInfos)) {
             deviceRelationManager.deleteDeviceMappingByUserIdAndCloudId(userId, cloud);
             //删除关系数据。
         } else {
-            List<DeviceCloudInfo> deviceEntities = convert(deviceShadowModels, clientId, userId, cloud);
+            List<DeviceCloudInfo> deviceEntities = convert(deviceInfos, clientId, userId, cloud);
             deviceEntities = deviceEntities.stream()
                     .peek(d -> {
                         List<DeviceCloudInfo.ThirdMapping> thirdMappings = d.getMapping()

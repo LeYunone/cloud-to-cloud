@@ -4,6 +4,7 @@ import com.leyunone.cloudcloud.bean.info.DeviceCloudInfo;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.handler.factory.DeviceReportHandlerFactory;
 import com.leyunone.cloudcloud.strategy.AbstractStrategyAutoRegisterComponent;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * :)
@@ -14,8 +15,9 @@ import com.leyunone.cloudcloud.strategy.AbstractStrategyAutoRegisterComponent;
  */
 public abstract class AbstractDeviceMessageReportHandler extends AbstractStrategyAutoRegisterComponent implements DeviceMessageReportHandler {
 
+    protected RestTemplate restTemplate;
 
-    public AbstractDeviceMessageReportHandler(DeviceReportHandlerFactory factory) {
+    public AbstractDeviceMessageReportHandler(DeviceReportHandlerFactory factory,RestTemplate restTemplate) {
         super(factory);
     }
 

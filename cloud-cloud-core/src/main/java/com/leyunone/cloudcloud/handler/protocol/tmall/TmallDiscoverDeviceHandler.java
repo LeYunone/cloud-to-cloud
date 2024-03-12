@@ -38,14 +38,14 @@ public class TmallDiscoverDeviceHandler extends AbstractStrategyTmallHandler<Tma
     @Override
     protected TmallDiscoverResponse action1(TmallDiscoverRequest tmallDiscoverRequest, ActionContext context) {
         String userId = context.getAccessTokenInfo().getUser().getUserId();
-        List<DeviceInfo> deviceShadowModels = deviceServiceHttpManager.getDeviceListByUserId(userId, context.getThirdPartyCloudConfigInfo());
+        List<DeviceInfo> deviceInfos = deviceServiceHttpManager.getDeviceListByUserId(userId, context.getThirdPartyCloudConfigInfo());
         /**
          * 设备关系存储
          */
-        super.doRelationStore(deviceShadowModels, userId, context.getThirdPartyCloudConfigInfo().getClientId(), ThirdPartyCloudEnum.TMALL, (thirdMapping -> {
+        super.doRelationStore(deviceInfos, userId, context.getThirdPartyCloudConfigInfo().getClientId(), ThirdPartyCloudEnum.TMALL, (thirdMapping -> {
         }));
         TmallHeader header = tmallDiscoverRequest.getHeader();
-        List<TmallDevice> tmallDevices = tmallDeviceInfoConverter.convert(deviceShadowModels);
+        List<TmallDevice> tmallDevices = tmallDeviceInfoConverter.convert(deviceInfos);
         return TmallDiscoverResponse.builder()
                 .header(super.buildHeader(header, header.getName() + "Response"))
                 .payload(TmallDiscoverResponse.Payload.builder()

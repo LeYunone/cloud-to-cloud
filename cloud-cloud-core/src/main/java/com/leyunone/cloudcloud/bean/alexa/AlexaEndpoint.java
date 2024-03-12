@@ -26,6 +26,7 @@ public class AlexaEndpoint {
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
+    @Builder
     public static class Scope {
 
         private String type;

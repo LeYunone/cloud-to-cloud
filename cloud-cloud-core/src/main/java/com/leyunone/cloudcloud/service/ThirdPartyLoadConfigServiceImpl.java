@@ -24,7 +24,7 @@ public class ThirdPartyLoadConfigServiceImpl implements ThirdPartyLoadConfigServ
 
     private final ThirdPartyActionRepository thirdPartyActionRepository;
 
-    public Map<String, Map<Integer, List<String>>> actionKeys = new HashMap<>();
+    public Map<ThirdPartyCloudEnum, Map<Integer, List<String>>> actionKeys = new HashMap<>();
 
     public ThirdPartyLoadConfigServiceImpl(ThirdPartyActionRepository thirdPartyActionRepository) {
         this.thirdPartyActionRepository = thirdPartyActionRepository;
@@ -36,7 +36,7 @@ public class ThirdPartyLoadConfigServiceImpl implements ThirdPartyLoadConfigServ
     @Override
     public void afterPropertiesSet() {
         List<ThirdPartyActionDO> thirdPartyActionDOS = thirdPartyActionRepository.selectByCon(null);
-        Map<String, List<ThirdPartyActionDO>> thirdActions = thirdPartyActionDOS.stream().collect(Collectors.groupingBy(ThirdPartyActionDO::getThirdPartyCloud));
+        Map<ThirdPartyCloudEnum, List<ThirdPartyActionDO>> thirdActions = thirdPartyActionDOS.stream().collect(Collectors.groupingBy(ThirdPartyActionDO::getThirdPartyCloud));
         thirdActions.keySet().forEach(cloud -> actionKeys.put(cloud,
                 thirdActions.get(cloud).stream()
                         .collect(Collectors.groupingBy(ThirdPartyActionDO::getActionType,

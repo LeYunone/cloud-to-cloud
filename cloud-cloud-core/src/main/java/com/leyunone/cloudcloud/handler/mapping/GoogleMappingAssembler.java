@@ -67,21 +67,19 @@ public class GoogleMappingAssembler extends AbstractStrategyMappingAssembler<Goo
                 .stream()
                 .map(p -> {
                     List<FunctionMappingDO> functionMappings = functionMappingMap.get(p);
-                    if (CollectionUtils.isEmpty(functionMappings)) {
+                    if (CollectionUtils.isEmpty(functionMappings) || CollectionUtil.isEmpty(productTypeMappingDOS)) {
                         return null;
                     }
                     List<ProductTypeMappingDO> productTypes = typeMap.get(p);
                     GoogleProductMapping productMapping = new GoogleProductMapping();
                     productMapping.setProductId(p);
-                    productMapping.setThirdPartyCloud(ThirdPartyCloudEnum.HUAWEI);
+                    productMapping.setThirdPartyCloud(ThirdPartyCloudEnum.GOOGLE);
                     productMapping.setStatusMappings(convert(functionMappings));
                     productMapping.setActionMappings(super.convertActionMapping(actionMappingDOS));
                     //集合去重
                     productMapping.setTraits(CollectionUtil.newArrayList(functionMappings.stream().map(f -> f.getThirdPartyCode().split("_")[1]).collect(Collectors.toSet())));
                     productMapping.setAttributes(this.buildConfig(functionMappings, capabilityMap));
-                    if (CollectionUtil.isNotEmpty(productTypes)) {
-                        productMapping.setThirdProductIds(productTypes.stream().map(ProductTypeMappingDO::getThirdProductId).distinct().collect(Collectors.toList()));
-                    }
+                    productMapping.setThirdProductIds(productTypes.stream().map(ProductTypeMappingDO::getThirdProductId).distinct().collect(Collectors.toList()));
                     return productMapping;
                 })
                 .filter(ObjectUtil::isNotNull)

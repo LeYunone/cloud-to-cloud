@@ -39,7 +39,11 @@ public class GoogleQueryHandler extends AbstractStrategyGoogleoHandler<GoogleQue
         List<DeviceInfo> devices = deviceServiceHttpManager.getDevicesStatusByDeviceIds(context.getAccessTokenInfo().getUser().getUserId()
                 , googleQueryRequest.getInputs().get(0).getPayload().getDevices().stream().map(t -> Long.parseLong(t.getId()))
                         .collect(Collectors.toList()), context.getThirdPartyCloudConfigInfo());
-        Map<String, Object> status = googleStatusConvert.convert(devices);
+        Map<String, Map<String,Object>> status = googleStatusConvert.convert(devices);
+        status.keySet().forEach(key->{
+            Map<String,Object> deviceStatus = status.get(key);
+            deviceStatus.put("status","SUCCESS");
+        });
         return new GoogleQueryResponse(googleQueryRequest.getRequestId(), GoogleQueryResponse.Payload.builder().devices(status).build());
     }
 

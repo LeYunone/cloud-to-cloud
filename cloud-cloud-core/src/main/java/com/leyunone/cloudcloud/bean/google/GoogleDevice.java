@@ -1,9 +1,6 @@
 package com.leyunone.cloudcloud.bean.google;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 import java.util.Map;
@@ -16,6 +13,8 @@ import java.util.Map;
  */
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class GoogleDevice {
 
     private String id;
@@ -41,6 +40,8 @@ public class GoogleDevice {
     @Getter
     @Setter
     @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Name {
 
         private String name;
@@ -53,6 +54,8 @@ public class GoogleDevice {
     @Getter
     @Setter
     @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class DeviceInfo {
 
         private String manufacturer;
@@ -65,12 +68,16 @@ public class GoogleDevice {
     }
 
     @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class OtherDevice {
         private String deviceId;
     }
 
     @Data
     @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class CustomData {
         private String productId;
     }

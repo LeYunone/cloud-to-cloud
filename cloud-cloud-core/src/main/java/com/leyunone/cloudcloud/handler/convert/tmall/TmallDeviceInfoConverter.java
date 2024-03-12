@@ -39,21 +39,21 @@ public class TmallDeviceInfoConverter extends AbstractTmallDataConverterTemplate
         List<ProductMapping> productMappings = productMappingService.getMapping(productIds, ThirdPartyCloudEnum.TMALL);
         Map<String, TmallProductMapping> tmallProductMappingMap = convertToMapByProductId(productMappings);
 
-        return deviceInfos.stream().map(deviceShadowModel -> {
-            TmallProductMapping tmallProductMapping = tmallProductMappingMap.get(deviceShadowModel.getProductId());
+        return deviceInfos.stream().map(deviceInfo -> {
+            TmallProductMapping tmallProductMapping = tmallProductMappingMap.get(deviceInfo.getProductId());
             if (ObjectUtil.isNull(tmallProductMapping)) return null;
             Map<String, Object> extensions = new HashMap<>();
-            extensions.put("productId", deviceShadowModel.getProductId());
+            extensions.put("productId", deviceInfo.getProductId());
             TmallDevice tmallDevice = new TmallDevice();
-            tmallDevice.setDeviceId(String.valueOf(deviceShadowModel.getDeviceId()));
-            tmallDevice.setDeviceName(deviceShadowModel.getDeviceName());
+            tmallDevice.setDeviceId(String.valueOf(deviceInfo.getDeviceId()));
+            tmallDevice.setDeviceName(deviceInfo.getDeviceName());
             tmallDevice.setDeviceType(tmallProductMapping.getDeviceTypeEnName());
             //必填
             tmallDevice.setBrand(tmallProductMapping.getBrand());
             //TODO 创建产品时类型设置为产品id
-            tmallDevice.setModel(deviceShadowModel.getProductId());
-            tmallDevice.setZone(deviceShadowModel.getGroupName());
-            tmallDevice.setStatus(convert(tmallProductMapping.getStatusMappings(), deviceShadowModel.getDeviceFunctions()));
+            tmallDevice.setModel(deviceInfo.getProductId());
+            tmallDevice.setZone(deviceInfo.getGroupName());
+            tmallDevice.setStatus(convert(tmallProductMapping.getStatusMappings(), deviceInfo.getDeviceFunctions()));
             tmallDevice.setExtensions(extensions);
             return tmallDevice;
         })

@@ -42,7 +42,7 @@ public class GoogleControlHandler extends AbstractStrategyGoogleoHandler<GoogleC
     protected GoogleControlResponse action1(GoogleControlRequest googleControlRequest, ActionContext context) {
         List<DeviceFunctionDTO> commands = googleControlConvert.convert(googleControlRequest);
         List<DeviceInfo> devices = deviceServiceHttpManager.commands(context.getAccessTokenInfo().getUser().getUserId(), commands, context.getThirdPartyCloudConfigInfo());
-        Map<String, Object> statusMap = googleStatusConvert.convert(devices);
+        Map<String, Map<String,Object>> statusMap = googleStatusConvert.convert(devices);
         /**
          * 所有设备状态都单个返回，不考虑控制时分的组
          */

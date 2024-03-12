@@ -55,7 +55,7 @@ public enum GoogleActionValueEnum {
      * @param actionMapping
      * @return
      */
-    public String valueConvert(Object value, ActionMapping actionMapping) {
+    public Object valueConvert(Object value, ActionMapping actionMapping) {
         value = getValue(value, actionMapping);
         if (ObjectUtil.isNotNull(actionMapping.getConvertFunction())) {
             value = actionMapping.getConvertFunction().convert(value.toString());
@@ -64,7 +64,7 @@ public enum GoogleActionValueEnum {
             //转化
             value = actionMapping.getValueMapping().get(String.valueOf(value)).toString();
         }
-        return value.toString();
+        return value;
     }
 
     /**

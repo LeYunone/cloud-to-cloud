@@ -39,20 +39,20 @@ public class AlexaDeviceInfoConverter extends AbstractAlexaDataConverterTemplate
         List<ProductMapping> mapping = productMappingService.getMapping(pids, ThirdPartyCloudEnum.ALEXA);
         Map<String, AlexaProductMapping> productMappings = super.convertToMapByProductId(mapping);
 
-        return r.stream().filter(deviceShadowModel -> productMappings.containsKey(deviceShadowModel.getProductId())).map(deviceShadowModel -> {
-            String pid = deviceShadowModel.getProductId();
+        return r.stream().filter(deviceInfo -> productMappings.containsKey(deviceInfo.getProductId())).map(deviceInfo -> {
+            String pid = deviceInfo.getProductId();
             AlexaProductMapping productMapping = productMappings.get(pid);
 
             Map<String, String> additionalAttributes = new HashMap<>();
             AlexaDevice alexaDevice = new AlexaDevice();
-            alexaDevice.setEndpointId(String.valueOf(deviceShadowModel.getDeviceId()));
+            alexaDevice.setEndpointId(String.valueOf(deviceInfo.getDeviceId()));
             alexaDevice.setManufacturerName("DEV");
             alexaDevice.setDescription("");
-            alexaDevice.setFriendlyName(deviceShadowModel.getDeviceName());
+            alexaDevice.setFriendlyName(deviceInfo.getDeviceName());
             alexaDevice.setAdditionalAttributes(additionalAttributes);
             alexaDevice.setDisplayCategories(productMapping.getThirdProductIds());
             Map<String, String> cookie = new HashMap<>();
-            cookie.put("productId", deviceShadowModel.getProductId());
+            cookie.put("productId", deviceInfo.getProductId());
             alexaDevice.setCookie(cookie);
 
             /**

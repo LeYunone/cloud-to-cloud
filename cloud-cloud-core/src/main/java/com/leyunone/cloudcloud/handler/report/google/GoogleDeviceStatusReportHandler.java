@@ -8,6 +8,7 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.homegraph.v1.HomeGraphService;
 import com.google.api.services.homegraph.v1.model.ReportStateAndNotificationDevice;
 import com.google.api.services.homegraph.v1.model.ReportStateAndNotificationRequest;
+import com.google.api.services.homegraph.v1.model.ReportStateAndNotificationResponse;
 import com.google.api.services.homegraph.v1.model.StateAndNotificationPayload;
 import com.leyunone.cloudcloud.bean.info.DeviceCloudInfo;
 import com.leyunone.cloudcloud.bean.info.DeviceInfo;
@@ -85,7 +86,8 @@ public class GoogleDeviceStatusReportHandler extends AbstractGoogleDeviceMessage
                                                             .setStates(states)));
             Object o = JSONObject.toJSONString(request);
             HomeGraphService.Devices.ReportStateAndNotification reportStateAndNotification = GoogleDeviceStatusReportHandler.homeGraphService.devices().reportStateAndNotification(request);
-            logger.debug("google device online report response:{}", reportStateAndNotification.toString());
+            ReportStateAndNotificationResponse execute = reportStateAndNotification.execute();
+            logger.debug("google device online report response:{}", execute);
         } catch (Exception e) {
             e.printStackTrace();
         }

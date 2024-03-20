@@ -32,7 +32,7 @@ public class FunctionMappingRepositoryImpl extends BaseRepository<FunctionMappin
     public FunctionMappingDO selectByProductThirdCode(String productId, String thirdCode) {
         LambdaQueryWrapper<FunctionMappingDO> lambda = new QueryWrapper<FunctionMappingDO>().lambda();
         lambda.eq(FunctionMappingDO::getProductId,productId);
-        lambda.eq(FunctionMappingDO::getThirdPartyCode,thirdCode);
+        lambda.eq(FunctionMappingDO::getThirdSignCode,thirdCode);
         return this.baseMapper.selectOne(lambda);
     }
 

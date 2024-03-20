@@ -1,9 +1,12 @@
 package com.leyunone.cloudcloud.handler.protocol.baidu;
 
-import com.leyunone.cloudcloud.bean.baidu.*;
 import com.leyunone.cloudcloud.bean.dto.DeviceFunctionDTO;
 import com.leyunone.cloudcloud.bean.info.ActionContext;
 import com.leyunone.cloudcloud.bean.info.DeviceInfo;
+import com.leyunone.cloudcloud.bean.third.baidu.BaiduAttributes;
+import com.leyunone.cloudcloud.bean.third.baidu.BaiduHeader;
+import com.leyunone.cloudcloud.bean.third.baidu.DeviceControlRequest;
+import com.leyunone.cloudcloud.bean.third.baidu.DeviceControlResponse;
 import com.leyunone.cloudcloud.constant.BaiduActionConstants;
 import com.leyunone.cloudcloud.handler.convert.baidu.BaiduActionConvert;
 import com.leyunone.cloudcloud.handler.convert.baidu.BaiduStatusConverter;

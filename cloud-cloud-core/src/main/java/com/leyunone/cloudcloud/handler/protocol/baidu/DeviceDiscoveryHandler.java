@@ -3,17 +3,17 @@ package com.leyunone.cloudcloud.handler.protocol.baidu;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
-import com.leyunone.cloudcloud.bean.baidu.BaiduDevice;
-import com.leyunone.cloudcloud.bean.baidu.BaiduDiscoverAppliancesResponse;
-import com.leyunone.cloudcloud.bean.baidu.BaiduHeader;
-import com.leyunone.cloudcloud.bean.baidu.DeviceDiscoveryRequest;
+import com.leyunone.cloudcloud.bean.third.baidu.BaiduDevice;
+import com.leyunone.cloudcloud.bean.third.baidu.BaiduDiscoverAppliancesResponse;
+import com.leyunone.cloudcloud.bean.third.baidu.BaiduHeader;
+import com.leyunone.cloudcloud.bean.third.baidu.DeviceDiscoveryRequest;
 import com.leyunone.cloudcloud.bean.info.AccessTokenInfo;
 import com.leyunone.cloudcloud.bean.info.ActionContext;
 import com.leyunone.cloudcloud.bean.info.DeviceInfo;
 import com.leyunone.cloudcloud.constant.BaiduActionConstants;
+import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.handler.convert.baidu.BaiduDeviceConvert;
 import com.leyunone.cloudcloud.handler.factory.CloudProtocolHandlerFactory;
-import com.leyunone.cloudcloud.handler.factory.StrategyFactory;
 import com.leyunone.cloudcloud.mangaer.DeviceRelationManager;
 import com.leyunone.cloudcloud.mangaer.DeviceServiceHttpManager;
 import org.springframework.stereotype.Service;
@@ -44,6 +44,11 @@ public class DeviceDiscoveryHandler extends AbstractStrategyBaiduHandler<BaiduDi
     protected BaiduDiscoverAppliancesResponse action1(DeviceDiscoveryRequest deviceDiscoveryRequest, ActionContext context) {
         AccessTokenInfo.User user = context.getAccessTokenInfo().getUser();
         List<DeviceInfo> deviceInfos = deviceServiceHttpManager.getDeviceListByUserId(user.getUserId(), context.getThirdPartyCloudConfigInfo());
+        super.doRelationStore(deviceInfos,
+                context.getAccessTokenInfo().getUser().getUserId(),
+                context.getThirdPartyCloudConfigInfo().getClientId(), ThirdPartyCloudEnum.BAIDU, (thirdMapping -> {
+                    thirdMapping.setThirdId(deviceDiscoveryRequest.getPayload().getOpenUid());
+                }));
         List<BaiduDevice> convert = baiduDeviceConvert.convert(deviceInfos);
         //分组
         List<BaiduDiscoverAppliancesResponse.DiscoveredGroup> groups = deviceInfos.stream()

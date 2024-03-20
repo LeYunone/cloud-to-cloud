@@ -4,6 +4,7 @@ import com.leyunone.cloudcloud.bean.info.AccessTokenInfo;
 import com.leyunone.cloudcloud.handler.factory.CloudCloudHandlerFactory;
 import com.leyunone.cloudcloud.handler.factory.StrategyFactory;
 import com.leyunone.cloudcloud.mangaer.AccessTokenManager;
+import com.leyunone.cloudcloud.service.ThirdPartyConfigService;
 import com.leyunone.cloudcloud.strategy.AbstractStrategyAutoRegisterComponent;
 
 /**
@@ -17,9 +18,12 @@ public abstract class AbstractCloudCloudHandler extends AbstractStrategyAutoRegi
 
     private final AccessTokenManager accessTokenManager;
 
-    protected AbstractCloudCloudHandler(CloudCloudHandlerFactory factory, AccessTokenManager accessTokenManager) {
+    protected final ThirdPartyConfigService thirdPartyConfigService;
+
+    protected AbstractCloudCloudHandler(CloudCloudHandlerFactory factory, AccessTokenManager accessTokenManager,ThirdPartyConfigService thirdPartyConfigService) {
         super(factory);
         this.accessTokenManager = accessTokenManager;
+        this.thirdPartyConfigService = thirdPartyConfigService;
     }
 
     @Override

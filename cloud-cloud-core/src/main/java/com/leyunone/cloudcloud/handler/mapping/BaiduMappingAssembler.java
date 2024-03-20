@@ -65,15 +65,15 @@ public class BaiduMappingAssembler extends AbstractStrategyMappingAssembler<Baid
                     List<FunctionMappingDO> functionMappings = functionMappingMap.get(p);
                     List<ActionMappingDO> actionMappings = actionMappingMap.get(p);
                     List<ProductTypeMappingDO> productTypeMappings = productMappingMap.get(p);
-                    if (CollectionUtils.isEmpty(functionMappings)) {
+                    if (CollectionUtils.isEmpty(functionMappings) || CollectionUtils.isEmpty(productTypeMappings)) {
                         return null;
                     }
                     BaiduProductMapping baiduProductMapping = new BaiduProductMapping();
                     baiduProductMapping.setProductId(p);
-                    baiduProductMapping.setThirdProductIds(productTypeMappings.stream().map(ProductTypeMappingDO::getThirdProductId).distinct().collect(Collectors.toList()));
+                    baiduProductMapping.setThirdProductIds(productTypeMappings.stream().map(ProductTypeMappingDO::getThirdProductId).collect(Collectors.toList()));
                     baiduProductMapping.setThirdPartyCloud(ThirdPartyCloudEnum.BAIDU);
-                    baiduProductMapping.setStatusMappings(convert(functionMappings));
-                    baiduProductMapping.setActionMappings(convertActionMapping(actionMappings));
+                    baiduProductMapping.setStatusMappings(super.convert(functionMappings));
+                    baiduProductMapping.setActionMappings(super.convertActionMapping(actionMappings));
                     return baiduProductMapping;
                 })
                 .filter(ObjectUtil::isNotNull)
@@ -84,28 +84,5 @@ public class BaiduMappingAssembler extends AbstractStrategyMappingAssembler<Baid
     protected String getKey() {
         return ThirdPartyCloudEnum.BAIDU.name();
     }
-
-    @Override
-    protected List<ActionMapping> convertActionMapping(List<ActionMappingDO> actionMappingDos) {
-        if (CollectionUtils.isEmpty(actionMappingDos)) {
-            return new ArrayList<>();
-        }
-        return actionMappingDos
-                .stream()
-                .map(am -> {
-                    ActionMapping actionMapping = new ActionMapping();
-                    BeanUtil.copyProperties(am, actionMapping);
-                    String valueMapping = am.getValueMapping();
-                    if (!StringUtils.isEmpty(valueMapping)) {
-                        JSONObject jsonObject = JSON.parseObject(valueMapping);
-                        actionMapping.setValueMapping(jsonObject.getInnerMap());
-                    } else {
-                        actionMapping.setValueMapping(new HashMap<>());
-                    }
-                    return actionMapping;
-                })
-                .collect(Collectors.toList());
-    }
-
 
 }

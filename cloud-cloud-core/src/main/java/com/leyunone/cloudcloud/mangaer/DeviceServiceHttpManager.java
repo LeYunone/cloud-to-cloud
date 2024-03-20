@@ -27,7 +27,7 @@ public interface DeviceServiceHttpManager {
     List<DeviceInfo> getDeviceListByUserId(String userId, ThirdPartyCloudConfigInfo cloudConfig);
 
 
-    DeviceInfo getDeviceStatusByDeviceId(String userId, Long deviceId, ThirdPartyCloudConfigInfo cloudConfig);
+    DeviceInfo getDeviceStatusByDeviceId(String userId, String deviceId, ThirdPartyCloudConfigInfo cloudConfig);
 
     /**
      * 批量获取状态
@@ -36,7 +36,7 @@ public interface DeviceServiceHttpManager {
      * @param cloudConfig
      * @return
      */
-    List<DeviceInfo> getDevicesStatusByDeviceIds(String userId, List<Long> deviceIds, ThirdPartyCloudConfigInfo cloudConfig);
+    List<DeviceInfo> getDevicesStatusByDeviceIds(String userId, List<String> deviceIds, ThirdPartyCloudConfigInfo cloudConfig);
 
 
     DeviceInfo command(String userId, DeviceFunctionDTO deviceCommand, ThirdPartyCloudConfigInfo cloudConfig);

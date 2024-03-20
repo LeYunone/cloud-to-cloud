@@ -1,6 +1,6 @@
 package com.leyunone.cloudcloud.handler.protocol.tmall;
 
-import com.leyunone.cloudcloud.bean.tmall.TmallHeader;
+import com.leyunone.cloudcloud.bean.third.tmall.TmallHeader;
 import com.leyunone.cloudcloud.handler.factory.CloudProtocolHandlerFactory;
 import com.leyunone.cloudcloud.handler.protocol.AbstractStrategyProtocolHandler;
 import com.leyunone.cloudcloud.mangaer.DeviceRelationManager;

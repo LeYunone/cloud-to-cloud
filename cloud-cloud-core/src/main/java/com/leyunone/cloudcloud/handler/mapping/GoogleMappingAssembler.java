@@ -1,5 +1,6 @@
 package com.leyunone.cloudcloud.handler.mapping;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
@@ -60,6 +61,7 @@ public class GoogleMappingAssembler extends AbstractStrategyMappingAssembler<Goo
         List<DeviceCapabilityDO> deviceCapabilityDOS = deviceCapabilityRepository.selectByCloud(ThirdPartyCloudEnum.GOOGLE);
         List<ProductTypeMappingDO> productTypeMappingDOS = productTypeMappingRepository.selectByProductIds(pids, ThirdPartyCloudEnum.GOOGLE.name());
 
+        Map<String, List<ActionMappingDO>> actionMappingMap = CollectionFunctionUtils.groupTo(actionMappingDOS, ActionMappingDO::getProductId);
         Map<String, List<FunctionMappingDO>> functionMappingMap = CollectionFunctionUtils.groupTo(functionMappingDos, FunctionMappingDO::getProductId);
         Map<Integer, DeviceCapabilityDO> capabilityMap = CollectionFunctionUtils.mapTo(deviceCapabilityDOS, DeviceCapabilityDO::getId);
         Map<String, List<ProductTypeMappingDO>> typeMap = productTypeMappingDOS.stream().collect(Collectors.groupingBy(ProductTypeMappingDO::getProductId));
@@ -67,48 +69,22 @@ public class GoogleMappingAssembler extends AbstractStrategyMappingAssembler<Goo
                 .stream()
                 .map(p -> {
                     List<FunctionMappingDO> functionMappings = functionMappingMap.get(p);
-                    if (CollectionUtils.isEmpty(functionMappings) || CollectionUtil.isEmpty(productTypeMappingDOS)) {
+                    List<ProductTypeMappingDO> productTypes = typeMap.get(p);
+                    if (CollectionUtils.isEmpty(functionMappings) || CollectionUtil.isEmpty(productTypes)) {
                         return null;
                     }
-                    List<ProductTypeMappingDO> productTypes = typeMap.get(p);
+                    List<ActionMappingDO> actionMaps = actionMappingMap.get(p);
                     GoogleProductMapping productMapping = new GoogleProductMapping();
                     productMapping.setProductId(p);
                     productMapping.setThirdPartyCloud(ThirdPartyCloudEnum.GOOGLE);
-                    productMapping.setStatusMappings(convert(functionMappings));
-                    productMapping.setActionMappings(super.convertActionMapping(actionMappingDOS));
-                    //集合去重
-                    productMapping.setTraits(CollectionUtil.newArrayList(functionMappings.stream().map(f -> f.getThirdPartyCode().split("_")[1]).collect(Collectors.toSet())));
+                    productMapping.setStatusMappings(super.convert(functionMappings));
+                    productMapping.setActionMappings(super.convertActionMapping(actionMaps));
+                    productMapping.setTraits(CollectionUtil.newArrayList(functionMappings.stream().map(FunctionMappingDO::getThirdActionCode).collect(Collectors.toSet())));
                     productMapping.setAttributes(this.buildConfig(functionMappings, capabilityMap));
                     productMapping.setThirdProductIds(productTypes.stream().map(ProductTypeMappingDO::getThirdProductId).distinct().collect(Collectors.toList()));
                     return productMapping;
                 })
                 .filter(ObjectUtil::isNotNull)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    protected List<StatusMapping> convert(List<FunctionMappingDO> functionMappingDos) {
-        if (CollectionUtil.isEmpty(functionMappingDos)) {
-            return new ArrayList<>();
-        }
-        return functionMappingDos
-                .stream()
-                .map(fm -> {
-                    StatusMapping functionMapping = StatusMapping.Converter.INSTANCE.convert(fm);
-                    String valueMapping = fm.getValueMapping();
-                    Map<String, Object> map = new HashMap<>();
-                    if (StrUtil.isNotBlank(valueMapping)) {
-                        JSONObject jsonObject = JSON.parseObject(valueMapping);
-                        map = jsonObject.getInnerMap();
-                    }
-                    /**
-                     * google: thirdSignCode_技能名
-                     */
-                    String[] thirdCodes = fm.getThirdPartyCode().split("_");
-                    functionMapping.setThirdSignCode(thirdCodes[0]);
-                    functionMapping.setValueMapping(map);
-                    return functionMapping;
-                })
                 .collect(Collectors.toList());
     }
 

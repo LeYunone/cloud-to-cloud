@@ -1,10 +1,10 @@
 package com.leyunone.cloudcloud.handler.protocol.alexa;
 
 import cn.hutool.core.collection.CollectionUtil;
-import com.leyunone.cloudcloud.bean.alexa.AlexaControlRequest;
-import com.leyunone.cloudcloud.bean.alexa.AlexaControlResponse;
-import com.leyunone.cloudcloud.bean.alexa.AlexaDeviceProperty;
-import com.leyunone.cloudcloud.bean.alexa.AlexaEndpoint;
+import com.leyunone.cloudcloud.bean.third.alexa.AlexaControlRequest;
+import com.leyunone.cloudcloud.bean.third.alexa.AlexaControlResponse;
+import com.leyunone.cloudcloud.bean.third.alexa.AlexaDeviceProperty;
+import com.leyunone.cloudcloud.bean.third.alexa.AlexaEndpoint;
 import com.leyunone.cloudcloud.bean.dto.DeviceFunctionDTO;
 import com.leyunone.cloudcloud.bean.enums.ActionTypeEnum;
 import com.leyunone.cloudcloud.bean.info.ActionContext;

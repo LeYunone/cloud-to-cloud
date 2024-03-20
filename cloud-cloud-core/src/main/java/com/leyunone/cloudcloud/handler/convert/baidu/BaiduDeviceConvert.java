@@ -1,13 +1,12 @@
 package com.leyunone.cloudcloud.handler.convert.baidu;
 
-import com.leyunone.cloudcloud.bean.baidu.BaiduAttributes;
-import com.leyunone.cloudcloud.bean.baidu.BaiduDevice;
+import com.leyunone.cloudcloud.bean.third.baidu.BaiduAttributes;
+import com.leyunone.cloudcloud.bean.third.baidu.BaiduDevice;
 import com.leyunone.cloudcloud.bean.info.DeviceInfo;
 import com.leyunone.cloudcloud.bean.mapping.ActionMapping;
 import com.leyunone.cloudcloud.bean.mapping.BaiduProductMapping;
 import com.leyunone.cloudcloud.bean.mapping.ProductMapping;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
-import com.leyunone.cloudcloud.handler.factory.ConvertHandlerFactory;
 import com.leyunone.cloudcloud.service.mapping.ProductMappingService;
 import com.leyunone.cloudcloud.util.ConvertUtils;
 import org.springframework.stereotype.Service;
@@ -48,7 +47,7 @@ public class BaiduDeviceConvert extends AbstractBaiduDataConverterTemplate<List<
                         return null;
                     }
                     List<ActionMapping> actionMappings = baiduProductMapping.getActionMappings();
-                    List<String> actions = actionMappings.stream().map(ActionMapping::getAction).filter(Objects::nonNull).distinct().collect(Collectors.toList());
+                    List<String> actions = actionMappings.stream().map(ActionMapping::getThirdActionCode).filter(Objects::nonNull).distinct().collect(Collectors.toList());
                     List<BaiduAttributes> baiduAttributes = convert(baiduProductMapping.getStatusMappings(), d.getDeviceFunctions());
                     Map<String, String> additionalApplianceDetails = new HashMap<>(16);
                     additionalApplianceDetails.put("productId", d.getProductId());

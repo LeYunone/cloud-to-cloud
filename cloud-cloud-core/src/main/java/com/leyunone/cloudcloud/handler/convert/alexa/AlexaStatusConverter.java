@@ -1,7 +1,7 @@
 package com.leyunone.cloudcloud.handler.convert.alexa;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.leyunone.cloudcloud.bean.alexa.AlexaDeviceProperty;
+import com.leyunone.cloudcloud.bean.third.alexa.AlexaDeviceProperty;
 import com.leyunone.cloudcloud.bean.dto.DeviceFunctionDTO;
 import com.leyunone.cloudcloud.bean.enums.ConvertFunctionEnum;
 import com.leyunone.cloudcloud.bean.info.DeviceInfo;
@@ -10,7 +10,6 @@ import com.leyunone.cloudcloud.bean.mapping.AlexaProductMapping;
 import com.leyunone.cloudcloud.bean.mapping.ProductMapping;
 import com.leyunone.cloudcloud.bean.mapping.StatusMapping;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
-import com.leyunone.cloudcloud.handler.factory.ConvertHandlerFactory;
 import com.leyunone.cloudcloud.service.mapping.ProductMappingService;
 import com.leyunone.cloudcloud.util.CollectionFunctionUtils;
 import com.leyunone.cloudcloud.util.TimeUtils;
@@ -58,22 +57,12 @@ public class AlexaStatusConverter extends AbstractAlexaDataConverterTemplate<Lis
                     .timeOfSample(TimeUtils.getUTCyyyyMMddTHHmmssSSSZ())
                     .uncertaintyInMilliseconds(500L)
                     .instance(functionMapping.getInstance())
-                    .namespace(functionMapping.getInterfaceStr())
+                    .namespace(functionMapping.getThirdActionCode())
                     .name(functionMapping.getThirdSignCode())
                     .value(this.valueOf(deviceFunction.getValue(), functionMapping))
                     .build()).collect(Collectors.toList()));
         });
         return result;
     }
-
-    protected Object valueOf(String value, StatusMapping functionMapping) {
-        /**
-         * 需要进行函数转换的属性
-         */
-        if (ObjectUtil.isNotNull(functionMapping.getConvertFunction())) {
-            ConvertFunctionEnum convertFunctionEnum = functionMapping.getConvertFunction();
-            return convertFunctionEnum.convert(value);
-        }
-        return super.valueOf(value, functionMapping);
-    }
+    
 }

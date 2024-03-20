@@ -1,9 +1,9 @@
 package com.leyunone.cloudcloud.handler.protocol.alexa;
 
-import com.leyunone.cloudcloud.bean.alexa.AlexaDevice;
-import com.leyunone.cloudcloud.bean.alexa.AlexaDiscoveryRequest;
-import com.leyunone.cloudcloud.bean.alexa.AlexaDiscoveryResponse;
-import com.leyunone.cloudcloud.bean.alexa.AlexaHeader;
+import com.leyunone.cloudcloud.bean.third.alexa.AlexaDevice;
+import com.leyunone.cloudcloud.bean.third.alexa.AlexaDiscoveryRequest;
+import com.leyunone.cloudcloud.bean.third.alexa.AlexaDiscoveryResponse;
+import com.leyunone.cloudcloud.bean.third.alexa.AlexaHeader;
 import com.leyunone.cloudcloud.bean.info.ActionContext;
 import com.leyunone.cloudcloud.bean.info.DeviceInfo;
 import com.leyunone.cloudcloud.constant.AlexaActionConstants;

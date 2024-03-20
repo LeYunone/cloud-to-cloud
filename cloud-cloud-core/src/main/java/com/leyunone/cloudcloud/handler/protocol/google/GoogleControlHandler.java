@@ -2,8 +2,8 @@ package com.leyunone.cloudcloud.handler.protocol.google;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.leyunone.cloudcloud.bean.dto.DeviceFunctionDTO;
-import com.leyunone.cloudcloud.bean.google.GoogleControlRequest;
-import com.leyunone.cloudcloud.bean.google.GoogleControlResponse;
+import com.leyunone.cloudcloud.bean.third.google.GoogleControlRequest;
+import com.leyunone.cloudcloud.bean.third.google.GoogleControlResponse;
 import com.leyunone.cloudcloud.bean.info.ActionContext;
 import com.leyunone.cloudcloud.bean.info.DeviceInfo;
 import com.leyunone.cloudcloud.constant.GoogleActionConstants;

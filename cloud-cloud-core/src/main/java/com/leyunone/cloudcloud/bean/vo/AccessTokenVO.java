@@ -24,5 +24,7 @@ public class AccessTokenVO {
 
     private String refresh_token;
 
-    private String token_type;;
+    private String token_type;
+    
+    private String error;
 }

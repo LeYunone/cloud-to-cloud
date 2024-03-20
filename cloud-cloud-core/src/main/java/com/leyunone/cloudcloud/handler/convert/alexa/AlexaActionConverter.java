@@ -1,16 +1,14 @@
 package com.leyunone.cloudcloud.handler.convert.alexa;
 
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.leyunone.cloudcloud.bean.alexa.AlexaControlRequest;
+import com.leyunone.cloudcloud.bean.third.alexa.AlexaControlRequest;
 import com.leyunone.cloudcloud.bean.dto.DeviceFunctionDTO;
 import com.leyunone.cloudcloud.bean.enums.AlexaActionValueEnum;
 import com.leyunone.cloudcloud.bean.mapping.AlexaProductMapping;
 import com.leyunone.cloudcloud.bean.mapping.ProductMapping;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
-import com.leyunone.cloudcloud.handler.factory.ConvertHandlerFactory;
 import com.leyunone.cloudcloud.service.mapping.ProductMappingService;
 import com.leyunone.cloudcloud.util.CollectionFunctionUtils;
 import org.springframework.stereotype.Service;

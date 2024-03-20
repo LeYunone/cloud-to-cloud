@@ -1,26 +1,18 @@
 package com.leyunone.cloudcloud.handler.action;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.leyunone.cloudcloud.annotate.Strategist;
-import com.leyunone.cloudcloud.bean.alexa.*;
+import com.leyunone.cloudcloud.bean.third.alexa.*;
 import com.leyunone.cloudcloud.bean.info.AccessTokenInfo;
 import com.leyunone.cloudcloud.bean.info.ActionContext;
 import com.leyunone.cloudcloud.bean.info.ThirdPartyCloudConfigInfo;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
-import com.leyunone.cloudcloud.handler.action.AbstractCloudCloudHandler;
 import com.leyunone.cloudcloud.handler.factory.CloudCloudHandlerFactory;
+import com.leyunone.cloudcloud.handler.protocol.AbstractStrategyProtocolHandler;
 import com.leyunone.cloudcloud.handler.protocol.CloudProtocolHandler;
 import com.leyunone.cloudcloud.mangaer.AccessTokenManager;
 import com.leyunone.cloudcloud.service.ThirdPartyConfigService;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.ValidationUtils;
-
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * :)
@@ -32,11 +24,9 @@ import java.util.stream.Collectors;
 @Service
 public class AlexaCloudHandler extends AbstractCloudCloudHandler {
 
-    private final ThirdPartyConfigService thirdPartyConfigService;
 
     protected AlexaCloudHandler(CloudCloudHandlerFactory factory, AccessTokenManager accessTokenManager, ThirdPartyConfigService thirdPartyConfigService) {
-        super(factory, accessTokenManager);
-        this.thirdPartyConfigService = thirdPartyConfigService;
+        super(factory, accessTokenManager, thirdPartyConfigService);
     }
 
     /**
@@ -65,7 +55,7 @@ public class AlexaCloudHandler extends AbstractCloudCloudHandler {
 
         AlexaHeader header = alexaStandardRequest.getDirective().getHeader();
         String namespace = header.getNamespace();
-        CloudProtocolHandler outwardCloudHandler = factory.getStrategy(namespace, CloudProtocolHandler.class);
+        AbstractStrategyProtocolHandler outwardCloudHandler = factory.getStrategy(namespace, AbstractStrategyProtocolHandler.class);
         Object action = outwardCloudHandler.action(request, new ActionContext(accessToken, config));
         /**
          * 发现设备响应需要处理 interface特殊字段

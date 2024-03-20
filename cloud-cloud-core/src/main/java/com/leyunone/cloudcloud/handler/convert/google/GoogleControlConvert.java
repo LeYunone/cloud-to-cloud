@@ -4,8 +4,8 @@ import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.leyunone.cloudcloud.bean.dto.DeviceFunctionDTO;
 import com.leyunone.cloudcloud.bean.enums.GoogleActionValueEnum;
-import com.leyunone.cloudcloud.bean.google.GoogleControlRequest;
-import com.leyunone.cloudcloud.bean.google.GoogleDevice;
+import com.leyunone.cloudcloud.bean.third.google.GoogleControlRequest;
+import com.leyunone.cloudcloud.bean.third.google.GoogleDevice;
 import com.leyunone.cloudcloud.bean.mapping.ActionMapping;
 import com.leyunone.cloudcloud.bean.mapping.GoogleProductMapping;
 import com.leyunone.cloudcloud.bean.mapping.ProductMapping;
@@ -71,7 +71,7 @@ public class GoogleControlConvert extends AbstractGoogleDataConverterTemplate<Li
                  *                        }
                  */
 
-                Map<String, List<ActionMapping>> actionMaps = CollectionFunctionUtils.groupTo(actionMappings, a -> a.getAction().split("_")[1]);
+                Map<String, List<ActionMapping>> actionMaps = CollectionFunctionUtils.groupTo(actionMappings, ActionMapping::getThirdActionCode);
                 //一次发出多个动作
                 execution.forEach(action -> {
                     List<ActionMapping> actionMap = actionMaps.get(action.getCommand());
@@ -100,10 +100,8 @@ public class GoogleControlConvert extends AbstractGoogleDataConverterTemplate<Li
          * Google取值规则：默认直接根据code值取值 
          *               有枚举走对象取值
          */
-        String action = actionMapping.getAction();
-        String[] thirdCodes = action.split("_");
-        String command = thirdCodes[1];
-        String[] codes = thirdCodes[0].split("#");
+        String command = actionMapping.getThirdActionCode();
+        String[] codes = actionMapping.getThirdSignCode().split("#");
         //最终值
         Object value = actionMapping.getDefaultValue();
         for (int i = 0; i < codes.length; i++) {

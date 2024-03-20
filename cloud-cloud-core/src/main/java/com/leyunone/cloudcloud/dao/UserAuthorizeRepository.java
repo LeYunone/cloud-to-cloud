@@ -6,6 +6,8 @@ import com.leyunone.cloudcloud.dao.base.iservice.IBaseRepository;
 import com.leyunone.cloudcloud.dao.entity.UserAuthorizeDO;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 
+import java.util.List;
+
 
 /**
  * :)
@@ -32,5 +34,7 @@ public interface UserAuthorizeRepository extends IBaseRepository<UserAuthorizeDO
     void updateByUserIdAndThirdPartyCloud(UserAuthorizeDO userAuthorizeDO, ThirdPartyCloudEnum cloud);
 
     UserClientInfoModel selectUserClientInfo(String userId, ThirdPartyCloudEnum cloud);
+
+    List<UserAuthorizeDO> selectByUserIds(List<String> userIds);
 
 }

@@ -1,6 +1,7 @@
 package com.leyunone.cloudcloud.dao;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.leyunone.cloudcloud.bean.UserClientInfoModel;
 import com.leyunone.cloudcloud.dao.base.repository.BaseRepository;
@@ -9,6 +10,8 @@ import com.leyunone.cloudcloud.dao.mapper.UserAuthorizeMapper;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.mangaer.CacheManager;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * :)
@@ -56,6 +59,13 @@ public class UserAuthorizeRepositoryImpl extends BaseRepository<UserAuthorizeMap
     @Override
     public UserClientInfoModel selectUserClientInfo(String userId, ThirdPartyCloudEnum cloud) {
         return this.baseMapper.selectUserClientInfo(userId, cloud);
+    }
+
+    @Override
+    public List<UserAuthorizeDO> selectByUserIds(List<String> userIds) {
+        LambdaQueryWrapper<UserAuthorizeDO> lambda = new QueryWrapper<UserAuthorizeDO>().lambda();
+        lambda.in(UserAuthorizeDO::getUserId, userIds);
+        return this.baseMapper.selectList(lambda);
     }
 
     private String generateUserCacheKey(String userId, ThirdPartyCloudEnum cloud) {

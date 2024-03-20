@@ -33,7 +33,15 @@ public class ActionMappingDO{
 
     private String productId;
 
-    private String thirdPartyCode;
+    /**
+     * 三方参数
+     */
+    private String thirdSignCode;
+
+    /**
+     * 三方行为标识
+     */
+    private String thirdActionCode;
 
     private String signCode;
 
@@ -48,8 +56,6 @@ public class ActionMappingDO{
     private ThirdPartyCloudEnum thirdPartyCloud;
 
     private OperationEnum operation;
-    
-    private String thirdActionCode;
 
     private ConvertFunctionEnum convertFunction;
 

@@ -74,6 +74,11 @@
             <artifactId>google-api-services-homegraph</artifactId>
             <version>v1-rev20230707-2.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.auth</groupId>
+            <artifactId>google-auth-library-oauth2-http</artifactId>
+            <version>1.19.0</version>
+        </dependency>
     </dependencies>
 
 </project>

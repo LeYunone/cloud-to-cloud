@@ -23,7 +23,15 @@ import java.util.Map;
 @Setter
 public class ActionMapping {
 
-    private String action;
+    /**
+     * 三方参数
+     */
+    private String thirdSignCode;
+
+    /**
+     * 三方行为标识
+     */
+    private String thirdActionCode;
 
     private Integer functionId;
 
@@ -53,7 +61,6 @@ public class ActionMapping {
 
         @Mappings({
                 @Mapping(target = "valueMapping",ignore = true),
-                @Mapping(target = "action",source = "thirdPartyCode"),
                 @Mapping(target = "operation",ignore = true)
         })
         ActionMapping convert(ActionMappingDO actionMappingDO);

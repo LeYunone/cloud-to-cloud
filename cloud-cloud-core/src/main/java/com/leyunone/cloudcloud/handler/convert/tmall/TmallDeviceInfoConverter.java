@@ -4,9 +4,8 @@ import cn.hutool.core.util.ObjectUtil;
 import com.leyunone.cloudcloud.bean.info.DeviceInfo;
 import com.leyunone.cloudcloud.bean.mapping.ProductMapping;
 import com.leyunone.cloudcloud.bean.mapping.TmallProductMapping;
-import com.leyunone.cloudcloud.bean.tmall.TmallDevice;
+import com.leyunone.cloudcloud.bean.third.tmall.TmallDevice;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
-import com.leyunone.cloudcloud.handler.factory.ConvertHandlerFactory;
 import com.leyunone.cloudcloud.service.mapping.ProductMappingService;
 import org.springframework.stereotype.Service;
 

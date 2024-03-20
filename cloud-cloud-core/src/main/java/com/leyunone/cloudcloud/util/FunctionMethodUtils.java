@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.leyunone.cloudcloud.bean.HSVColor;
 import com.leyunone.cloudcloud.bean.RGBColor;
 import com.leyunone.cloudcloud.bean.RGBWColor;
-import com.leyunone.cloudcloud.bean.baidu.DeviceControlRequest;
+import com.leyunone.cloudcloud.bean.third.baidu.DeviceControlRequest;
 
 import java.awt.*;
 

@@ -1,8 +1,8 @@
 package com.leyunone.cloudcloud.handler.protocol.google;
 
-import com.leyunone.cloudcloud.bean.google.GoogleDevice;
-import com.leyunone.cloudcloud.bean.google.GoogleDiscoveryResponse;
-import com.leyunone.cloudcloud.bean.google.GoogleStandardRequest;
+import com.leyunone.cloudcloud.bean.third.google.GoogleDevice;
+import com.leyunone.cloudcloud.bean.third.google.GoogleDiscoveryResponse;
+import com.leyunone.cloudcloud.bean.third.google.GoogleStandardRequest;
 import com.leyunone.cloudcloud.bean.info.ActionContext;
 import com.leyunone.cloudcloud.bean.info.DeviceInfo;
 import com.leyunone.cloudcloud.constant.GoogleActionConstants;

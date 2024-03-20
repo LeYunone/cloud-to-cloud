@@ -1,7 +1,7 @@
 package com.leyunone.cloudcloud.handler.convert.google;
 
 import cn.hutool.core.collection.CollectionUtil;
-import com.leyunone.cloudcloud.bean.google.GoogleDevice;
+import com.leyunone.cloudcloud.bean.third.google.GoogleDevice;
 import com.leyunone.cloudcloud.bean.info.DeviceInfo;
 import com.leyunone.cloudcloud.bean.mapping.GoogleProductMapping;
 import com.leyunone.cloudcloud.bean.mapping.ProductMapping;

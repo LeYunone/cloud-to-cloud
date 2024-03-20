@@ -36,7 +36,7 @@ public class ThirdPartyCloudConfigInfo {
 
     private String reportUrl;
 
-    private ThirdPartyCloudEnum thirdPartyCloudEnum;
+    private ThirdPartyCloudEnum thirdPartyCloud;
 
     private LocalDateTime createTime;
 

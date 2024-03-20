@@ -51,4 +51,16 @@ public class OAuthServiceImpl implements OAuthService {
                 .token_type(accessTokenEntity.getTokenType())
                 .build();
     }
+
+    @Override
+    public AccessTokenVO generateAccessTokenByRefreshToken(String refreshToken, String clientId) {
+        AccessTokenInfo accessTokenEntity = accessTokenManager.generateAccessTokenByRefreshToken(refreshToken, clientId);
+        return AccessTokenVO
+                .builder()
+                .access_token(accessTokenEntity.getAccessToken())
+                .refresh_token(accessTokenEntity.getRefreshToken())
+                .expires_in(accessTokenEntity.getExpiresIn())
+                .token_type(accessTokenEntity.getTokenType())
+                .build();
+    }
 }

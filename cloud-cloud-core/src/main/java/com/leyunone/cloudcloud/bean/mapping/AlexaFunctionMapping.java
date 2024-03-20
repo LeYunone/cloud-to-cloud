@@ -23,8 +23,6 @@ public class AlexaFunctionMapping extends StatusMapping {
      */
     private String instance;
 
-    private String interfaceStr;
-
     private String productId;
 
     private Integer capabilityConfigId;

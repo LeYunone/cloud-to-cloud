@@ -32,20 +32,9 @@ public class StatusMapping {
     
     private String thirdSignCode;
 
+    private String thirdActionCode;
+
     private String legalValue;
 
     private ConvertFunctionEnum convertFunction;;
-
-
-    @Mapper
-    public interface Converter {
-
-        Converter INSTANCE  = Mappers.getMapper(Converter.class);
-
-        @Mappings({
-                @Mapping(target = "valueMapping",ignore = true)
-        })
-        StatusMapping convert(FunctionMappingDO functionMappingDO);
-
-    }
 }

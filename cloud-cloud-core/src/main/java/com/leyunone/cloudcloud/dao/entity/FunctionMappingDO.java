@@ -52,7 +52,9 @@ public class FunctionMappingDO {
     /**
      * 语音技能枚举 详细请见代码
      */
-    private String thirdPartyCode;
+    private String thirdSignCode;
+
+    private String thirdActionCode;
 
     /**
      * 语音平台  0：百度

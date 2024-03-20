@@ -2,11 +2,10 @@ package com.leyunone.cloudcloud.handler.protocol.tmall;
 
 import com.leyunone.cloudcloud.bean.info.ActionContext;
 import com.leyunone.cloudcloud.bean.info.DeviceInfo;
-import com.leyunone.cloudcloud.bean.tmall.TmallDevice;
-import com.leyunone.cloudcloud.bean.tmall.TmallDiscoverRequest;
-import com.leyunone.cloudcloud.bean.tmall.TmallDiscoverResponse;
-import com.leyunone.cloudcloud.bean.tmall.TmallHeader;
-import com.leyunone.cloudcloud.constant.BaiduActionConstants;
+import com.leyunone.cloudcloud.bean.third.tmall.TmallDevice;
+import com.leyunone.cloudcloud.bean.third.tmall.TmallDiscoverRequest;
+import com.leyunone.cloudcloud.bean.third.tmall.TmallDiscoverResponse;
+import com.leyunone.cloudcloud.bean.third.tmall.TmallHeader;
 import com.leyunone.cloudcloud.constant.TmallActionConstants;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.handler.convert.tmall.TmallDeviceInfoConverter;

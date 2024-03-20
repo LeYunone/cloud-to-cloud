@@ -10,6 +10,7 @@ import com.google.api.services.homegraph.v1.model.ReportStateAndNotificationDevi
 import com.google.api.services.homegraph.v1.model.ReportStateAndNotificationRequest;
 import com.google.api.services.homegraph.v1.model.ReportStateAndNotificationResponse;
 import com.google.api.services.homegraph.v1.model.StateAndNotificationPayload;
+import com.google.auth.http.HttpCredentialsAdapter;
 import com.leyunone.cloudcloud.bean.info.DeviceCloudInfo;
 import com.leyunone.cloudcloud.bean.info.DeviceInfo;
 import com.leyunone.cloudcloud.dao.entity.ThirdPartyClientDO;

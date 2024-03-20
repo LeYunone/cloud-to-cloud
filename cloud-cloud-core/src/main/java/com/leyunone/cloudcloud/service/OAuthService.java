@@ -28,4 +28,7 @@ public interface OAuthService {
      * @return
      */
     AccessTokenVO generateAccessTokenByCode(String code, String clientId);
+
+    AccessTokenVO generateAccessTokenByRefreshToken(String refreshToken,String clientId);
+
 }

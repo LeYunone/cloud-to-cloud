@@ -30,18 +30,18 @@ public abstract class AbstractBaiduDataConverterTemplate<R, P> extends AbstractD
         if (CollectionUtil.isEmpty(statusMappings) || CollectionUtil.isEmpty(status)) {
             return new ArrayList<>();
         }
-        Map<String, StatusMapping> functionMappingMap = statusMappings
+        Map<String, StatusMapping> statusMappingMap = statusMappings
                 .stream()
                 .collect(Collectors.toMap(StatusMapping::getSignCode, v -> v, (v1, v2) -> v2));
         return status
                 .stream()
                 .map(s -> {
                     String signCode = s.getSignCode();
-                    StatusMapping statusMapping = functionMappingMap.get(signCode);
+                    StatusMapping statusMapping = statusMappingMap.get(signCode);
                     if (null == statusMapping) {
                         return null;
                     }
-                    String value = s.getValue();
+                    String value = s.getValue().toString();
                     value = valueOf(value, statusMapping).toString();
                     return BaiduAttributes
                             .builder()

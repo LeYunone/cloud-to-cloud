@@ -1,5 +1,6 @@
 package com.leyunone.cloudcloud.bean.third.baidu;
 
+import com.alibaba.fastjson.JSONObject;
 import lombok.*;
 
 import java.util.Map;
@@ -17,10 +18,11 @@ public class DeviceControlRequest {
 
     private BaiduHeader header;
 
-    private Payload payload;
+    private JSONObject payload;
 
     @Getter
     @Setter
+    @Deprecated
     public static class Payload{
 
         private String accessToken;

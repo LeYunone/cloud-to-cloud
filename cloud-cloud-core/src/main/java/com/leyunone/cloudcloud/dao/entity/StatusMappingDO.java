@@ -23,8 +23,8 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("m_function_mapping")
-public class FunctionMappingDO {
+@TableName("m_status_mapping")
+public class StatusMappingDO {
 
     private static final long serialVersionUID = 1L;
 

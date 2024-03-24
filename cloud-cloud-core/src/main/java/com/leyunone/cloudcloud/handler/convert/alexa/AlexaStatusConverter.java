@@ -59,7 +59,7 @@ public class AlexaStatusConverter extends AbstractAlexaDataConverterTemplate<Lis
                     .instance(functionMapping.getInstance())
                     .namespace(functionMapping.getThirdActionCode())
                     .name(functionMapping.getThirdSignCode())
-                    .value(this.valueOf(deviceFunction.getValue(), functionMapping))
+                    .value(this.valueOf(deviceFunction.getValue().toString(), functionMapping))
                     .build()).collect(Collectors.toList()));
         });
         return result;

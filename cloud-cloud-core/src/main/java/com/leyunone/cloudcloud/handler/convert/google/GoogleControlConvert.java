@@ -1,9 +1,7 @@
 package com.leyunone.cloudcloud.handler.convert.google;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.alibaba.fastjson.JSONObject;
 import com.leyunone.cloudcloud.bean.dto.DeviceFunctionDTO;
-import com.leyunone.cloudcloud.bean.enums.GoogleActionValueEnum;
 import com.leyunone.cloudcloud.bean.third.google.GoogleControlRequest;
 import com.leyunone.cloudcloud.bean.third.google.GoogleDevice;
 import com.leyunone.cloudcloud.bean.mapping.ActionMapping;
@@ -77,7 +75,7 @@ public class GoogleControlConvert extends AbstractGoogleDataConverterTemplate<Li
                     List<ActionMapping> actionMap = actionMaps.get(action.getCommand());
                     //一个动作映射我方云多个操作
                     actionMap.forEach(actionMapping -> {
-                        Object value = this.getValue(action.getParams(), actionMapping);
+                        Object value = super.getControlValue(action.getParams(), actionMapping);
                         if (ObjectUtil.isNull(value)) return;
                         DeviceFunctionDTO codeCommand = new DeviceFunctionDTO();
                         codeCommand.setSignCode(actionMapping.getSignCode());
@@ -93,26 +91,6 @@ public class GoogleControlConvert extends AbstractGoogleDataConverterTemplate<Li
 
         });
         return functionCodeCommands;
-    }
-
-    private Object getValue(JSONObject params, ActionMapping actionMapping) {
-        /**
-         * Google取值规则：默认直接根据code值取值 
-         *               有枚举走对象取值
-         */
-        String command = actionMapping.getThirdActionCode();
-        String[] codes = actionMapping.getThirdSignCode().split("#");
-        //最终值
-        Object value = actionMapping.getDefaultValue();
-        for (int i = 0; i < codes.length; i++) {
-            if (i == codes.length - 1) {
-                value = params.get(codes[i]);
-                break;
-            }
-            params = (JSONObject) params.get(codes[i]);
-        }
-        GoogleActionValueEnum byEnumName = GoogleActionValueEnum.getByEnumName(command);
-        return byEnumName.valueConvert(value, actionMapping);
     }
 
 

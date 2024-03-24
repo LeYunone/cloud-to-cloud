@@ -3,8 +3,7 @@ package com.leyunone.cloudcloud.bean.mapping;
 import com.leyunone.cloudcloud.bean.enums.ConvertFunctionEnum;
 import com.leyunone.cloudcloud.dao.entity.ActionMappingDO;
 import com.leyunone.cloudcloud.enums.OperationEnum;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -21,6 +20,9 @@ import java.util.Map;
  */
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ActionMapping {
 
     /**

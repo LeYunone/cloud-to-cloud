@@ -23,7 +23,7 @@ public class DeviceFunctionDTO {
 
     private Integer functionId;
 
-    private String value;
+    private Object value;
     
     private Long timestamp;
 

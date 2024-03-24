@@ -1,13 +1,8 @@
 package com.leyunone.cloudcloud.bean.mapping;
 
 import com.leyunone.cloudcloud.bean.enums.ConvertFunctionEnum;
-import com.leyunone.cloudcloud.dao.entity.FunctionMappingDO;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.ibatis.annotations.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
-import org.mapstruct.factory.Mappers;
 
 import java.util.Map;
 

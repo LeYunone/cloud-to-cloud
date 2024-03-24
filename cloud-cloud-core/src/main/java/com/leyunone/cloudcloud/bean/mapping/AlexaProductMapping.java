@@ -68,34 +68,6 @@ public class AlexaProductMapping extends ProductMapping {
          * 技能表映射
          * key = thirdSignCode alexa中的name
          */
-        private Map<String, CapabilityMapping> capabilityMapping = new HashMap<>();
-    }
-
-    @Getter
-    @Setter
-    @Builder
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class CapabilityMapping implements Serializable {
-
-        /**
-         * 第三方标识
-         */
-        private String thirdSignCode;
-
-        private Map<String, Object> valueMapping;
-
-        /**
-         * 不为空的时候采用默认值
-         */
-        private String defaultValue;
-
-        private Boolean valueOf;
-
-        private OperationEnum operation;
-
-        private String signCode;
-
-        private Integer functionId;
+        private Map<String, ActionMapping> capabilityMapping = new HashMap<>();
     }
 }

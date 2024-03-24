@@ -65,7 +65,7 @@ public class GoogleStatusConvert extends AbstractGoogleDataConverterTemplate<Map
         status.stream().filter(t -> statusMap.containsKey(t.getSignCode())).forEach(deviceFunction -> {
             List<StatusMapping> functionMap = statusMap.get(deviceFunction.getSignCode());
             functionMap.forEach(f -> {
-                Object value = this.valueOf(deviceFunction.getValue(), f);
+                Object value = this.valueOf(deviceFunction.getValue().toString(), f);
                 //非该属性映射
                 if (ObjectUtil.isNull(value)) return;
                 /**

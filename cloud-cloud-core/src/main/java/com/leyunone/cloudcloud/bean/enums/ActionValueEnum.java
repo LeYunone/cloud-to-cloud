@@ -13,14 +13,14 @@ import java.util.Map;
  * @Author LeYunone
  * @Date 2024/2/28 11:05
  */
-public enum GoogleActionValueEnum {
+public enum ActionValueEnum {
 
     DEFAULT("default");
 
-    private static final Map<String, GoogleActionValueEnum> ENUM_MAP = new HashMap<>();
+    private static final Map<String, ActionValueEnum> ENUM_MAP = new HashMap<>();
 
     static {
-        for (GoogleActionValueEnum myEnum : GoogleActionValueEnum.values()) {
+        for (ActionValueEnum myEnum : ActionValueEnum.values()) {
             ENUM_MAP.put(myEnum.getName(), myEnum);
         }
     }
@@ -31,11 +31,11 @@ public enum GoogleActionValueEnum {
      * @param enumName
      * @return
      */
-    public static GoogleActionValueEnum getByEnumName(String enumName) {
+    public static ActionValueEnum getByEnumName(String enumName) {
         return ENUM_MAP.getOrDefault(enumName, DEFAULT);
     }
 
-    GoogleActionValueEnum(String name) {
+    ActionValueEnum(String name) {
         this.name = name;
     }
 

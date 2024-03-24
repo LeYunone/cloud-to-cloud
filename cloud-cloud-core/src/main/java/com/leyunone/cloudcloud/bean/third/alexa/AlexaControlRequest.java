@@ -1,5 +1,6 @@
 package com.leyunone.cloudcloud.bean.third.alexa;
 
+import com.alibaba.fastjson.JSONObject;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,11 +25,12 @@ public class AlexaControlRequest {
 
         private AlexaEndpoint endpoint;
 
-        private Payload payload;
+        private JSONObject payload;
     }
 
     @Getter
     @Setter
+    @Deprecated
     public static class Payload {
 
         private Color color;

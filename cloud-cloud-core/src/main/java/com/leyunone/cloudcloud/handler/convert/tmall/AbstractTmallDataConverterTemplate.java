@@ -39,14 +39,14 @@ public abstract class AbstractTmallDataConverterTemplate<R, P> extends AbstractD
         if (CollectionUtil.isEmpty(functionMappings) || CollectionUtil.isEmpty(status)) {
             return new HashMap<>();
         }
-        Map<String, StatusMapping> functionMappingMap = functionMappings
+        Map<String, StatusMapping> statusMappingMap = functionMappings
                 .stream()
                 .collect(Collectors.toMap(StatusMapping::getSignCode, v -> v, (v1, v2) -> v2));
         return status
                 .stream()
-                .filter(t -> functionMappingMap.containsKey(t.getSignCode()))
+                .filter(t -> statusMappingMap.containsKey(t.getSignCode()))
                 .collect(Collectors.toMap(t -> {
-                    StatusMapping functionMapping = functionMappingMap.get(t.getSignCode());
+                    StatusMapping functionMapping = statusMappingMap.get(t.getSignCode());
                     return functionMapping.getSignCode();
                 }, DeviceFunctionDTO::getValue));
     }

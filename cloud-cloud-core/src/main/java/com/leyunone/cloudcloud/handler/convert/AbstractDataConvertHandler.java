@@ -2,18 +2,14 @@ package com.leyunone.cloudcloud.handler.convert;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
-import com.leyunone.cloudcloud.bean.dto.DeviceFunctionDTO;
+import com.alibaba.fastjson.JSONObject;
 import com.leyunone.cloudcloud.bean.enums.ConvertFunctionEnum;
+import com.leyunone.cloudcloud.bean.enums.ActionValueEnum;
+import com.leyunone.cloudcloud.bean.mapping.ActionMapping;
 import com.leyunone.cloudcloud.bean.mapping.StatusMapping;
-import com.leyunone.cloudcloud.handler.factory.ConvertHandlerFactory;
 import com.leyunone.cloudcloud.service.mapping.ProductMappingService;
-import com.leyunone.cloudcloud.strategy.AbstractStrategyAutoRegisterComponent;
-import org.springframework.util.StringUtils;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * :)
@@ -64,5 +60,25 @@ public abstract class AbstractDataConvertHandler<R, P> implements ConvertHandler
             }
         }
         return newValue;
+    }
+
+    protected Object getControlValue(JSONObject params, ActionMapping actionMapping) {
+        /**
+         * Google取值规则：默认直接根据code值取值
+         *               有枚举走对象取值
+         */
+        String command = actionMapping.getThirdActionCode();
+        String[] codes = actionMapping.getThirdSignCode().split("#");
+        //最终值
+        Object value = actionMapping.getDefaultValue();
+        for (int i = 0; i < codes.length; i++) {
+            if (i == codes.length - 1) {
+                value = params.get(codes[i]);
+                break;
+            }
+            params = (JSONObject) params.get(codes[i]);
+        }
+        ActionValueEnum byEnumName = ActionValueEnum.getByEnumName(command);
+        return byEnumName.valueConvert(value, actionMapping);
     }
 }

@@ -1,5 +1,6 @@
 package com.leyunone.cloudcloud.handler.convert.baidu;
 
+import com.alibaba.fastjson.JSONObject;
 import com.leyunone.cloudcloud.bean.third.baidu.DeviceControlRequest;
 import com.leyunone.cloudcloud.bean.dto.DeviceFunctionDTO;
 import com.leyunone.cloudcloud.bean.enums.BaiduCommandEnums;
@@ -33,8 +34,8 @@ public class BaiduActionConvert extends AbstractBaiduDataConverterTemplate<Devic
     public DeviceFunctionDTO convert(DeviceControlRequest r) {
         String name = r.getHeader().getName();
         String action = name.replaceAll("Request", "");
-        BaiduCommandEnums byName = BaiduCommandEnums.getByName(action);
-        String productId = r.getPayload().getAppliance().getAdditionalApplianceDetails().get("productId");
+        DeviceControlRequest.Payload payload = JSONObject.parseObject(r.getPayload().toJSONString(), DeviceControlRequest.Payload.class);
+        String productId = payload.getAppliance().getAdditionalApplianceDetails().get("productId");
         List<ProductMapping> mapping = productMappingService.getMapping(productId, ThirdPartyCloudEnum.BAIDU);
         Optional<ProductMapping> first = mapping.stream().findFirst();
         if (!first.isPresent()) {
@@ -45,11 +46,11 @@ public class BaiduActionConvert extends AbstractBaiduDataConverterTemplate<Devic
         Map<String, ActionMapping> actionMap = actionMappings
                 .stream()
                 .collect(Collectors.toMap(k -> k.getThirdActionCode().toUpperCase(), v -> v, (v1, v2) -> v2));
-        ActionMapping actionMapping = actionMap.get(byName.getName());
-        String value = byName.valueConvert(r.getPayload(), actionMapping);
+        ActionMapping actionMapping = actionMap.get(action);
+        Object value = super.getControlValue(r.getPayload(), actionMapping);
         DeviceFunctionDTO deviceFunctionDTO = new DeviceFunctionDTO();
         deviceFunctionDTO.setSignCode(actionMapping.getSignCode());
-        deviceFunctionDTO.setDeviceId(r.getPayload().getAppliance().getApplianceId());
+        deviceFunctionDTO.setDeviceId(payload.getAppliance().getApplianceId());
         deviceFunctionDTO.setValue(value);
         return deviceFunctionDTO;
     }

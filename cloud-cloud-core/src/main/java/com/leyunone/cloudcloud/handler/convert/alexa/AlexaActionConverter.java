@@ -3,6 +3,7 @@ package com.leyunone.cloudcloud.handler.convert.alexa;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.leyunone.cloudcloud.bean.mapping.ActionMapping;
 import com.leyunone.cloudcloud.bean.third.alexa.AlexaControlRequest;
 import com.leyunone.cloudcloud.bean.dto.DeviceFunctionDTO;
 import com.leyunone.cloudcloud.bean.enums.AlexaActionValueEnum;
@@ -39,7 +40,7 @@ public class AlexaActionConverter extends AbstractAlexaDataConverterTemplate<Lis
      */
     @Override
     public List<DeviceFunctionDTO> convert(AlexaControlRequest r) {
-        JSONObject cookie = (JSONObject)r.getDirective().getEndpoint().getCookie();
+        JSONObject cookie = (JSONObject) r.getDirective().getEndpoint().getCookie();
         String productId = cookie.getString("productId");
         if (StrUtil.isBlank(productId)) {
             //TODO 发现设备时未填充，或cookie丢失
@@ -53,7 +54,6 @@ public class AlexaActionConverter extends AbstractAlexaDataConverterTemplate<Lis
 
         Map<String, List<AlexaProductMapping.Capability>> capabilityMap = CollectionFunctionUtils.groupTo(capabilityList.stream().filter(t -> t.getThirdActionCode().equals(namespace)).collect(Collectors.toList()),
                 AlexaProductMapping.Capability::getThirdActionCode);
-        AlexaActionValueEnum byEnumName = AlexaActionValueEnum.getByEnumName(name);
         List<DeviceFunctionDTO> codeCommands = new ArrayList<>();
         /**
          * name未配置，不支持控制
@@ -62,10 +62,10 @@ public class AlexaActionConverter extends AbstractAlexaDataConverterTemplate<Lis
             codeCommands = capabilityMap.get(namespace).stream().map(capability -> {
                 DeviceFunctionDTO codeCommand = new DeviceFunctionDTO();
                 //FIXME 出现value为空
-                String value = null;
+                Object value = null;
                 if (CollectionUtil.isNotEmpty(capability.getCapabilityMapping()) && capability.getCapabilityMapping().containsKey(name)) {
-                    AlexaProductMapping.CapabilityMapping capabilityMapping = capability.getCapabilityMapping().get(name);
-                    value = byEnumName.valueConvert(r.getDirective().getPayload(), capabilityMapping);
+                    ActionMapping capabilityMapping = capability.getCapabilityMapping().get(name);
+                    value = super.getControlValue(r.getDirective().getPayload(), capabilityMapping);
                     codeCommand.setOperation(capabilityMapping.getOperation());
                     codeCommand.setSignCode(capabilityMapping.getSignCode());
                     codeCommand.setValue(value);

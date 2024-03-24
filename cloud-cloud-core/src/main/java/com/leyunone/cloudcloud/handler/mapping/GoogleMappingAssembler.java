@@ -1,21 +1,17 @@
 package com.leyunone.cloudcloud.handler.mapping;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.leyunone.cloudcloud.bean.mapping.GoogleProductMapping;
-import com.leyunone.cloudcloud.bean.mapping.StatusMapping;
 import com.leyunone.cloudcloud.dao.ActionMappingRepository;
 import com.leyunone.cloudcloud.dao.DeviceCapabilityRepository;
 import com.leyunone.cloudcloud.dao.FunctionMappingRepository;
 import com.leyunone.cloudcloud.dao.ProductTypeMappingRepository;
 import com.leyunone.cloudcloud.dao.entity.ActionMappingDO;
 import com.leyunone.cloudcloud.dao.entity.DeviceCapabilityDO;
-import com.leyunone.cloudcloud.dao.entity.FunctionMappingDO;
+import com.leyunone.cloudcloud.dao.entity.StatusMappingDO;
 import com.leyunone.cloudcloud.dao.entity.ProductTypeMappingDO;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.handler.factory.MappingAssemblerFactory;
@@ -56,19 +52,19 @@ public class GoogleMappingAssembler extends AbstractStrategyMappingAssembler<Goo
 
     @Override
     protected List<GoogleProductMapping> dataGet(List<String> pids) {
-        List<FunctionMappingDO> functionMappingDos = functionMappingRepository.selectByProductIdsAndThirdPartyCloud(pids, ThirdPartyCloudEnum.GOOGLE.name());
+        List<StatusMappingDO> statusMappingDos = functionMappingRepository.selectByProductIdsAndThirdPartyCloud(pids, ThirdPartyCloudEnum.GOOGLE.name());
         List<ActionMappingDO> actionMappingDOS = actionMappingRepository.selectByProductIds(pids, ThirdPartyCloudEnum.GOOGLE.name());
         List<DeviceCapabilityDO> deviceCapabilityDOS = deviceCapabilityRepository.selectByCloud(ThirdPartyCloudEnum.GOOGLE);
         List<ProductTypeMappingDO> productTypeMappingDOS = productTypeMappingRepository.selectByProductIds(pids, ThirdPartyCloudEnum.GOOGLE.name());
 
         Map<String, List<ActionMappingDO>> actionMappingMap = CollectionFunctionUtils.groupTo(actionMappingDOS, ActionMappingDO::getProductId);
-        Map<String, List<FunctionMappingDO>> functionMappingMap = CollectionFunctionUtils.groupTo(functionMappingDos, FunctionMappingDO::getProductId);
+        Map<String, List<StatusMappingDO>> statusMappingMap = CollectionFunctionUtils.groupTo(statusMappingDos, StatusMappingDO::getProductId);
         Map<Integer, DeviceCapabilityDO> capabilityMap = CollectionFunctionUtils.mapTo(deviceCapabilityDOS, DeviceCapabilityDO::getId);
         Map<String, List<ProductTypeMappingDO>> typeMap = productTypeMappingDOS.stream().collect(Collectors.groupingBy(ProductTypeMappingDO::getProductId));
         return pids
                 .stream()
                 .map(p -> {
-                    List<FunctionMappingDO> functionMappings = functionMappingMap.get(p);
+                    List<StatusMappingDO> functionMappings = statusMappingMap.get(p);
                     List<ProductTypeMappingDO> productTypes = typeMap.get(p);
                     if (CollectionUtils.isEmpty(functionMappings) || CollectionUtil.isEmpty(productTypes)) {
                         return null;
@@ -79,7 +75,7 @@ public class GoogleMappingAssembler extends AbstractStrategyMappingAssembler<Goo
                     productMapping.setThirdPartyCloud(ThirdPartyCloudEnum.GOOGLE);
                     productMapping.setStatusMappings(super.convert(functionMappings));
                     productMapping.setActionMappings(super.convertActionMapping(actionMaps));
-                    productMapping.setTraits(CollectionUtil.newArrayList(functionMappings.stream().map(FunctionMappingDO::getThirdActionCode).collect(Collectors.toSet())));
+                    productMapping.setTraits(CollectionUtil.newArrayList(functionMappings.stream().map(StatusMappingDO::getThirdActionCode).collect(Collectors.toSet())));
                     productMapping.setAttributes(this.buildConfig(functionMappings, capabilityMap));
                     productMapping.setThirdProductIds(productTypes.stream().map(ProductTypeMappingDO::getThirdProductId).distinct().collect(Collectors.toList()));
                     return productMapping;
@@ -88,9 +84,9 @@ public class GoogleMappingAssembler extends AbstractStrategyMappingAssembler<Goo
                 .collect(Collectors.toList());
     }
 
-    private Map<String, Object> buildConfig(List<FunctionMappingDO> functionMappingDOS, Map<Integer, DeviceCapabilityDO> capabilityMap) {
+    private Map<String, Object> buildConfig(List<StatusMappingDO> statusMappingDOS, Map<Integer, DeviceCapabilityDO> capabilityMap) {
         Map<String, Object> result = new HashMap<>();
-        functionMappingDOS.stream().filter(t -> ObjectUtil.isNotNull(t.getCapabilityConfigId()))
+        statusMappingDOS.stream().filter(t -> ObjectUtil.isNotNull(t.getCapabilityConfigId()))
                 .forEach(functionMappingDO -> {
                     for (String id : functionMappingDO.getCapabilityConfigId().split(",")) {
                         DeviceCapabilityDO deviceCapabilityDO = capabilityMap.get(Integer.parseInt(id));

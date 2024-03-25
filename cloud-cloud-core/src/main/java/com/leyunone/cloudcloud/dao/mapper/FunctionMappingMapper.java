@@ -2,7 +2,7 @@ package com.leyunone.cloudcloud.dao.mapper;
 
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.leyunone.cloudcloud.dao.entity.StatusMappingDO;
+import com.leyunone.cloudcloud.dao.entity.FunctionMappingDO;
 
 /**
  * <p>
@@ -12,6 +12,6 @@ import com.leyunone.cloudcloud.dao.entity.StatusMappingDO;
  * @author leyunone
  * @since 2023-12-14
  */
-public interface FunctionMappingMapper extends BaseMapper<StatusMappingDO> {
+public interface FunctionMappingMapper extends BaseMapper<FunctionMappingDO> {
 
 }

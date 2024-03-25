@@ -62,13 +62,13 @@ public class ReportMessageReportShuntHandlerImpl implements ReportMessageReportS
         List<DeviceCloudInfo.ThirdMapping> mapping = deviceEntity.getMapping();
         mapping.forEach(m -> {
             try {
-                ThirdPartyCloudEnum cloud = m.getCloud();
+                ThirdPartyCloudEnum cloud = m.getThirdPartyCloud();
                 AbstractDeviceMessageReportHandler template = deviceReportHandlerFactory.getStrategy(cloud.name(), AbstractDeviceMessageReportHandler.class);
                 if (null != template) {
                     template.handler(msg, m);
                 }
             } catch (Exception e) {
-                log.warn("device message report third cloud error, third cloud" + m.getCloud() + "msg" + msg + ",ex", e);
+                log.warn("device message report third cloud error, third cloud" + m.getThirdPartyCloud() + "msg" + msg + ",ex", e);
             }
         });
     }

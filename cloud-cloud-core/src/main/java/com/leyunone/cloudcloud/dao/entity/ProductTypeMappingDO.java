@@ -9,6 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -62,6 +63,8 @@ public class ProductTypeMappingDO implements Serializable {
      * 语音平台
      */
     private ThirdPartyCloudEnum thirdPartyCloud;
+
+    private LocalDateTime updateTime;
 
 
 }

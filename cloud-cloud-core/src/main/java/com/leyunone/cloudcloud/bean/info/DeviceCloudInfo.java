@@ -36,7 +36,7 @@ public class DeviceCloudInfo {
 
         private String userId;
 
-        private ThirdPartyCloudEnum cloud;
+        private ThirdPartyCloudEnum thirdPartyCloud;
 
         private String thirdId;
 

@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>首页</title>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js" type="application/javascript"></script>
-    <script src="https://code.hcharts.cn/plugins/zh_cn.js" type="application/javascript"></script>
     <!-- 引入样式 -->
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <!-- 引入组件库 -->
@@ -28,32 +27,16 @@
             <el-menu-item index="google">Google</el-menu-item>
         </el-menu>
     </el-aside>
-    <el-main style="flex: 1; padding: 20px;">
+    <el-main style="flex: 1; padding: 20px; height: 100%;width: 100%;">
         <component :is="selectedTabComponent"></component>
     </el-main>
 </div>
 </body>
 </html>
 
+<script src="BaiduConfig.js"></script>
+<script src="TmaillConfig.js"></script>
 <script>
-    Vue.component('baidu-config', {
-        template: `
-    <div>
-      <h2>百度配置页面</h2>
-      <div class="tab-content">百度配置内容</div>
-    </div>
-  `
-    });
-
-    Vue.component('tmall-config', {
-        template: `
-    <div>
-      <h2>天猫精灵配置页面</h2>
-      <div class="tab-content">天猫精灵配置内容</div>
-    </div>
-  `
-    });
-
     new Vue({
         el: '#app',
         data: {
@@ -75,6 +58,8 @@
         methods: {
             handleSelect(key) {
                 this.selectedTab = key;
+            },
+            testCl() {
             }
         }
     })
@@ -96,4 +81,21 @@
         border-radius: 5px;
         margin-top: 20px;
     }
+
+    /* 新添加的选项卡样式 */
+    .el-tabs {
+        margin-top: 20px;
+    }
+
+    .el-tab-pane {
+        padding: 20px;
+    }
+
+    .tab-content {
+        background-color: #f5f5f5;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-top: 20px;
+    }
+
 </style>

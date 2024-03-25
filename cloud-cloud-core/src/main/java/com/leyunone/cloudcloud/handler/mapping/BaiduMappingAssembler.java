@@ -6,7 +6,7 @@ import com.leyunone.cloudcloud.dao.ActionMappingRepository;
 import com.leyunone.cloudcloud.dao.FunctionMappingRepository;
 import com.leyunone.cloudcloud.dao.ProductTypeMappingRepository;
 import com.leyunone.cloudcloud.dao.entity.ActionMappingDO;
-import com.leyunone.cloudcloud.dao.entity.StatusMappingDO;
+import com.leyunone.cloudcloud.dao.entity.FunctionMappingDO;
 import com.leyunone.cloudcloud.dao.entity.ProductTypeMappingDO;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.handler.factory.MappingAssemblerFactory;
@@ -39,11 +39,11 @@ public class BaiduMappingAssembler extends AbstractStrategyMappingAssembler<Baid
 
     @Override
     protected List<BaiduProductMapping> dataGet(List<String> pids) {
-        List<StatusMappingDO> statusMappingDos = functionMappingRepository.selectByProductIdsAndThirdPartyCloud(pids, getKey());
+        List<FunctionMappingDO> functionMappingDos = functionMappingRepository.selectByProductIdsAndThirdPartyCloud(pids, getKey());
         List<ProductTypeMappingDO> productTypeMappingDOS = productTypeMappingRepository.selectByProductIds(pids, getKey());
-        Map<String, List<StatusMappingDO>> statusMappingMap = statusMappingDos
+        Map<String, List<FunctionMappingDO>> statusMappingMap = functionMappingDos
                 .stream()
-                .collect(Collectors.groupingBy(StatusMappingDO::getProductId, Collectors.toList()));
+                .collect(Collectors.groupingBy(FunctionMappingDO::getProductId, Collectors.toList()));
         Map<String, List<ProductTypeMappingDO>> productMappingMap = productTypeMappingDOS.stream().collect(Collectors.groupingBy(ProductTypeMappingDO::getThirdProductId));
 
         List<ActionMappingDO> actionMappingDos = actionMappingRepository.selectByProductIds(pids, getKey());
@@ -53,7 +53,7 @@ public class BaiduMappingAssembler extends AbstractStrategyMappingAssembler<Baid
         return pids
                 .stream()
                 .map(p -> {
-                    List<StatusMappingDO> functionMappings = statusMappingMap.get(p);
+                    List<FunctionMappingDO> functionMappings = statusMappingMap.get(p);
                     List<ActionMappingDO> actionMappings = actionMappingMap.get(p);
                     List<ProductTypeMappingDO> productTypeMappings = productMappingMap.get(p);
                     if (CollectionUtils.isEmpty(functionMappings) || CollectionUtils.isEmpty(productTypeMappings)) {

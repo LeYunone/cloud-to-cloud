@@ -67,6 +67,16 @@ public  class BaseRepository<M extends BaseMapper<DO>, DO> extends BaseCommon<M,
     }
 
     @Override
+    public boolean updateBatchById(List<DO> ds) {
+        return false;
+    }
+
+    @Override
+    public boolean saveBatch(List<DO> ds) {
+        return false;
+    }
+
+    @Override
     public List<DO> selectByCon(Object o) {
         return (List<DO>) this.selectByCon(o, do_Class);
     }

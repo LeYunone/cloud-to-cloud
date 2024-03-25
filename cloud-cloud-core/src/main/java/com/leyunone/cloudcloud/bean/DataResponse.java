@@ -28,8 +28,16 @@ public class DataResponse<T> implements Serializable {
     public DataResponse() {
     }
 
+    public static <T> DataResponse<T> of() {
+        DataResponse<T> response = new DataResponse<>();
+        response.setStatus(true);
+        response.setCode(ResultCode.SUCCESS.getCode());
+        response.setMessage(ResultCode.SUCCESS.getDesc());
+        return response;
+    }
+
     public static <T> DataResponse<T> of(T data) {
-        DataResponse<T> response = new DataResponse();
+        DataResponse<T> response = new DataResponse<>();
         response.setStatus(true);
         response.setData(data);
         response.setCode(ResultCode.SUCCESS.getCode());
@@ -46,7 +54,7 @@ public class DataResponse<T> implements Serializable {
     }
 
     public static <T> DataResponse<T> of(boolean status, ResultCode responseCode, T data) {
-        DataResponse<T> response = new DataResponse();
+        DataResponse<T> response = new DataResponse<>();
         response.setStatus(status);
         response.setData(data);
         response.setCode(responseCode.getCode());

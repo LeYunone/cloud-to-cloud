@@ -47,4 +47,8 @@ public interface IBaseRepository<DO> extends IQueryService<DO> {
     boolean save(DO d);
 
     <R> boolean deleteLogicById(Serializable id, SFunction<DO, R> tableId);
+
+    boolean updateBatchById(List<DO> ds);
+
+    boolean saveBatch(List<DO> ds);
 }

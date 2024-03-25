@@ -6,7 +6,7 @@ import cn.hutool.core.util.StrUtil;
 import com.leyunone.cloudcloud.bean.mapping.TmallProductMapping;
 import com.leyunone.cloudcloud.dao.FunctionMappingRepository;
 import com.leyunone.cloudcloud.dao.ProductTypeMappingRepository;
-import com.leyunone.cloudcloud.dao.entity.StatusMappingDO;
+import com.leyunone.cloudcloud.dao.entity.FunctionMappingDO;
 import com.leyunone.cloudcloud.dao.entity.ProductTypeMappingDO;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.handler.factory.MappingAssemblerFactory;
@@ -45,16 +45,16 @@ public class TmallMappingAssembler extends AbstractStrategyMappingAssembler<Tmal
 
     @Override
     protected List<TmallProductMapping> dataGet(List<String> pids) {
-        List<StatusMappingDO> statusMappingDos = functionMappingRepository.selectByProductIdsAndThirdPartyCloud(pids, ThirdPartyCloudEnum.TMALL.name());
-        Map<String, List<StatusMappingDO>> statusMappingMap = statusMappingDos
+        List<FunctionMappingDO> functionMappingDos = functionMappingRepository.selectByProductIdsAndThirdPartyCloud(pids, ThirdPartyCloudEnum.TMALL.name());
+        Map<String, List<FunctionMappingDO>> statusMappingMap = functionMappingDos
                 .stream()
-                .collect(Collectors.groupingBy(StatusMappingDO::getProductId, Collectors.toList()));
+                .collect(Collectors.groupingBy(FunctionMappingDO::getProductId, Collectors.toList()));
         List<ProductTypeMappingDO> productTypeMappingDOS = productTypeMappingRepository.selectByProductIds(pids, ThirdPartyCloudEnum.TMALL.name());
         Map<String, List<ProductTypeMappingDO>> typeMap = productTypeMappingDOS.stream().collect(Collectors.groupingBy(ProductTypeMappingDO::getProductId));
         return pids
                 .stream()
                 .map(p -> {
-                    List<StatusMappingDO> functionMappings = statusMappingMap.get(p);
+                    List<FunctionMappingDO> functionMappings = statusMappingMap.get(p);
                     if (CollectionUtils.isEmpty(functionMappings)) {
                         return null;
                     }

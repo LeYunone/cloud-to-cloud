@@ -10,7 +10,7 @@ import com.leyunone.cloudcloud.bean.mapping.ProductMapping;
 import com.leyunone.cloudcloud.bean.mapping.StatusMapping;
 import com.leyunone.cloudcloud.dao.FunctionMappingRepository;
 import com.leyunone.cloudcloud.dao.entity.ActionMappingDO;
-import com.leyunone.cloudcloud.dao.entity.StatusMappingDO;
+import com.leyunone.cloudcloud.dao.entity.FunctionMappingDO;
 import com.leyunone.cloudcloud.handler.factory.MappingAssemblerFactory;
 import com.leyunone.cloudcloud.mangaer.CacheManager;
 import com.leyunone.cloudcloud.strategy.AbstractStrategyAutoRegisterComponent;
@@ -41,11 +41,11 @@ public abstract class AbstractStrategyMappingAssembler<R extends ProductMapping>
     }
 
 
-    protected List<StatusMapping> convert(List<StatusMappingDO> statusMappingDos) {
-        if (CollectionUtil.isEmpty(statusMappingDos)) {
+    protected List<StatusMapping> convert(List<FunctionMappingDO> functionMappingDos) {
+        if (CollectionUtil.isEmpty(functionMappingDos)) {
             return new ArrayList<>();
         }
-        return statusMappingDos
+        return functionMappingDos
                 .stream()
                 .map(fm -> {
                     StatusMapping statusMapping = new StatusMapping();

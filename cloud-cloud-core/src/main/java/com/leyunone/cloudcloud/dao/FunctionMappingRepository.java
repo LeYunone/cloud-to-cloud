@@ -2,7 +2,7 @@ package com.leyunone.cloudcloud.dao;
 
 
 import com.leyunone.cloudcloud.dao.base.iservice.IBaseRepository;
-import com.leyunone.cloudcloud.dao.entity.StatusMappingDO;
+import com.leyunone.cloudcloud.dao.entity.FunctionMappingDO;
 
 import java.util.List;
 
@@ -13,10 +13,10 @@ import java.util.List;
  * @email 365627310@qq.com
  * @date 2024-02-14
  */
-public interface FunctionMappingRepository extends IBaseRepository<StatusMappingDO> {
+public interface FunctionMappingRepository extends IBaseRepository<FunctionMappingDO> {
 
-    List<StatusMappingDO> selectByProductIdsAndThirdPartyCloud(List<String> productId, String cloud);
+    List<FunctionMappingDO> selectByProductIdsAndThirdPartyCloud(List<String> productId, String cloud);
 
-    StatusMappingDO selectByProductThirdCode(String productId, String thirdCode);
+    FunctionMappingDO selectByProductThirdCode(String productId, String thirdCode);
 
 }

@@ -73,7 +73,7 @@ public abstract class AbstractStrategyProtocolHandler<R,P> extends AbstractStrat
         return deviceInfos
                 .stream()
                 .map(d -> {
-                    DeviceCloudInfo.ThirdMapping thirdMapping = DeviceCloudInfo.ThirdMapping.builder().userId(userId).cloud(cloud).clientId(clientId).build();
+                    DeviceCloudInfo.ThirdMapping thirdMapping = DeviceCloudInfo.ThirdMapping.builder().userId(userId).thirdPartyCloud(cloud).clientId(clientId).build();
                     return DeviceCloudInfo
                             .builder()
                             .deviceId(d.getDeviceId())

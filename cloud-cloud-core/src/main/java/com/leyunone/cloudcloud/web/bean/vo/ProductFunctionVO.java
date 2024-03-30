@@ -1,7 +1,11 @@
 package com.leyunone.cloudcloud.web.bean.vo;
 
+import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * :)
@@ -15,6 +19,12 @@ public class ProductFunctionVO {
 
     private String productId;
 
-    private String thirdProductId;
+    private List<String> thirdProductIds;
+
+    private List<String> thirdSignCodes;
+
+    private LocalDateTime updateTime;
+
+    private ThirdPartyCloudEnum thirdPartyCloud;
     
 }

@@ -44,21 +44,19 @@ public class ProductTypeMappingServiceImpl implements ProductTypeMappingService 
 
     @Override
     public Page<ProductTypeVO> listByCon(ProductTypeQuery query) {
-        Page<ProductTypeMappingDO> productTypeMappingDOPage = productTypeMappingRepository.selectPage(query);
+        Page<ProductTypeMappingDO> productTypeMappingDOPage = productTypeMappingRepository.selectPageOrder(query);
         List<String> pids = productTypeMappingDOPage.getRecords().stream().map(ProductTypeMappingDO::getProductId).collect(Collectors.toList());
         List<ProductTypeMappingDO> productTypeMappingDOS = productTypeMappingRepository.selectByProductIds(pids, query.getThirdPartyCloud().name());
         Map<String, List<ProductTypeMappingDO>> productMap = CollectionFunctionUtils.groupTo(productTypeMappingDOS, ProductTypeMappingDO::getProductId);
 
         Page<ProductTypeVO> page = new Page<>();
-        page.setRecords(pids.stream().map(pid -> {
+        page.setRecords(productTypeMappingDOPage.getRecords().stream().map(p -> {
             ProductTypeVO productTypeVO = new ProductTypeVO();
-            productTypeVO.setProductId(pid);
-            if (productMap.containsKey(pid)) {
-                List<ProductTypeMappingDO> productTypeMappings = productMap.get(pid);
-                productTypeVO.setThirdProductIds(productTypeMappings.stream().map(ProductTypeMappingDO::getThirdProductId).collect(Collectors.toList()));
-                productTypeVO.setUpdateTime(CollectionUtil.getFirst(productTypeMappings).getUpdateTime());
-                productTypeVO.setThirdPartyCloud(CollectionUtil.getFirst(productTypeMappings).getThirdPartyCloud());
-            }
+            productTypeVO.setProductId(p.getProductId());
+            productTypeVO.setUpdateTime(p.getUpdateTime());
+            List<ProductTypeMappingDO> productTypeMappings = productMap.get(p.getProductId());
+            productTypeVO.setThirdProductIds(productTypeMappings.stream().map(ProductTypeMappingDO::getThirdProductId).collect(Collectors.toList()));
+            productTypeVO.setThirdPartyCloud(CollectionUtil.getFirst(productTypeMappings).getThirdPartyCloud());
             return productTypeVO;
         }).collect(Collectors.toList()));
         page.setTotal(productTypeMappingDOPage.getTotal());

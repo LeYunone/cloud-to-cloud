@@ -1,5 +1,6 @@
 package com.leyunone.cloudcloud.dao;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -23,11 +24,16 @@ import java.util.List;
 public class ProductTypeMappingRepositoryImpl extends BaseRepository<ProductTypeMappingMapper, ProductTypeMappingDO> implements ProductTypeMappingRepository {
 
     @Override
-    public List<ProductTypeMappingDO> selectByProductIds(List<String> productIds,String cloud) {
+    public List<ProductTypeMappingDO> selectByProductIds(List<String> productIds, String cloud) {
         LambdaQueryWrapper<ProductTypeMappingDO> lambda = new QueryWrapper<ProductTypeMappingDO>().lambda();
         lambda.in(ProductTypeMappingDO::getProductId, productIds);
-        lambda.eq(ProductTypeMappingDO::getThirdPartyCloud,cloud);
+        lambda.eq(ProductTypeMappingDO::getThirdPartyCloud, cloud);
         return this.baseMapper.selectList(lambda);
+    }
+
+    @Override
+    public List<ProductTypeMappingDO> selectByProductId(String productIds, String cloud) {
+        return this.selectByProductIds(CollectionUtil.newArrayList(productIds), cloud);
     }
 
     @Override
@@ -43,6 +49,12 @@ public class ProductTypeMappingRepositoryImpl extends BaseRepository<ProductType
         lambda.eq(ProductTypeMappingDO::getThirdPartyCloud, query.getThirdPartyCloud());
         Page<ProductTypeMappingDO> page = new Page<>(query.getIndex(), query.getSize());
         return (Page<ProductTypeMappingDO>) this.baseMapper.selectPage(page, lambda);
+    }
+
+    @Override
+    public Page<ProductTypeMappingDO> selectPageOrder(ProductTypeQuery query) {
+        Page<ProductTypeMappingDO> page = new Page<>(query.getIndex(), query.getSize());
+        return this.baseMapper.selectPageOrder(query, page);
     }
 
     @Override

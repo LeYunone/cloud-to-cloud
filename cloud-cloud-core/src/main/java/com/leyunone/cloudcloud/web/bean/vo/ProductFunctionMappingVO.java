@@ -1,4 +1,4 @@
-package com.leyunone.cloudcloud.web.bean.dto;
+package com.leyunone.cloudcloud.web.bean.vo;
 
 import com.leyunone.cloudcloud.bean.enums.ConvertFunctionEnum;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
@@ -7,30 +7,26 @@ import lombok.Setter;
 
 import java.util.List;
 
-/**
- * :)
- *
- * @Author leyunone
- * @Date 2024/3/26 15:14
- */
 @Getter
 @Setter
-public class ProductFunctionDTO {
+public class ProductFunctionMappingVO {
 
     private String productId;
 
     private List<FunctionMapping> productFunctions;
+    
+    private List<String> thirdProductIds;
 
     private ThirdPartyCloudEnum thirdPartyCloud;
 
     @Getter
     @Setter
     public static class FunctionMapping {
-
+        
         private String productId;
-
+        
         private ThirdPartyCloudEnum thirdPartyCloud;
-
+        
         private Integer id;
 
         private String signCode;
@@ -38,7 +34,7 @@ public class ProductFunctionDTO {
         private Integer functionId;
 
         private String thirdSignCode;
-
+        
         private String thirdActionCode;
 
         private Integer valueOf;
@@ -51,13 +47,13 @@ public class ProductFunctionDTO {
 
         private String remark;
     }
-
+    
     @Getter
     @Setter
-    public static class ValueMap {
-
+    public static class ValueMap{
+        
         private String key;
-
+        
         private Object value;
     }
 }

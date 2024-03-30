@@ -11,7 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" type="application/javascript"></script>
 </head>
 <body style="margin: 0; padding: 0; height: 100vh; display: flex;">
-<div id="app" style="height: 100%; display: flex;">
+<div id="app" style="height: 100%; display: flex; width: 100%">
     <el-aside height="100%" width="200px" style="background-color: #2d4059; color: white;">
         <el-menu default-active="baidu" @select="handleSelect" background-color="#2d4059" text-color="white"
                  active-text-color="#409EFF">
@@ -59,8 +59,6 @@
             handleSelect(key) {
                 this.selectedTab = key;
             },
-            testCl() {
-            }
         }
     })
 </script>

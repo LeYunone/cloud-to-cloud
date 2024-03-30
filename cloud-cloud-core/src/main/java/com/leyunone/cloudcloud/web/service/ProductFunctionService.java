@@ -2,8 +2,10 @@ package com.leyunone.cloudcloud.web.service;
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.web.bean.dto.ProductFunctionDTO;
 import com.leyunone.cloudcloud.web.bean.query.ProductTypeQuery;
+import com.leyunone.cloudcloud.web.bean.vo.ProductFunctionMappingVO;
 import com.leyunone.cloudcloud.web.bean.vo.ProductFunctionVO;
 
 import java.util.List;
@@ -16,13 +18,13 @@ import java.util.List;
  */
 public interface ProductFunctionService {
 
-    ProductFunctionVO getDetail(Integer id);
+    ProductFunctionMappingVO getDetail(String productId, ThirdPartyCloudEnum cloud);
 
     Page<ProductFunctionVO> listByCon(ProductTypeQuery query);
 
     void save(ProductFunctionDTO dto);
 
     List<String> thirdFunction(String thirdPartyCloud);
-    
-    void delete(Integer id);
+
+    void delete(ProductFunctionDTO dto);
 }

@@ -20,9 +20,13 @@ public interface ProductTypeMappingRepository extends IBaseRepository<ProductTyp
 
     List<ProductTypeMappingDO> selectByProductIds(List<String> productIds,String cloud);
 
+    List<ProductTypeMappingDO> selectByProductId(String productIds,String cloud);
+
     List<ProductTypeMappingDO> selectByCloud(String cloud);
 
     Page<ProductTypeMappingDO> selectPage(ProductTypeQuery query);
+
+    Page<ProductTypeMappingDO> selectPageOrder(ProductTypeQuery query);
 
     int deleteByProductId(String productId, ThirdPartyCloudEnum cloud);
 }

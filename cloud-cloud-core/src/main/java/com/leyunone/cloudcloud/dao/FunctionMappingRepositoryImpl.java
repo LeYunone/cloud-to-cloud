@@ -1,10 +1,13 @@
 package com.leyunone.cloudcloud.dao;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyunone.cloudcloud.dao.base.repository.BaseRepository;
 import com.leyunone.cloudcloud.dao.entity.FunctionMappingDO;
 import com.leyunone.cloudcloud.dao.mapper.FunctionMappingMapper;
+import com.leyunone.cloudcloud.web.bean.query.ProductTypeQuery;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -26,6 +29,17 @@ public class FunctionMappingRepositoryImpl extends BaseRepository<FunctionMappin
         lambda.eq(FunctionMappingDO::getThirdPartyCloud,cloud);
         lambda.in(FunctionMappingDO::getProductId,productId);
         return this.baseMapper.selectList(lambda);
+    }
+
+    @Override
+    public List<FunctionMappingDO> selectByProductIdsAndThirdPartyCloud(String productId, String cloud) {
+        return this.selectByProductIdsAndThirdPartyCloud(CollectionUtil.newArrayList(productId),cloud);
+    }
+
+    @Override
+    public Page<FunctionMappingDO> selectPageOrder(ProductTypeQuery query) {
+        Page<FunctionMappingDO> page = new Page<>(query.getIndex(),query.getSize());
+        return this.baseMapper.selectPageOrder(query,page);
     }
 
     @Override

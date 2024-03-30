@@ -1,8 +1,10 @@
 package com.leyunone.cloudcloud.dao;
 
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyunone.cloudcloud.dao.base.iservice.IBaseRepository;
 import com.leyunone.cloudcloud.dao.entity.FunctionMappingDO;
+import com.leyunone.cloudcloud.web.bean.query.ProductTypeQuery;
 
 import java.util.List;
 
@@ -16,6 +18,10 @@ import java.util.List;
 public interface FunctionMappingRepository extends IBaseRepository<FunctionMappingDO> {
 
     List<FunctionMappingDO> selectByProductIdsAndThirdPartyCloud(List<String> productId, String cloud);
+
+    List<FunctionMappingDO> selectByProductIdsAndThirdPartyCloud(String productId, String cloud);
+
+    Page<FunctionMappingDO> selectPageOrder(ProductTypeQuery query);
 
     FunctionMappingDO selectByProductThirdCode(String productId, String thirdCode);
 

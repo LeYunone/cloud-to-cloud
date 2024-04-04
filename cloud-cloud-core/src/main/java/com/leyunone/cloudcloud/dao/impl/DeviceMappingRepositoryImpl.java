@@ -1,8 +1,9 @@
-package com.leyunone.cloudcloud.dao;
+package com.leyunone.cloudcloud.dao.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.leyunone.cloudcloud.dao.DeviceMappingRepository;
 import com.leyunone.cloudcloud.dao.base.repository.BaseRepository;
 import com.leyunone.cloudcloud.dao.entity.DeviceMappingDO;
 import com.leyunone.cloudcloud.dao.mapper.DeviceMappingMapper;

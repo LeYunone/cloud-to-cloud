@@ -3,6 +3,7 @@ package com.leyunone.cloudcloud.dao;
 
 import com.leyunone.cloudcloud.dao.base.iservice.IBaseRepository;
 import com.leyunone.cloudcloud.dao.entity.ThirdPartyClientDO;
+import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 
 /**
  * :)
@@ -15,4 +16,7 @@ public interface ThirdPartyClientRepository extends IBaseRepository<ThirdPartyCl
 
     ThirdPartyClientDO selectByClientId(String clientId);
 
+    ThirdPartyClientDO selectByCloud(ThirdPartyCloudEnum cloudEnum);
+
+    int deleteByCloud(ThirdPartyCloudEnum cloudEnum);
 }

@@ -2,11 +2,54 @@ Vue.component("baidu-config", {
     template: `
     <div>
         <div>
-            <h2>百度配置页面</h2>
-            <div class="tab-content">百度配置内容</div>
-            <el-tabs type="border-card">
-                <el-tab-pane label="产品映射">
-                    <el-button type="primary" @click="productTypeDialog = true">新增</el-button>
+            <div style="text-align: center; font-weight: bold; position: relative; top: -5px;">< 百度配置页面 ></div>
+            <el-row >
+              <el-col >
+                <el-card shadow="always">
+                    <el-form :inline="true" ref="form" :model="clientConfig" label-width="125px">
+                      <el-form-item label="客户端id">
+                        <el-input v-model="clientConfig.clientId"></el-input>
+                      </el-form-item>
+                      <el-form-item label="客户端秘钥">
+                        <el-input v-model="clientConfig.clientSecret"></el-input>
+                      </el-form-item>
+                      <el-form-item label="目标项目路由">
+                        <el-input v-model="clientConfig.mainUrl"></el-input>
+                      </el-form-item>
+                      <el-form-item label="图标">
+                        <el-input v-model="clientConfig.icon"></el-input>
+                      </el-form-item>
+                      <el-form-item label="附加信息">
+                        <el-input v-model="clientConfig.additionalInformation"></el-input>
+                      </el-form-item>
+                      <el-form-item label="上报URL">
+                        <el-input v-model="clientConfig.reportUrl"></el-input>
+                      </el-form-item>
+                      <el-form-item label="产商云客户端id">
+                        <el-input v-model="clientConfig.thirdClientId"></el-input>
+                      </el-form-item>
+                      <el-form-item label="产商云客户端秘钥">
+                        <el-input v-model="clientConfig.thirdClientSecret"></el-input>
+                      </el-form-item>
+                      <el-form-item size="large">
+                        <el-button type="primary" @click="clientConfigSave">保存</el-button>
+                      </el-form-item>
+                    </el-form>
+                </el-card>
+              </el-col>
+            </el-row>
+            
+            <el-tabs v-model="panelActiveName" type="border-card" @tab-click="paneHandler">
+                <el-tab-pane name="productType" label="产品映射">
+                <el-form :inline="true"  class="demo-form-inline">
+                  <el-form-item label="开发云产品id">
+                    <el-input v-model="queryFrom.productId" placeholder="产品id"></el-input>
+                  </el-form-item>
+                  <el-form-item>
+                    <el-button type="primary" @click="baiduProductType">查询</el-button>
+                    <el-button style="text-align: right;" type="primary" @click="productTypeDialog = true">新增</el-button>
+                  </el-form-item>
+                </el-form>
                     <el-table :data="productTypeTable" style="height:500px;overflow: auto;width: 100%">
                         <el-table-column prop="productId" label="开发云产品ID"></el-table-column>
                         <el-table-column prop="thirdProductIds" label="产商云产品ID">
@@ -34,9 +77,16 @@ Vue.component("baidu-config", {
                     >
                     </el-pagination>
                 </el-tab-pane>
-
-                <el-tab-pane label="属性映射">
-                    <el-button type="primary" @click="productFunctionDialog = true">新增</el-button>
+                <el-tab-pane name="productFunction" label="属性映射">
+                    <el-form :inline="true"  class="demo-form-inline">
+                      <el-form-item label="开发云产品id">
+                        <el-input v-model="queryFrom.productId" placeholder="产品id"></el-input>
+                      </el-form-item>
+                      <el-form-item>
+                        <el-button type="primary" @click="baiduProductFunction">查询</el-button>
+                        <el-button type="primary" @click="productFunctionDialog = true">新增</el-button>
+                      </el-form-item>
+                    </el-form>
                     <el-table :data="productFunctionTable" style="height:500px;overflow: auto;width: 100%">
                         <el-table-column prop="productId" label="开发云产品ID"></el-table-column>
                         <el-table-column prop="thirdProductIds" label="产商云产品ID">
@@ -70,9 +120,16 @@ Vue.component("baidu-config", {
                     >
                     </el-pagination>
                 </el-tab-pane>
-                <!--控制-->
-                <el-tab-pane label="行为映射">
+                <el-tab-pane name="productAction" label="行为映射">
+                    <el-form :inline="true"  class="demo-form-inline">
+                      <el-form-item label="开发云产品id">
+                        <el-input v-model="queryFrom.productId" placeholder="产品id"></el-input>
+                      </el-form-item>
+                      <el-form-item>
+                        <el-button type="primary" @click="baiduProductAction">查询</el-button>
                     <el-button type="primary" @click="productActionDialog = true">新增</el-button>
+                      </el-form-item>
+                    </el-form>
                     <el-table :data="productActionTable" style="height:500px;overflow: auto;width: 100%">
                         <el-table-column prop="productId" label="开发云产品ID"></el-table-column>
                         <el-table-column prop="thirdProductIds" label="产商云产品ID">
@@ -83,6 +140,11 @@ Vue.component("baidu-config", {
                         <el-table-column prop="signCodes" label="开发云属性code">
                             <template slot-scope="scope">
                                 <span v-html="scope.row.signCodes.join('<br>')"></span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="thirdSignCodes" label="产商云属性">
+                            <template slot-scope="scope">
+                                <span v-html="scope.row.thirdSignCodes.join('<br>')"></span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="thirdPartyCloud" label="产商云"></el-table-column>
@@ -105,26 +167,19 @@ Vue.component("baidu-config", {
                     >
                     </el-pagination>
                 </el-tab-pane>
-                <el-tab-pane label="三方属性产商配置">
+                <el-tab-pane name="productCapability" label="三方属性产商配置">
                     <el-button type="primary" @click="productCapabilityDialog = true">新增</el-button>
                     <el-table :data="productCapabilityTable" style="height:500px;overflow: auto;width: 100%">
-                        <el-table-column prop="productId" label="开发云产品ID"></el-table-column>
-                        <el-table-column prop="thirdProductIds" label="产商云产品ID">
-                            <template slot-scope="scope">
-                                <span v-html="scope.row.thirdProductIds.join('<br>')"></span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="signCodes" label="开发云属性code">
-                            <template slot-scope="scope">
-                                <span v-html="scope.row.signCodes.join('<br>')"></span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="thirdPartyCloud" label="产商云"></el-table-column>
+                        <el-table-column prop="capabilitySemantics" label="能力语义"></el-table-column>
+                        <el-table-column prop="capabilityConfiguration" label="资源配置"></el-table-column>
+                        <el-table-column prop="instanceName" label="实例名"></el-table-column>
+                        <el-table-column prop="valueSemantics" label="值语义"></el-table-column>
+                        <el-table-column prop="description" label="备注"></el-table-column>
                         <el-table-column prop="updateTime" label="更新时间"></el-table-column>
                         <el-table-column label="操作">
                             <template slot-scope="scope">
-                                <el-button type="text" @click="productCapabilityEdit(scope.row.productId)">编辑</el-button>
-                                <el-button type="text" @click="productCapabilityDelete(scope.row.productId)">删除</el-button>
+                                <el-button type="text" @click="productCapabilityEdit(scope.row.id)">编辑</el-button>
+                                <el-button type="text" @click="productCapabilityDelete(scope.row.id)">删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -209,9 +264,9 @@ Vue.component("baidu-config", {
                             <el-input v-model="scope.row.functionId"></el-input>
                         </template>
                     </el-table-column>
-                    <el-table-column label="产商云属性" prop="thirdPartyCode">
+                    <el-table-column label="产商云属性" prop="thirdSignCode">
                         <template slot-scope="scope">
-                            <el-input v-model="scope.row.thirdPartyCode"></el-input>
+                            <el-input v-model="scope.row.thirdSignCode"></el-input>
                         </template>
                     </el-table-column>
                     <el-table-column label="产商云属性行为" prop="thirdActionCode">
@@ -291,9 +346,9 @@ Vue.component("baidu-config", {
                             <el-input v-model="scope.row.functionId"></el-input>
                         </template>
                     </el-table-column>
-                    <el-table-column label="产商云属性" prop="thirdPartyCode">
+                    <el-table-column label="产商云属性" prop="thirdSignCode">
                         <template slot-scope="scope">
-                            <el-input v-model="scope.row.thirdPartyCode"></el-input>
+                            <el-input v-model="scope.row.thirdSignCode"></el-input>
                         </template>
                     </el-table-column>
                     <el-table-column label="产商云属性行为" prop="thirdActionCode">
@@ -354,88 +409,60 @@ Vue.component("baidu-config", {
         </span>
         </el-dialog>
         
-        <!--控制映射表-->
+        <!--产商属性配置表-->
         <el-dialog title="产商属性配置表" :visible.sync="productCapabilityDialog" width="80%"
            :before-close="productCapabilityCancel">
             <el-form ref="productCapability" :model="productCapability" label-width="100px">
-                <el-form-item label="开发云产品id">
-                    <el-input v-model="productCapability.productId" :disabled="isProductActionUpdate"></el-input>
+                <el-form-item label="能力语义">
+                        <el-input v-model="productCapability.capabilitySemantics"></el-input>
                 </el-form-item>
-        
-                <el-table :data="productCapability.productCapabilitys" style="width: 100%">
-                    <el-table-column label="开发云属性" prop="signCode">
-                        <template slot-scope="scope">
-                            <el-input v-model="scope.row.signCode"></el-input>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="开发云属性标识" prop="functionId">
-                        <template slot-scope="scope">
-                            <el-input v-model="scope.row.functionId"></el-input>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="产商云属性" prop="thirdPartyCode">
-                        <template slot-scope="scope">
-                            <el-input v-model="scope.row.thirdPartyCode"></el-input>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="产商云属性行为" prop="thirdActionCode">
-                        <template slot-scope="scope">
-                            <el-input v-model="scope.row.thirdActionCode"></el-input>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="是否值映射" prop="valueOf">
-                        <template slot-scope="scope">
-                            <el-select v-model="scope.row.valueOf">
-                                <el-option label="否" value="0"></el-option>
-                                <el-option label="是" value="1"></el-option>
-                            </el-select>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="转换函数" prop="convertFunction">
-                        <template slot-scope="scope">
-                            <el-select v-model="scope.row.convertFunction" placeholder="NONE" clearable filterable>
-                                <el-option
-                                        v-for="item in convertFunctions"
-                                        :key="item"
-                                        :label="item"
-                                        :value="item"
-                                ></el-option>
-                            </el-select>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="备注" prop="remark">
-                        <template slot-scope="scope">
-                            <el-input v-model="scope.row.remark"></el-input>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="操作">
-                        <template slot-scope="scope">
-                            <el-button type="text" @click="productCapabilityRemoveRow(scope.$index)">删除</el-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
+                <el-form-item label="资源配置">
+                        <el-input v-model="productCapability.capabilityConfiguration"></el-input>
+                </el-form-item>
+                <el-form-item label="实例名">
+                        <el-input v-model="productCapability.instanceName"></el-input>
+                </el-form-item>
+                <el-form-item label="值语义">
+                        <el-input v-model="productCapability.valueSemantics"></el-input>
+                </el-form-item>
+                <el-form-item label="备注">
+                        <el-input v-model="productCapability.description"></el-input>
+                </el-form-item>
             </el-form>
-            <el-button @click="productCapabilityAddRow">新增行</el-button>
+            
             <span slot="footer" class="dialog-footer">
                   <el-button @click="productCapabilityCancel">取消</el-button>
                   <el-button type="primary" @click="productCapabilitySave">保存</el-button>
-                </span>
+            </span>
         </el-dialog>
     </div>
   `,
     mounted: function () {
         this.baiduProductType();
-        this.baiduProductFunction();
         this.productTypeThirdIds();
-        this.baiduProductAction();
+        this.clientConfigDetail();
         axios({
-            url: "/toc/api/web/config/convertFunctions",
+            url: "/cloudToCloud/api/web/config/convertFunctions",
         }).then((res) => {
             this.convertFunctions = res.data.result;
         });
     },
     data: function () {
         return {
+            queryFrom:{
+                productId:""
+            },
+            clientConfig: {
+                clientId: "",
+                clientSecret: "",
+                mainUrl: "",
+                icon: "",
+                additionalInformation: "",
+                reportUrl: "",
+                thirdPartyCloud: "BAIDU",
+                thirdClientId: "",
+                thirdClientSecret: ""
+            },
             isProductTypeUpdate: false,
             productTypeTable: [],
             productTypeCurrentPage: 1, // 当前页数
@@ -470,7 +497,7 @@ Vue.component("baidu-config", {
                         id: "",
                         signCode: "",
                         functionId: "",
-                        thirdPartyCode: "",
+                        thirdSignCode: "",
                         valueOf: '0',
                         valueMapping: [{key: "", value: ""}],
                         convertFunction: "",
@@ -494,7 +521,7 @@ Vue.component("baidu-config", {
                         id: "",
                         signCode: "",
                         functionId: "",
-                        thirdPartyCode: "",
+                        thirdSignCode: "",
                         valueOf: '0',
                         valueMapping: [{key: "", value: ""}],
                         convertFunction: "",
@@ -503,11 +530,57 @@ Vue.component("baidu-config", {
                 ],
             },
 
+            isProductCapabilityUpdate: false,
+            productCapabilityTable: [],
+            productCapabilityCurrentPage: 1, // 当前页数
+            productCapabilityPageSize: 10, // 每页显示条数
+            productCapabilityTotal: 0, // 总条数
+            productCapabilityDialog: false, //产品映射弹窗
+            productCapability: {
+                thirdPartyCloud: "BAIDU",
+                id: "",
+                capabilitySemantics: "",
+                capabilityConfiguration: "",
+                instanceName: "",
+                valueSemantics: "",
+                description: ""
+            },
             thirdPids: [],
-            convertFunctions: []
+            convertFunctions: [],
+            panelActiveName: "productType"
         };
     },
     methods: {
+        paneHandler(tab, event) {
+            this.queryFrom.productId = "";
+            if (this.panelActiveName === "productType") {
+                this.baiduProductType();
+            } else if (this.panelActiveName === "productFunction") {
+                this.baiduProductFunction();
+            } else if (this.panelActiveName === "productAction") {
+                this.baiduProductAction();
+            } else if (this.panelActiveName === "productCapability") {
+                this.baiduProductCapability();
+            }
+        },
+        clientConfigDetail() {
+            axios({
+                url: "/cloudToCloud/api/web/config/clientConfig",
+                params: {
+                    "cloud": "BAIDU"
+                }
+            }).then((res) => {
+                this.clientConfig = res.data.result;
+            })
+        },
+        clientConfigSave() {
+            axios({
+                url: "/cloudToCloud/api/web/config/saveClientConfig",
+                method: "POST",
+                data: this.clientConfig
+            })
+        },
+
         //产品类型方法
         productTypeRemoveRow(index) {
             this.productType.productTypes.splice(index, 1);
@@ -517,7 +590,7 @@ Vue.component("baidu-config", {
         },
         productTypeThirdIds() {
             axios({
-                url: "/toc/api/web/productType/thirdProducts",
+                url: "/cloudToCloud/api/web/productType/thirdProducts",
                 params: {
                     thirdPartyCloud: "BAIDU",
                 },
@@ -535,11 +608,12 @@ Vue.component("baidu-config", {
         },
         baiduProductType() {
             axios({
-                url: "/toc/api/web/productType/list",
+                url: "/cloudToCloud/api/web/productType/list",
                 params: {
                     index: this.productTypeCurrentPage,
                     size: this.productTypePageSize,
                     thirdPartyCloud: "BAIDU",
+                    productId:this.queryFrom.productId
                 },
             }).then((res) => {
                 var result = res.data.result;
@@ -550,20 +624,20 @@ Vue.component("baidu-config", {
         },
         productTypeEdit(productId) {
             axios({
-                url: "/toc/api/web/productType/detail",
+                url: "/cloudToCloud/api/web/productType/detail",
                 params: {
                     productId: productId,
                     thirdPartyCloud: "BAIDU"
                 },
             }).then((res) => {
                 var result = res.data.result;
-                if(result.success){
+                if (result.success) {
                     this.productType.productId = result.productId;
                     this.productType.thirdPartyCloud = result.thirdPartyCloud;
                     this.productType.productTypes = result.productTypes;
                     this.isProductTypeUpdate = true;
                     this.productTypeDialog = true;
-                }else{
+                } else {
                     this.$message.error(data.message);
                 }
             });
@@ -571,7 +645,7 @@ Vue.component("baidu-config", {
         productTypeSave() {
             axios({
                 method: "POST",
-                url: "/toc/api/web/productType/save",
+                url: "/cloudToCloud/api/web/productType/save",
                 data: {
                     productId: this.productType.productId,
                     thirdPartyCloud: "BAIDU",
@@ -586,7 +660,7 @@ Vue.component("baidu-config", {
         productTypeDelete(productId) {
             axios({
                 method: "POST",
-                url: "/toc/api/web/productType/delete",
+                url: "/cloudToCloud/api/web/productType/delete",
                 data: {
                     productId: productId,
                     thirdPartyCloud: "BAIDU",
@@ -632,7 +706,7 @@ Vue.component("baidu-config", {
         },
         baiduProductFunction() {
             axios({
-                url: "/toc/api/web/productFunction/list",
+                url: "/cloudToCloud/api/web/productFunction/list",
                 params: {
                     index: this.productFunctionCurrentPage,
                     size: this.productFunctionPageSize,
@@ -647,7 +721,7 @@ Vue.component("baidu-config", {
         },
         productFunctionEdit(productId) {
             axios({
-                url: "/toc/api/web/productFunction/detail",
+                url: "/cloudToCloud/api/web/productFunction/detail",
                 params: {
                     productId: productId,
                     thirdPartyCloud: "BAIDU"
@@ -664,7 +738,7 @@ Vue.component("baidu-config", {
         productFunctionSave() {
             axios({
                 method: "POST",
-                url: "/toc/api/web/productFunction/save",
+                url: "/cloudToCloud/api/web/productFunction/save",
                 data: {
                     productId: this.productFunction.productId,
                     thirdPartyCloud: "BAIDU",
@@ -679,7 +753,7 @@ Vue.component("baidu-config", {
         productFunctionDelete(productId) {
             axios({
                 method: "POST",
-                url: "/toc/api/web/productFunction/delete",
+                url: "/cloudToCloud/api/web/productFunction/delete",
                 data: {
                     productId: productId,
                     thirdPartyCloud: "BAIDU",
@@ -716,15 +790,15 @@ Vue.component("baidu-config", {
         },
         productActionHandleSizeChange(size) {
             this.productActionPageSize = size;
-            this.baiduProductFunction();
+            this.baiduProductAction();
         },
         productActionHandleCurrentChange(index) {
             this.productActionCurrentPage = index;
-            this.baiduProductFunction();
+            this.baiduProductAction();
         },
         baiduProductAction() {
             axios({
-                url: "/toc/api/web/productAction/list",
+                url: "/cloudToCloud/api/web/action/list",
                 params: {
                     index: this.productActionCurrentPage,
                     size: this.productActionPageSize,
@@ -739,7 +813,7 @@ Vue.component("baidu-config", {
         },
         productActionEdit(productId) {
             axios({
-                url: "/toc/api/web/productAction/detail",
+                url: "/cloudToCloud/api/web/action/detail",
                 params: {
                     productId: productId,
                     thirdPartyCloud: "BAIDU"
@@ -756,7 +830,7 @@ Vue.component("baidu-config", {
         productActionSave() {
             axios({
                 method: "POST",
-                url: "/toc/api/web/productAction/save",
+                url: "/cloudToCloud/api/web/action/save",
                 data: {
                     productId: this.productAction.productId,
                     thirdPartyCloud: "BAIDU",
@@ -771,7 +845,7 @@ Vue.component("baidu-config", {
         productActionDelete(productId) {
             axios({
                 method: "POST",
-                url: "/toc/api/web/productAction/delete",
+                url: "/cloudToCloud/api/web/action/delete",
                 data: {
                     productId: productId,
                     thirdPartyCloud: "BAIDU",
@@ -785,6 +859,75 @@ Vue.component("baidu-config", {
             this.productActionDialog = false;
             this.productAction = this.$options.data().productAction;
             this.isProductFunctionUpdate = false;
+        },
+
+        //属性配置
+        productCapabilityHandleSizeChange(size) {
+            this.productCapabilityPageSize = size;
+            this.baiduProductCapability();
+        },
+        productCapabilityHandleCurrentChange(index) {
+            this.productCapabilityCurrentPage = index;
+            this.baiduProductCapability();
+        },
+        baiduProductCapability() {
+            axios({
+                url: "/cloudToCloud/api/web/productCapability/list",
+                params: {
+                    index: this.productCapabilityCurrentPage,
+                    size: this.productCapabilityPageSize,
+                    thirdPartyCloud: "BAIDU",
+                },
+            }).then((res) => {
+                var result = res.data.result;
+
+                this.productCapabilityTotal = result.total;
+                this.productCapabilityTable = result.records;
+            });
+        },
+        productCapabilityEdit(id) {
+            axios({
+                url: "/cloudToCloud/api/web/productCapability/detail",
+                params: {
+                    productId: productId,
+                    thirdPartyCloud: "BAIDU"
+                },
+            }).then((res) => {
+                var result = res.data.result;
+                this.productCapability.productId = result.productId;
+                this.productCapability.thirdPartyCloud = result.thirdPartyCloud;
+                this.productCapability.productCapabilitys = result.productCapabilitys;
+                this.isProductCapabilityUpdate = true;
+                this.productCapabilityDialog = true;
+            });
+        },
+        productCapabilitySave() {
+            axios({
+                method: "POST",
+                url: "/cloudToCloud/api/web/productCapability/save",
+                data: this.productCapability,
+            }).then((res) => {
+                this.productCapabilityDialog = false;
+                this.productCapability = this.$options.data().productCapability;
+                this.baiduProductCapability();
+            });
+        },
+        productCapabilityDelete(id) {
+            axios({
+                method: "POST",
+                url: "/cloudToCloud/api/web/productCapability/delete",
+                data: {
+                    id: id
+                },
+            }).then((res) => {
+                this.baiduProductCapability();
+            });
+        },
+        productCapabilityCancel() {
+            console.log("clear")
+            this.productCapabilityDialog = false;
+            this.productCapability = this.$options.data().productCapability;
+            this.isProductCapabilityUpdate = false;
         }
     },
 });

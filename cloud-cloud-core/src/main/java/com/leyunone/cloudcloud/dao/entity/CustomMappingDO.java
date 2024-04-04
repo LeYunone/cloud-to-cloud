@@ -37,7 +37,7 @@ public class CustomMappingDO  {
     /**
      * 第三方功能标识
      */
-    private String thirdPartyCode;
+    private String thirdSignCode;
 
     /**
      * 产品id

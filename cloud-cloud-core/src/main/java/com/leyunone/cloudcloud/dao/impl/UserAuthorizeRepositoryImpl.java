@@ -1,9 +1,10 @@
-package com.leyunone.cloudcloud.dao;
+package com.leyunone.cloudcloud.dao.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.leyunone.cloudcloud.bean.UserClientInfoModel;
+import com.leyunone.cloudcloud.dao.UserAuthorizeRepository;
 import com.leyunone.cloudcloud.dao.base.repository.BaseRepository;
 import com.leyunone.cloudcloud.dao.entity.UserAuthorizeDO;
 import com.leyunone.cloudcloud.dao.mapper.UserAuthorizeMapper;

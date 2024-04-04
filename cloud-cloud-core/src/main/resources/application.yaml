@@ -1,0 +1,49 @@
+server:
+  servlet:
+    context-path: /cloudToCloud/api/
+## 数据库配置
+spring:
+  application:
+    name: cloud-to-cloud
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/voice_cloud?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false
+    username: root
+    password: root
+    filters: stat
+    maxActive: 20
+    initialSize: 1
+    maxWait: 60000
+    minIdle: 1
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxOpenPreparedStatements: 20
+    driver-class-name: com.mysql.jdbc.Driver
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    jedis:
+      pool:
+        max-active: 20
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
+    timeout: 5000
+  servlet:
+    multipart:
+      max-file-size: -1
+      max-request-size: -1
+## 打印日志级别
+logging:
+  level:
+    com.chz.mapper: debug
+### mp日志
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #开启sql日志
+

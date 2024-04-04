@@ -1,7 +1,8 @@
-package com.leyunone.cloudcloud.dao;
+package com.leyunone.cloudcloud.dao.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.leyunone.cloudcloud.dao.CustomMappingRepository;
 import com.leyunone.cloudcloud.dao.base.repository.BaseRepository;
 import com.leyunone.cloudcloud.dao.entity.CustomMappingDO;
 import com.leyunone.cloudcloud.dao.mapper.CustomMappingMapper;
@@ -21,7 +22,7 @@ public class CustomMappingRepositoryImpl extends BaseRepository<CustomMappingMap
     public CustomMappingDO selectByProductThirdCode(String productId, String thirdCode) {
         LambdaQueryWrapper<CustomMappingDO> lambda = new QueryWrapper<CustomMappingDO>().lambda();
         lambda.eq(CustomMappingDO::getProductId,productId);
-        lambda.eq(CustomMappingDO::getThirdPartyCode,thirdCode);
+        lambda.eq(CustomMappingDO::getThirdSignCode,thirdCode);
         return this.baseMapper.selectOne(lambda);
     }
     

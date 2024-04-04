@@ -1,8 +1,12 @@
-package com.leyunone.cloudcloud.dao;
+package com.leyunone.cloudcloud.dao.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.leyunone.cloudcloud.dao.ThirdPartyClientRepository;
 import com.leyunone.cloudcloud.dao.base.repository.BaseRepository;
 import com.leyunone.cloudcloud.dao.entity.ThirdPartyClientDO;
 import com.leyunone.cloudcloud.dao.mapper.ThirdPartyClientMapper;
+import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.mangaer.CacheManager;
 import org.springframework.stereotype.Repository;
 
@@ -39,6 +43,20 @@ public class ThirdPartyClientRepositoryImpl extends BaseRepository<ThirdPartyCli
             }
         }
         return outwardClientDO;
+    }
+
+    @Override
+    public ThirdPartyClientDO selectByCloud(ThirdPartyCloudEnum cloudEnum) {
+        LambdaQueryWrapper<ThirdPartyClientDO> lambda = new QueryWrapper<ThirdPartyClientDO>().lambda();
+        lambda.eq(ThirdPartyClientDO::getThirdPartyCloud,cloudEnum);
+        return this.baseMapper.selectOne(lambda);
+    }
+
+    @Override
+    public int deleteByCloud(ThirdPartyCloudEnum cloudEnum) {
+        LambdaQueryWrapper<ThirdPartyClientDO> lambda = new QueryWrapper<ThirdPartyClientDO>().lambda();
+        lambda.eq(ThirdPartyClientDO::getThirdPartyCloud,cloudEnum);
+        return this.baseMapper.delete(lambda);
     }
 
     private String generateCacheKey(String clientId) {

@@ -175,9 +175,9 @@ Vue.component("alexa-config", {
                             <el-input v-model="scope.row.functionId"></el-input>
                         </template>
                     </el-table-column>
-                    <el-table-column label="产商云属性" prop="thirdPartyCode">
+                    <el-table-column label="产商云属性" prop="thirdSignCode">
                         <template slot-scope="scope">
-                            <el-input v-model="scope.row.thirdPartyCode"></el-input>
+                            <el-input v-model="scope.row.thirdSignCode"></el-input>
                         </template>
                     </el-table-column>
                     <el-table-column label="产商云属性行为" prop="thirdActionCode">
@@ -257,9 +257,9 @@ Vue.component("alexa-config", {
                             <el-input v-model="scope.row.functionId"></el-input>
                         </template>
                     </el-table-column>
-                    <el-table-column label="产商云属性" prop="thirdPartyCode">
+                    <el-table-column label="产商云属性" prop="thirdSignCode">
                         <template slot-scope="scope">
-                            <el-input v-model="scope.row.thirdPartyCode"></el-input>
+                            <el-input v-model="scope.row.thirdSignCode"></el-input>
                         </template>
                     </el-table-column>
                     <el-table-column label="产商云属性行为" prop="thirdActionCode">
@@ -327,7 +327,7 @@ Vue.component("alexa-config", {
         this.productTypeThirdIds();
         this.alexaProductAction();
         axios({
-            url: "/toc/api/web/config/convertFunctions",
+            url: "/cloudToCloud/api/web/config/convertFunctions",
         }).then((res) => {
             this.convertFunctions = res.data.result;
         });
@@ -368,7 +368,7 @@ Vue.component("alexa-config", {
                         id: "",
                         signCode: "",
                         functionId: "",
-                        thirdPartyCode: "",
+                        thirdSignCode: "",
                         valueOf: '0',
                         valueMapping: [{key: "", value: ""}],
                         convertFunction: "",
@@ -392,7 +392,7 @@ Vue.component("alexa-config", {
                         id: "",
                         signCode: "",
                         functionId: "",
-                        thirdPartyCode: "",
+                        thirdSignCode: "",
                         valueOf: '0',
                         valueMapping: [{key: "", value: ""}],
                         convertFunction: "",
@@ -415,7 +415,7 @@ Vue.component("alexa-config", {
         },
         productTypeThirdIds() {
             axios({
-                url: "/toc/api/web/productType/thirdProducts",
+                url: "/cloudToCloud/api/web/productType/thirdProducts",
                 params: {
                     thirdPartyCloud: "ALEXA",
                 },
@@ -433,7 +433,7 @@ Vue.component("alexa-config", {
         },
         alexaProductType() {
             axios({
-                url: "/toc/api/web/productType/list",
+                url: "/cloudToCloud/api/web/productType/list",
                 params: {
                     index: this.productTypeCurrentPage,
                     size: this.productTypePageSize,
@@ -448,7 +448,7 @@ Vue.component("alexa-config", {
         },
         productTypeEdit(productId) {
             axios({
-                url: "/toc/api/web/productType/detail",
+                url: "/cloudToCloud/api/web/productType/detail",
                 params: {
                     productId: productId,
                     thirdPartyCloud: "ALEXA"
@@ -469,7 +469,7 @@ Vue.component("alexa-config", {
         productTypeSave() {
             axios({
                 method: "POST",
-                url: "/toc/api/web/productType/save",
+                url: "/cloudToCloud/api/web/productType/save",
                 data: {
                     productId: this.productType.productId,
                     thirdPartyCloud: "ALEXA",
@@ -484,7 +484,7 @@ Vue.component("alexa-config", {
         productTypeDelete(productId) {
             axios({
                 method: "POST",
-                url: "/toc/api/web/productType/delete",
+                url: "/cloudToCloud/api/web/productType/delete",
                 data: {
                     productId: productId,
                     thirdPartyCloud: "ALEXA",
@@ -530,7 +530,7 @@ Vue.component("alexa-config", {
         },
         alexaProductFunction() {
             axios({
-                url: "/toc/api/web/productFunction/list",
+                url: "/cloudToCloud/api/web/productFunction/list",
                 params: {
                     index: this.productFunctionCurrentPage,
                     size: this.productFunctionPageSize,
@@ -545,7 +545,7 @@ Vue.component("alexa-config", {
         },
         productFunctionEdit(productId) {
             axios({
-                url: "/toc/api/web/productFunction/detail",
+                url: "/cloudToCloud/api/web/productFunction/detail",
                 params: {
                     productId: productId,
                     thirdPartyCloud: "ALEXA"
@@ -562,7 +562,7 @@ Vue.component("alexa-config", {
         productFunctionSave() {
             axios({
                 method: "POST",
-                url: "/toc/api/web/productFunction/save",
+                url: "/cloudToCloud/api/web/productFunction/save",
                 data: {
                     productId: this.productFunction.productId,
                     thirdPartyCloud: "ALEXA",
@@ -577,7 +577,7 @@ Vue.component("alexa-config", {
         productFunctionDelete(productId) {
             axios({
                 method: "POST",
-                url: "/toc/api/web/productFunction/delete",
+                url: "/cloudToCloud/api/web/productFunction/delete",
                 data: {
                     productId: productId,
                     thirdPartyCloud: "ALEXA",
@@ -622,7 +622,7 @@ Vue.component("alexa-config", {
         },
         alexaProductAction() {
             axios({
-                url: "/toc/api/web/productAction/list",
+                url: "/cloudToCloud/api/web/productAction/list",
                 params: {
                     index: this.productActionCurrentPage,
                     size: this.productActionPageSize,
@@ -637,7 +637,7 @@ Vue.component("alexa-config", {
         },
         productActionEdit(productId) {
             axios({
-                url: "/toc/api/web/productAction/detail",
+                url: "/cloudToCloud/api/web/productAction/detail",
                 params: {
                     productId: productId,
                     thirdPartyCloud: "ALEXA"
@@ -654,7 +654,7 @@ Vue.component("alexa-config", {
         productActionSave() {
             axios({
                 method: "POST",
-                url: "/toc/api/web/productAction/save",
+                url: "/cloudToCloud/api/web/productAction/save",
                 data: {
                     productId: this.productAction.productId,
                     thirdPartyCloud: "ALEXA",
@@ -669,7 +669,7 @@ Vue.component("alexa-config", {
         productActionDelete(productId) {
             axios({
                 method: "POST",
-                url: "/toc/api/web/productAction/delete",
+                url: "/cloudToCloud/api/web/productAction/delete",
                 data: {
                     productId: productId,
                     thirdPartyCloud: "ALEXA",

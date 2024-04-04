@@ -1,5 +1,6 @@
-package com.leyunone.cloudcloud.dao;
+package com.leyunone.cloudcloud.dao.impl;
 
+import com.leyunone.cloudcloud.dao.ThirdPartyActionRepository;
 import com.leyunone.cloudcloud.dao.base.repository.BaseRepository;
 import com.leyunone.cloudcloud.dao.entity.ThirdPartyActionDO;
 import com.leyunone.cloudcloud.dao.mapper.ThirdPartyActionMapper;

@@ -1,7 +1,9 @@
 package com.leyunone.cloudcloud.dao;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyunone.cloudcloud.dao.base.iservice.IBaseRepository;
 import com.leyunone.cloudcloud.dao.entity.ActionMappingDO;
+import com.leyunone.cloudcloud.web.bean.query.ProductTypeQuery;
 
 import java.util.List;
 
@@ -15,4 +17,9 @@ import java.util.List;
 public interface ActionMappingRepository extends IBaseRepository<ActionMappingDO> {
 
     List<ActionMappingDO> selectByProductIds(List<String> productIds, String cloud);
+
+    List<ActionMappingDO> selectByProductId(String productId, String cloud);
+
+    Page<ActionMappingDO> selectPageOrder(ProductTypeQuery query);
+
 }

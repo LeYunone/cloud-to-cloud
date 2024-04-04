@@ -1,5 +1,6 @@
-package com.leyunone.cloudcloud.dao;
+package com.leyunone.cloudcloud.dao.impl;
 
+import com.leyunone.cloudcloud.dao.DeviceRepository;
 import com.leyunone.cloudcloud.dao.base.repository.BaseRepository;
 import com.leyunone.cloudcloud.dao.entity.DeviceDO;
 import com.leyunone.cloudcloud.dao.mapper.DeviceMapper;

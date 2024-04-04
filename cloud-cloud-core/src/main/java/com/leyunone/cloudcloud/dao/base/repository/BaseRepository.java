@@ -24,9 +24,9 @@ import java.util.Map;
  * @since 2022-03-28
  * 基础服务类1  需要调节 - DO[实体]  CO[出参]  M[mapper]
  */
-public  class BaseRepository<M extends BaseMapper<DO>, DO> extends BaseCommon<M, DO> implements IBaseRepository<DO> {
+public class BaseRepository<M extends BaseMapper<DO>, DO> extends BaseCommon<M, DO> implements IBaseRepository<DO> {
 
-    public BaseRepository () {
+    public BaseRepository() {
         Class<?> c = getClass();
         Type t = c.getGenericSuperclass();
         if (t instanceof ParameterizedType) {
@@ -60,9 +60,9 @@ public  class BaseRepository<M extends BaseMapper<DO>, DO> extends BaseCommon<M,
     @Override
     public <R> boolean deleteLogicById(Serializable id, SFunction<DO, R> tableId) {
         UpdateWrapper updateWrapper = new UpdateWrapper();
-        updateWrapper.set("isDeleted",1);
+        updateWrapper.set("isDeleted", 1);
         LambdaUpdateWrapper lambda = updateWrapper.lambda();
-        lambda.eq(tableId,id);
+        lambda.eq(tableId, id);
         return super.update(lambda);
     }
 
@@ -105,8 +105,9 @@ public  class BaseRepository<M extends BaseMapper<DO>, DO> extends BaseCommon<M,
         List<R> rs = this.castCover(dos, clazz);
         return rs;
     }
+
     @Override
-    public <R>R selectById(Serializable id, Class<R> clazz) {
+    public <R> R selectById(Serializable id, Class<R> clazz) {
         DO aDo = this.baseMapper.selectById(id);
         R r = null;
         try {
@@ -116,13 +117,13 @@ public  class BaseRepository<M extends BaseMapper<DO>, DO> extends BaseCommon<M,
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        BeanUtil.copyProperties(aDo,r);
+        BeanUtil.copyProperties(aDo, r);
         return r;
     }
 
     @Override
     public DO selectById(Serializable id) {
-        return (DO)this.selectById(id,do_Class);
+        return (DO) this.selectById(id, do_Class);
     }
 
     @Override
@@ -156,8 +157,13 @@ public  class BaseRepository<M extends BaseMapper<DO>, DO> extends BaseCommon<M,
     }
 
     @Override
-    protected <R>List<R> castCover(List<DO> dos,Class<R> tarClazz) {
+    protected <R> List<R> castCover(List<DO> dos, Class<R> tarClazz) {
         List<R> list = BeanUtil.copyToList(dos, tarClazz);
         return list;
+    }
+
+    @Override
+    public boolean save(DO entity) {
+        return this.baseMapper.insert(entity) == 1;
     }
 }

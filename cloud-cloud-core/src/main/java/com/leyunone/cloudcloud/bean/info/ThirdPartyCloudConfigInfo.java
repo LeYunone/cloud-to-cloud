@@ -14,14 +14,6 @@ public class ThirdPartyCloudConfigInfo {
 
     private String clientSecret;
 
-    private Long appId;
-
-    private Long tenantId;
-
-    private String appUuid;
-
-    private String tenantUuid;
-
     private String mainUrl;
 
     private String skillId;
@@ -31,8 +23,6 @@ public class ThirdPartyCloudConfigInfo {
     private String additionalInformation;
 
     private String redirectUri;
-
-    private String appSecret;
 
     private String reportUrl;
 

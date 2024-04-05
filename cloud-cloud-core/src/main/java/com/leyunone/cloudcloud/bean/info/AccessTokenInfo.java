@@ -45,9 +45,5 @@ public class AccessTokenInfo {
         private String thirdInfo;
 
         private ThirdPartyCloudEnum thirdPartyCloud;
-
-        private LocalDateTime createTime;
-
-        private LocalDateTime updateTime;
     }
 }

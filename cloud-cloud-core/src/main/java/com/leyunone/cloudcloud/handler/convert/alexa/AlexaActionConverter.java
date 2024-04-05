@@ -6,7 +6,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.leyunone.cloudcloud.bean.mapping.ActionMapping;
 import com.leyunone.cloudcloud.bean.third.alexa.AlexaControlRequest;
 import com.leyunone.cloudcloud.bean.dto.DeviceFunctionDTO;
-import com.leyunone.cloudcloud.bean.enums.AlexaActionValueEnum;
 import com.leyunone.cloudcloud.bean.mapping.AlexaProductMapping;
 import com.leyunone.cloudcloud.bean.mapping.ProductMapping;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;

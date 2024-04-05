@@ -21,9 +21,9 @@ import java.io.IOException;
  */
 @Component
 @RabbitListener(bindings = @QueueBinding(
-        value = @Queue(value = "toc.device.shadow", durable = "true"),
+        value = @Queue(value = "cloud.device.shadow", durable = "true"),
         exchange = @Exchange(value = "device.shadow.topic", type = ExchangeTypes.TOPIC),
-        key = {"device.shadow.toc"}
+        key = {"cloud.shadow.toc"}
 ))
 public class DeviceMessageConsumer {
 

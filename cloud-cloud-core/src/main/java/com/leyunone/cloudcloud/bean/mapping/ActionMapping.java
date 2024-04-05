@@ -44,7 +44,7 @@ public class ActionMapping {
      */
     private String defaultValue;
 
-    private Boolean valueOf;
+    private boolean valueOf;
 
     /**
      * 

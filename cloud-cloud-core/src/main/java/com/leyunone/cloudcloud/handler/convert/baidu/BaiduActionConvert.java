@@ -3,7 +3,6 @@ package com.leyunone.cloudcloud.handler.convert.baidu;
 import com.alibaba.fastjson.JSONObject;
 import com.leyunone.cloudcloud.bean.third.baidu.DeviceControlRequest;
 import com.leyunone.cloudcloud.bean.dto.DeviceFunctionDTO;
-import com.leyunone.cloudcloud.bean.enums.BaiduCommandEnums;
 import com.leyunone.cloudcloud.bean.mapping.ActionMapping;
 import com.leyunone.cloudcloud.bean.mapping.BaiduProductMapping;
 import com.leyunone.cloudcloud.bean.mapping.ProductMapping;

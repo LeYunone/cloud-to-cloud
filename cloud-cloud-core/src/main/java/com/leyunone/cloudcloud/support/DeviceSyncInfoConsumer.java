@@ -23,9 +23,9 @@ import java.util.List;
  */
 @Component
 @RabbitListener(bindings = @QueueBinding(
-        value = @Queue(value = "toc.device.status", durable = "true"),
+        value = @Queue(value = "cloud.device.status", durable = "true"),
         exchange = @Exchange(value = "device.report.topic", type = ExchangeTypes.TOPIC),
-        key = {"toc.device.sync"}
+        key = {"cloud.device.sync"}
 ))
 public class DeviceSyncInfoConsumer {
 

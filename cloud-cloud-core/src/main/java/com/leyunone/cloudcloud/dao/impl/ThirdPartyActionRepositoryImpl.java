@@ -13,5 +13,5 @@ import org.springframework.stereotype.Repository;
  * @Date 2024/1/31 9:14
  */
 @Repository
-public class ThirdPartyActionRepositoryImpl extends BaseRepository<ThirdPartyActionMapper, ThirdPartyActionDO> implements ThirdPartyActionRepository {
+public class ThirdPartyActionRepositoryImpl extends BaseRepository<ThirdPartyActionMapper, ThirdPartyActionDO,Object> implements ThirdPartyActionRepository {
 }

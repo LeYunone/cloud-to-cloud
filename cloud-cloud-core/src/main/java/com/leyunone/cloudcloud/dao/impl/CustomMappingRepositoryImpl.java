@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
  * @date 2024-02-14
  */
 @Repository
-public class CustomMappingRepositoryImpl extends BaseRepository<CustomMappingMapper, CustomMappingDO> implements CustomMappingRepository {
+public class CustomMappingRepositoryImpl extends BaseRepository<CustomMappingMapper, CustomMappingDO,Object> implements CustomMappingRepository {
 
     @Override
     public CustomMappingDO selectByProductThirdCode(String productId, String thirdCode) {

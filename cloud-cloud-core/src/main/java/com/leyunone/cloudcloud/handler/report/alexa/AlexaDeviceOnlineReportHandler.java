@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.leyunone.cloudcloud.bean.enums.ReportTypeEnum;
 import com.leyunone.cloudcloud.bean.third.alexa.AlexaDeviceProperty;
 import com.leyunone.cloudcloud.bean.third.alexa.AlexaDeviceReportBean;
 import com.leyunone.cloudcloud.bean.dto.DeviceMessageDTO;
@@ -64,8 +65,15 @@ public class AlexaDeviceOnlineReportHandler extends AbstractAlexaDeviceMessageRe
                 .timeOfSample(TimeUtils.getUTCyyyyMMddTHHmmssSSSZ())
                 .uncertaintyInMilliseconds(0L)
                 .build()), tokenOrRefresh);
-        //TODO  不进行设备上下线播报
-//        deviceReportBean.setPayload(JSONObject.toJSONString(onlineParam));
+        deviceReportBean.setContext(AlexaDeviceReportBean.Context.builder()
+                .properties(CollectionUtil.newArrayList(AlexaDeviceProperty.builder()
+                        .namespace("Alexa.EndpointHealth")
+                        .name("connectivity")
+                        .value(online)
+                        .timeOfSample(TimeUtils.getUTCyyyyMMddTHHmmssSSSZ())
+                        .uncertaintyInMilliseconds(0L)
+                        .build()))
+                .build());
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -107,4 +115,8 @@ public class AlexaDeviceOnlineReportHandler extends AbstractAlexaDeviceMessageRe
         return ThirdPartyCloudEnum.ALEXA;
     }
 
+    @Override
+    public ReportTypeEnum type() {
+        return ReportTypeEnum.ONLINE;
+    }
 }

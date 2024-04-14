@@ -11,6 +11,7 @@ import com.google.api.services.homegraph.v1.model.ReportStateAndNotificationRequ
 import com.google.api.services.homegraph.v1.model.ReportStateAndNotificationResponse;
 import com.google.api.services.homegraph.v1.model.StateAndNotificationPayload;
 import com.google.auth.http.HttpCredentialsAdapter;
+import com.leyunone.cloudcloud.bean.enums.ReportTypeEnum;
 import com.leyunone.cloudcloud.bean.info.DeviceCloudInfo;
 import com.leyunone.cloudcloud.bean.info.DeviceInfo;
 import com.leyunone.cloudcloud.dao.entity.ThirdPartyClientDO;
@@ -97,6 +98,12 @@ public class GoogleDeviceStatusReportHandler extends AbstractGoogleDeviceMessage
     @Override
     public ThirdPartyCloudEnum getCloud() {
         return ThirdPartyCloudEnum.GOOGLE;
+    }
+
+
+    @Override
+    public ReportTypeEnum type() {
+        return ReportTypeEnum.STATUS;
     }
 
 }

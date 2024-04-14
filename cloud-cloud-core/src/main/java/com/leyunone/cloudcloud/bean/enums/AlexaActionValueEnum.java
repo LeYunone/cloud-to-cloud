@@ -175,7 +175,7 @@ public enum AlexaActionValueEnum {
 
     protected String valueOfConvert(Object value, ActionMapping capability) {
         Map<String, Object> valueMapping = capability.getValueMapping();
-        if (capability.getValueOf()) {
+        if (capability.isValueOf()) {
             value = valueMapping.get(value).toString();
         }
         return String.valueOf(value);

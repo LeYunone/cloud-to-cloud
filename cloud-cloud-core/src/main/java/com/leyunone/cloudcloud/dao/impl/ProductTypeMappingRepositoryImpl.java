@@ -22,7 +22,7 @@ import java.util.List;
  * @date 2024-02-14
  */
 @Service
-public class ProductTypeMappingRepositoryImpl extends BaseRepository<ProductTypeMappingMapper, ProductTypeMappingDO> implements ProductTypeMappingRepository {
+public class ProductTypeMappingRepositoryImpl extends BaseRepository<ProductTypeMappingMapper, ProductTypeMappingDO,Object> implements ProductTypeMappingRepository {
 
     @Override
     public List<ProductTypeMappingDO> selectByProductIds(List<String> productIds, String cloud) {

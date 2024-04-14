@@ -22,7 +22,7 @@ import java.util.List;
  * @date 2024-02-14
  */
 @Repository
-public class DeviceMappingRepositoryImpl extends BaseRepository<DeviceMappingMapper, DeviceMappingDO> implements DeviceMappingRepository {
+public class DeviceMappingRepositoryImpl extends BaseRepository<DeviceMappingMapper, DeviceMappingDO,Object> implements DeviceMappingRepository {
 
     @Resource
     DeviceMappingMapper deviceMappingMapper;

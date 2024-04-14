@@ -1,12 +1,18 @@
 package com.leyunone.cloudcloud.mangaer.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.leyunone.cloudcloud.mangaer.CacheManager;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * :)
@@ -18,6 +24,8 @@ import java.util.function.Function;
 @Service
 public class CacheManagerImpl implements CacheManager {
 
+    private RedisTemplate<Object, Object> redisTemplate;
+
     @Override
     public <T> T getData(String key, Class<T> clazz) {
         return null;
@@ -25,26 +33,78 @@ public class CacheManagerImpl implements CacheManager {
 
     @Override
     public boolean addData(String key, String value) {
-        return false;
+        if (key.isEmpty()) {
+            return false;
+        }
+        redisTemplate.opsForValue().set(key, value);
+        return true;
     }
 
     @Override
-    public boolean addData(String key, Object value, Long time) {
-        return false;
+    public <T> boolean addData(String key, T value, Long time) {
+        if (key.isEmpty()) {
+            return false;
+        }
+        redisTemplate.opsForValue().set(key, value, time, TimeUnit.MILLISECONDS);
+        return true;
     }
 
     @Override
     public boolean addData(String key, Object value, Long time, TimeUnit unit) {
-        return false;
+        if (key.isEmpty()) {
+            return false;
+        }
+        redisTemplate.opsForValue().set(key, value, time, unit);
+        return true;
     }
 
     @Override
-    public <T> Optional<List<T>> getData(List<Object> keys, Long time, Function<List<T>, List<T>> getMissData, Function<T, String> generateKey) {
-        return Optional.empty();
+    public <T> Optional<List<T>> get(List<Object> keys) {
+        if (CollectionUtils.isEmpty(keys)) {
+            return Optional.empty();
+        }
+        List<Object> multiGet = redisTemplate.opsForValue().multiGet(keys);
+        List<T> collect = multiGet.stream().filter(Objects::nonNull).map(v -> (T) v).collect(Collectors.toList());
+        if (CollectionUtils.isEmpty(collect)) {
+            return Optional.empty();
+        } else {
+            return Optional.of(collect);
+        }
+    }
+
+    long defaultTimeMin = 15;
+
+    @Override
+    public <T> Optional<List<T>> getData(List<Object> keys, Long time, TimeUnit unit, Function<List<T>, List<T>> getMissData, Function<T, String> generateKey) {
+        Optional<List<T>> optional = get(keys);
+        List<T> hitData = new ArrayList<>();
+        if (null != optional && optional.isPresent()) {
+            hitData = optional.get();
+        }
+        List<T> missData = getMissData.apply(hitData);
+        if (!CollectionUtils.isEmpty(missData)) {
+            if (time == null) {
+                time = defaultTimeMin;
+            }
+            Long finalTime = time;
+            missData.forEach(t -> {
+                addData(generateKey.apply(t), t, finalTime, unit);
+            });
+            hitData.addAll(missData);
+        }
+        if (CollectionUtils.isEmpty(hitData)) {
+            return Optional.empty();
+        } else {
+            return Optional.of(hitData);
+        }
     }
 
     @Override
     public boolean deleteData(String key) {
-        return false;
+        if (StrUtil.isEmpty(key)){
+            return false;
+        }
+        redisTemplate.delete(key);
+        return true;
     }
 }

@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
  * @date 2024-02-14
  */
 @Repository
-public class DeviceCapabilityRepositoryImpl extends BaseRepository<DeviceCapabilityMapper, DeviceCapabilityDO> implements DeviceCapabilityRepository {
+public class DeviceCapabilityRepositoryImpl extends BaseRepository<DeviceCapabilityMapper, DeviceCapabilityDO,Object> implements DeviceCapabilityRepository {
 
     private final CacheManager cacheManager;
 

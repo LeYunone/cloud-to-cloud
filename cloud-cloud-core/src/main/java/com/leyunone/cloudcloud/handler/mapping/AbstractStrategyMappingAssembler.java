@@ -17,6 +17,7 @@ import com.leyunone.cloudcloud.strategy.AbstractStrategyAutoRegisterComponent;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -49,7 +50,7 @@ public abstract class AbstractStrategyMappingAssembler<R extends ProductMapping>
                 .stream()
                 .map(fm -> {
                     StatusMapping statusMapping = new StatusMapping();
-                    BeanUtil.copyProperties(fm,statusMapping);
+                    BeanUtil.copyProperties(fm, statusMapping);
                     String valueMapping = fm.getValueMapping();
                     Map<String, Object> map = new HashMap<>();
                     if (StrUtil.isNotBlank(valueMapping)) {
@@ -79,7 +80,7 @@ public abstract class AbstractStrategyMappingAssembler<R extends ProductMapping>
                 .collect(Collectors.toList());
 
         Optional<List<R>> rs = cacheManager.getData(cacheKeys,
-                null,
+                3L, TimeUnit.MINUTES,
                 (hit) -> {
                     List<String> missPidList = new ArrayList<>();
                     if (CollectionUtils.isEmpty(hit)) {

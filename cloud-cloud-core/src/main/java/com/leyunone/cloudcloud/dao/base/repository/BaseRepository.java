@@ -1,6 +1,7 @@
 package com.leyunone.cloudcloud.dao.base.repository;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -11,9 +12,12 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyunone.cloudcloud.dao.base.iservice.IBaseRepository;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -24,17 +28,39 @@ import java.util.Map;
  * @since 2022-03-28
  * 基础服务类1  需要调节 - DO[实体]  CO[出参]  M[mapper]
  */
-public class BaseRepository<M extends BaseMapper<DO>, DO> extends BaseCommon<M, DO> implements IBaseRepository<DO> {
+public class BaseRepository<M extends BaseMapper<DO>, DO, CONVERT> extends BaseCommon<M, DO, CONVERT> implements IBaseRepository<DO> {
 
-    public BaseRepository() {
-        Class<?> c = getClass();
-        Type t = c.getGenericSuperclass();
-        if (t instanceof ParameterizedType) {
-            Type[] params = ((ParameterizedType) t).getActualTypeArguments();
-            super.do_Class = (Class<?>) params[1];
-        }
+    private Class<DO> do_Class;
+
+    private Map<Class<?>, Method> covers;
+
+    private Map<Class<?>, Method> collectionCovers;
+
+    {
+        this.do_Class = getDo_Class();
+        this.covers = getCovers();
+        this.collectionCovers = getCollectionCovers();
     }
 
+
+    /**
+     * 根据实体类更新
+     *
+     * @param o
+     * @return
+     */
+    @Override
+    public boolean updateById(Object o) {
+        DO d = o.getClass().isAssignableFrom(do_Class) ? (DO) o : castToDO(o);
+        return super.updateById(d);
+    }
+
+    /**
+     * 创建实体
+     *
+     * @param entity
+     * @return
+     */
     @Override
     public boolean insertOrUpdate(Object entity) {
         DO aDo = castToDO(entity);
@@ -42,90 +68,106 @@ public class BaseRepository<M extends BaseMapper<DO>, DO> extends BaseCommon<M, 
     }
 
     @Override
-    public boolean insertOrUpdateBatch(List params) {
-        List list = castToDO(params);
-        return this.saveOrUpdateBatch(list);
+    public boolean insertOrUpdateBatch(Collection<DO> entitys) {
+        if (CollectionUtils.isEmpty(entitys)) {
+            return true;
+        }
+        return this.saveOrUpdateBatch(entitys);
     }
 
+    /**
+     * id删除
+     *
+     * @param id
+     * @return
+     */
     @Override
     public boolean deleteById(Serializable id) {
         return super.removeById(id);
     }
 
     @Override
-    public boolean deleteByIdBatch(List ids) {
+    public boolean deleteByIds(Collection<? extends Serializable> ids) {
+        if (CollectionUtils.isEmpty(ids)) {
+            return true;
+        }
         return super.removeByIds(ids);
     }
 
+
+    /**
+     * id 逻辑删除
+     *
+     * @param id
+     * @return
+     */
     @Override
     public <R> boolean deleteLogicById(Serializable id, SFunction<DO, R> tableId) {
-        UpdateWrapper updateWrapper = new UpdateWrapper();
-        updateWrapper.set("isDeleted", 1);
-        LambdaUpdateWrapper lambda = updateWrapper.lambda();
-        lambda.eq(tableId, id);
-        return super.update(lambda);
-    }
-
-    @Override
-    public boolean updateBatchById(List<DO> ds) {
-        return false;
-    }
-
-    @Override
-    public boolean saveBatch(List<DO> ds) {
-        return false;
-    }
-
-    @Override
-    public List<DO> selectByCon(Object o) {
-        return (List<DO>) this.selectByCon(o, do_Class);
-    }
-
-    @Override
-    public List<DO> selectByCon(LambdaQueryWrapper<DO> queryWrapper) {
-        return null;
-    }
-
-    @Override
-    public List<DO> selectByCon(Object o, LambdaQueryWrapper<DO> queryWrapper) {
-        return null;
-    }
-
-    @Override
-    public <R> List<R> selectByCon(Object o, Class<R> clazz) {
-        return this.selectByCon(o, clazz, null);
-    }
-
-    @Override
-    public <R> List<R> selectByCon(Object o, Class<R> clazz, LambdaQueryWrapper<DO> queryWrapper) {
-        deletedToFalse(o);
-        DO d = castToDO(o);
-        List<DO> dos = this.getConQueryResult(d, queryWrapper);
-        //target class
-        List<R> rs = this.castCover(dos, clazz);
-        return rs;
-    }
-
-    @Override
-    public <R> R selectById(Serializable id, Class<R> clazz) {
-        DO aDo = this.baseMapper.selectById(id);
-        R r = null;
         try {
-            r = clazz.newInstance();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+            Field isDeleted = do_Class.getDeclaredField("isDeleted");
+            if (null != isDeleted) {
+                UpdateWrapper<DO> updateWrapper = new UpdateWrapper<DO>();
+                updateWrapper.set("is_deleted", 0);
+                LambdaUpdateWrapper<DO> lambda = updateWrapper.lambda();
+                lambda.eq(tableId, id);
+                return super.update(lambda);
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        BeanUtil.copyProperties(aDo, r);
-        return r;
+        return false;
+    }
+
+
+    /**
+     * id 批量逻辑删除
+     *
+     * @param ids
+     * @return
+     */
+    @Override
+    public <R> boolean deleteLogicByIds(List<? extends Serializable> ids, SFunction<DO, R> tableId) {
+        try {
+            Field isDeleted = do_Class.getDeclaredField("isDeleted");
+            if (null != isDeleted) {
+                UpdateWrapper<DO> updateWrapper = new UpdateWrapper<DO>();
+                updateWrapper.set("is_deleted", 0);
+                LambdaUpdateWrapper<DO> lambda = updateWrapper.lambda();
+                lambda.in(tableId, ids);
+                return super.update(lambda);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     @Override
-    public DO selectById(Serializable id) {
-        return (DO) this.selectById(id, do_Class);
+    public <R> boolean updateNewId(String oldId, String newId, SFunction<DO, R> tableId) {
+        LambdaUpdateWrapper<DO> lambda = new UpdateWrapper().lambda();
+        lambda.eq(tableId, oldId);
+        lambda.set(tableId, newId);
+        return this.update(lambda);
     }
 
+    @Override
+    public <R> boolean insertBatch(Collection<R> entitys) {
+        List<DO> save = (List<DO>) castCover(collectionCovers, do_Class, entitys);
+        return this.saveBatch(save);
+    }
+
+    @Override
+    public DO selectOne(Object o) {
+        return this.selectOne(o, do_Class);
+    }
+
+    /**
+     * 根据条件只查询一条
+     *
+     * @param o
+     * @param clazz
+     * @return
+     */
     @Override
     public <R> R selectOne(Object o, Class<R> clazz) {
         List<R> rs = this.selectByCon(o, clazz);
@@ -137,33 +179,152 @@ public class BaseRepository<M extends BaseMapper<DO>, DO> extends BaseCommon<M, 
     }
 
     @Override
-    public DO selectOne(Object o) {
-        return (DO) this.selectOne(o, do_Class);
+    public DO selectById(Serializable id) {
+        return this.selectById(id, do_Class);
     }
 
     @Override
-    public Page selectByConPage(Object o, Page page) {
-        return null;
+    public List<DO> selectByIds(List<? extends Serializable> ids) {
+        return this.selectByIds(ids, do_Class);
     }
 
     @Override
-    public Page selectByConOrderPage(Object con, Page page, SFunction function, boolean isDesc) {
-        return null;
+    public <R> List<R> selectByIds(List<? extends Serializable> ids, Class<R> clazz) {
+        if (org.springframework.util.CollectionUtils.isEmpty(ids)) return new ArrayList<>();
+        List<DO> dos = this.baseMapper.selectBatchIds(ids);
+        return (List<R>) this.castCover(this.collectionCovers, clazz, dos);
+    }
+
+    /**
+     * 主键id查询
+     *
+     * @param id
+     * @param clazz
+     * @param <R>
+     * @return
+     */
+    @Override
+    public <R> R selectById(Serializable id, Class<R> clazz) {
+        if (!covers.containsKey(clazz)) {
+            return (R) this.baseMapper.selectById(id);
+        }
+        DO aDo = this.baseMapper.selectById(id);
+        Object o = this.castCover(this.covers, clazz, aDo);
+        return (R) o;
+    }
+
+    /**
+     * 默认出来DO
+     *
+     * @param o
+     * @return
+     */
+    @Override
+    public List<DO> selectByCon(Object o) {
+        return this.selectByCon(o, do_Class);
     }
 
     @Override
-    protected Object castCover(Map<Class<?>, Method> cover, Class<?> clazz, Object o) {
-        return null;
+    public List<DO> selectByCon(LambdaQueryWrapper<DO> queryWrapper) {
+        DO aDo = castToDO(null);
+        return this.selectByCon(aDo, do_Class, queryWrapper);
     }
 
     @Override
-    protected <R> List<R> castCover(List<DO> dos, Class<R> tarClazz) {
-        List<R> list = BeanUtil.copyToList(dos, tarClazz);
-        return list;
+    public List<DO> selectByCon(Object o, LambdaQueryWrapper<DO> queryWrapper) {
+        return this.selectByCon(o, do_Class, queryWrapper);
+    }
+
+    /**
+     * 自定义出来clazz对象
+     *
+     * @param o
+     * @param clazz
+     * @return
+     */
+    @Override
+    public <R> List<R> selectByCon(Object o, Class<R> clazz) {
+        return this.selectByCon(o, clazz, null);
     }
 
     @Override
-    public boolean save(DO entity) {
-        return this.baseMapper.insert(entity) == 1;
+    public <R> List<R> selectByCon(Object o, Class<R> clazz, LambdaQueryWrapper<DO> queryWrapper) {
+        DO d = castToDO(o);
+        deletedToFalse(d);
+        List<DO> dos = this.getConQueryResult(d, queryWrapper);
+        if (!covers.containsKey(clazz)) {
+            //出DO
+            return (List<R>) dos;
+        }
+        //target class
+        return (List<R>) this.castCover(this.collectionCovers, clazz, dos);
+    }
+
+    @Override
+    public Page<DO> selectByConPage(Object o, Page page) {
+        LambdaQueryWrapper<DO> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        DO jDO = JSON.parseObject(JSON.toJSONString(o), do_Class);
+        lambdaQueryWrapper.setEntity(jDO);
+        return this.page(page, lambdaQueryWrapper);
+    }
+
+    @Override
+    public Page<DO> selectByConPage(Object o, Integer index, Integer size) {
+        Page page = new Page(index, size);
+        return this.selectByConPage(page, page);
+    }
+
+    @Override
+    public <R> Page<R> selectByConPage(Object o, Integer index, Integer size, Class<R> clazz) {
+        Page page = new Page(index, size);
+        return this.selectByConPage(o, clazz, page);
+    }
+
+    @Override
+    public <R> Page<R> selectByConPage(Object o, Class<R> clazz, Page page) {
+        Page<DO> doPage = this.selectByConPage(o, page);
+        List<R> cover = (List<R>) castCover(this.collectionCovers, clazz, doPage.getRecords());
+        Page<R> rPage = new Page<>(doPage.getCurrent(), doPage.getSize(), doPage.getTotal());
+        rPage.setRecords(cover);
+        rPage.setOrders(doPage.getOrders());
+        rPage.setPages(doPage.getPages());
+        return rPage;
+    }
+
+
+    /**
+     * @param o
+     * @param clazz
+     * @param type  排序0为desc 1为asc
+     * @param <R>
+     * @return
+     */
+    @Override
+    public <R, Z> List<R> selectByConOrder(Object o, Class<R> clazz, int type, SFunction<DO, Z>... tables) {
+        LambdaQueryWrapper<DO> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        if (type == 0) {
+            for (SFunction<DO, Z> table : tables) {
+                lambdaQueryWrapper.orderByDesc(table);
+            }
+        } else {
+            for (SFunction<DO, Z> table : tables) {
+                lambdaQueryWrapper.orderByAsc(table);
+            }
+        }
+        return this.selectByCon(o, clazz, lambdaQueryWrapper);
+    }
+
+    /**
+     * 自定义排序查询 默认对象DO
+     *
+     * @param o
+     * @param type
+     * @param tables
+     * @param <Z>
+     * @return
+     */
+    @Override
+    public <Z> List<DO> selectByConOrder(Object o, int type, SFunction<DO, Z>... tables) {
+        return this.selectByConOrder(o, do_Class, type, tables);
     }
 }

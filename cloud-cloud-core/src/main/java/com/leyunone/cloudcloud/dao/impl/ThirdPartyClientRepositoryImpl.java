@@ -20,7 +20,7 @@ import javax.annotation.Resource;
  * @date 2024-02-14
  */
 @Repository
-public class ThirdPartyClientRepositoryImpl extends BaseRepository<ThirdPartyClientMapper, ThirdPartyClientDO> implements ThirdPartyClientRepository {
+public class ThirdPartyClientRepositoryImpl extends BaseRepository<ThirdPartyClientMapper, ThirdPartyClientDO,Object> implements ThirdPartyClientRepository {
 
     @Resource
     ThirdPartyClientMapper thirdPartyClientMapper;

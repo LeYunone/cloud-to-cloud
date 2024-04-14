@@ -1,5 +1,6 @@
 package com.leyunone.cloudcloud.service;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.leyunone.cloudcloud.bean.enums.ActionTypeEnum;
 import com.leyunone.cloudcloud.dao.ThirdPartyActionRepository;
 import com.leyunone.cloudcloud.dao.entity.ThirdPartyActionDO;
@@ -50,9 +51,9 @@ public class ThirdPartyLoadConfigServiceImpl implements ThirdPartyLoadConfigServ
 
     @Override
     public List<String> getKeys(ThirdPartyCloudEnum cloud, ActionTypeEnum actionType) {
-        Map<Integer, List<String>> cloudActions = actionKeys.get(cloud.name());
+        Map<Integer, List<String>> cloudActions = actionKeys.get(cloud);
         List<String> keys = new ArrayList<>();
-        if (cloudActions.containsKey(actionType.getType())) {
+        if (CollectionUtil.isNotEmpty(cloudActions) && cloudActions.containsKey(actionType.getType())) {
             keys = cloudActions.get(actionType.getType());
         }
         return keys;

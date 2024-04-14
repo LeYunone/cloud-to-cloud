@@ -60,7 +60,7 @@ public enum ActionValueEnum {
         if (ObjectUtil.isNotNull(actionMapping.getConvertFunction())) {
             value = actionMapping.getConvertFunction().convert(value.toString());
         }
-        if (actionMapping.getValueOf()) {
+        if (actionMapping.isValueOf()) {
             //转化
             value = actionMapping.getValueMapping().get(String.valueOf(value)).toString();
         }

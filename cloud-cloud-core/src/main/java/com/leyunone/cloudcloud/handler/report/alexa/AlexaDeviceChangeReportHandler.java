@@ -3,6 +3,7 @@ package com.leyunone.cloudcloud.handler.report.alexa;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.leyunone.cloudcloud.bean.enums.ReportTypeEnum;
 import com.leyunone.cloudcloud.bean.third.alexa.AlexaDeviceProperty;
 import com.leyunone.cloudcloud.bean.third.alexa.AlexaDeviceReportBean;
 import com.leyunone.cloudcloud.bean.info.DeviceCloudInfo;
@@ -66,4 +67,8 @@ public class AlexaDeviceChangeReportHandler extends AbstractAlexaDeviceMessageRe
         return ThirdPartyCloudEnum.ALEXA;
     }
 
+    @Override
+    public ReportTypeEnum type() {
+        return ReportTypeEnum.STATUS;
+    }
 }

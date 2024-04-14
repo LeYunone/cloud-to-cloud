@@ -276,12 +276,12 @@ public enum BaiduCommandEnums {
 
     public String valueOfConvert(String value, ActionMapping actionMapping) {
         Map<String, Object> valueMapping = actionMapping.getValueMapping();
-        if (actionMapping.getValueOf()) {
+        if (actionMapping.isValueOf()) {
             value = valueMapping.get(value).toString();
         }
         return value;
     }
-    
+
     private final static Map<String, BaiduCommandEnums> MAP;
 
 

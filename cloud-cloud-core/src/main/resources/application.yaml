@@ -1,4 +1,4 @@
-server:
+servletserver:
   servlet:
     context-path: /cloudToCloud/api/
 ## 数据库配置
@@ -22,7 +22,6 @@ spring:
     testOnReturn: false
     poolPreparedStatements: true
     maxOpenPreparedStatements: 20
-    driver-class-name: com.mysql.jdbc.Driver
   redis:
     database: 0
     host: 127.0.0.1
@@ -40,8 +39,7 @@ spring:
       max-request-size: -1
 ## 打印日志级别
 logging:
-  level:
-    com.chz.mapper: debug
+  level: debug
 ### mp日志
 mybatis-plus:
   configuration:

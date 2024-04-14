@@ -15,6 +15,6 @@ import org.springframework.stereotype.Repository;
  * @date 2024-02-14
  */
 @Repository
-public class DeviceRepositoryImpl extends BaseRepository<DeviceMapper, DeviceDO> implements DeviceRepository {
+public class DeviceRepositoryImpl extends BaseRepository<DeviceMapper, DeviceDO,Object> implements DeviceRepository {
 
 }

@@ -21,7 +21,7 @@ import java.util.List;
  * @date 2024-02-14
  */
 @Repository
-public class FunctionMappingRepositoryImpl extends BaseRepository<FunctionMappingMapper, FunctionMappingDO> implements FunctionMappingRepository {
+public class FunctionMappingRepositoryImpl extends BaseRepository<FunctionMappingMapper, FunctionMappingDO,Object> implements FunctionMappingRepository {
 
 
     @Override

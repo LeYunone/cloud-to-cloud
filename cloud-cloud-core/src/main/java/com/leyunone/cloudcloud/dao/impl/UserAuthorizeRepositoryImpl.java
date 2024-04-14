@@ -22,7 +22,7 @@ import java.util.List;
  * @date 2024-02-14
  */
 @Repository
-public class UserAuthorizeRepositoryImpl extends BaseRepository<UserAuthorizeMapper, UserAuthorizeDO> implements UserAuthorizeRepository {
+public class UserAuthorizeRepositoryImpl extends BaseRepository<UserAuthorizeMapper, UserAuthorizeDO,Object> implements UserAuthorizeRepository {
 
 
     private static final String USER_AUTHORIZE_CACHE_PREFIX = "USER_AUTHORIZE";

@@ -63,7 +63,6 @@ public class ActionMapping {
 
         @Mappings({
                 @Mapping(target = "valueMapping",ignore = true),
-                @Mapping(target = "operation",ignore = true)
         })
         ActionMapping convert(ActionMappingDO actionMappingDO);
 

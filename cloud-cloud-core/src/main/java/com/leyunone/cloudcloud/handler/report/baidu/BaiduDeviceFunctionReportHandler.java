@@ -3,6 +3,7 @@ package com.leyunone.cloudcloud.handler.report.baidu;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.leyunone.cloudcloud.bean.enums.ReportTypeEnum;
 import com.leyunone.cloudcloud.bean.third.baidu.BaiduAttributes;
 import com.leyunone.cloudcloud.bean.third.baidu.BaiduHeader;
 import com.leyunone.cloudcloud.bean.third.baidu.BaiduStatusReportRequest;
@@ -65,6 +66,11 @@ public class BaiduDeviceFunctionReportHandler extends AbstractStatusCommonReport
         return ThirdPartyCloudEnum.BAIDU;
     }
 
+    @Override
+    public ReportTypeEnum type() {
+        return ReportTypeEnum.STATUS;
+    }
+    
     @Override
     protected boolean cooling(String message) {
         DeviceMessageDTO deviceMessage = JSONObject.parseObject(message, DeviceMessageDTO.class);

@@ -23,7 +23,7 @@ import java.util.List;
  * @date 2024-02-14
  */
 @Repository
-public class ActionMappingRepositoryImpl extends BaseRepository<ActionMappingMapper, ActionMappingDO> implements ActionMappingRepository {
+public class ActionMappingRepositoryImpl extends BaseRepository<ActionMappingMapper, ActionMappingDO,Object> implements ActionMappingRepository {
 
     @Resource
     private ActionMappingMapper actionMappingMapper;

@@ -3,11 +3,14 @@ package com.leyunone.cloudcloud.dao.impl;
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyunone.cloudcloud.dao.FunctionMappingRepository;
 import com.leyunone.cloudcloud.dao.base.repository.BaseRepository;
 import com.leyunone.cloudcloud.dao.entity.FunctionMappingDO;
 import com.leyunone.cloudcloud.dao.mapper.FunctionMappingMapper;
+import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.web.bean.query.ProductTypeQuery;
 import org.springframework.stereotype.Repository;
 
@@ -49,6 +52,24 @@ public class FunctionMappingRepositoryImpl extends BaseRepository<FunctionMappin
         lambda.eq(FunctionMappingDO::getProductId,productId);
         lambda.eq(FunctionMappingDO::getThirdSignCode,thirdCode);
         return this.baseMapper.selectOne(lambda);
+    }
+
+    @Override
+    public void deleteByProductId(String productId, ThirdPartyCloudEnum cloud) {
+        LambdaQueryWrapper<FunctionMappingDO> lambda = new QueryWrapper<FunctionMappingDO>().lambda();
+        lambda.eq(FunctionMappingDO::getProductId, productId);
+        lambda.eq(FunctionMappingDO::getThirdPartyCloud, cloud);
+        this.baseMapper.delete(lambda);
+    }
+
+    @Override
+    public void updateNull(List<String> productIds) {
+        LambdaUpdateWrapper<FunctionMappingDO> lambda = new UpdateWrapper<FunctionMappingDO>().lambda();
+        lambda.in(FunctionMappingDO::getProductId, productIds);
+        lambda.set(FunctionMappingDO::getCapabilityConfigId, null);
+        lambda.set(FunctionMappingDO::getConvertFunction, null);
+        lambda.set(FunctionMappingDO::getValueMapping,null);
+        this.baseMapper.update(null, lambda);
     }
 
 }

@@ -1,4 +1,4 @@
-package com.leyunone.cloudcloud.web.service.impl;
+package com.leyunone.cloudcloud.util;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;

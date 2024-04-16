@@ -8,6 +8,7 @@ import com.leyunone.cloudcloud.dao.ProductTypeMappingRepository;
 import com.leyunone.cloudcloud.dao.entity.ProductTypeMappingDO;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.util.CollectionFunctionUtils;
+import com.leyunone.cloudcloud.util.DaoUtils;
 import com.leyunone.cloudcloud.web.bean.dto.ProductTypeMappingDTO;
 import com.leyunone.cloudcloud.web.bean.query.ProductTypeQuery;
 import com.leyunone.cloudcloud.web.bean.vo.ProductTypeMappingVO;
@@ -46,6 +47,7 @@ public class ProductTypeMappingServiceImpl implements ProductTypeMappingService 
     public Page<ProductTypeVO> listByCon(ProductTypeQuery query) {
         Page<ProductTypeMappingDO> productTypeMappingDOPage = productTypeMappingRepository.selectPageOrder(query);
         List<String> pids = productTypeMappingDOPage.getRecords().stream().map(ProductTypeMappingDO::getProductId).collect(Collectors.toList());
+        if(CollectionUtil.isEmpty(pids)) return new Page<>();
         List<ProductTypeMappingDO> productTypeMappingDOS = productTypeMappingRepository.selectByProductIds(pids, query.getThirdPartyCloud().name());
         Map<String, List<ProductTypeMappingDO>> productMap = CollectionFunctionUtils.groupTo(productTypeMappingDOS, ProductTypeMappingDO::getProductId);
 

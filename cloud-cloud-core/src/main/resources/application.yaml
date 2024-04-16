@@ -1,6 +1,7 @@
-servletserver:
+server:
   servlet:
     context-path: /cloudToCloud/api/
+  port: 8801
 ## 数据库配置
 spring:
   application:
@@ -38,8 +39,6 @@ spring:
       max-file-size: -1
       max-request-size: -1
 ## 打印日志级别
-logging:
-  level: debug
 ### mp日志
 mybatis-plus:
   configuration:

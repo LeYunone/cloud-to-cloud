@@ -37,7 +37,7 @@ public class ProductActionMappingVO {
         
         private String thirdActionCode;
 
-        private Integer valueOf;
+        private boolean valueOf;
 
         private List<ValueMap> valueMapping;
 

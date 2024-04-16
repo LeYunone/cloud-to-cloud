@@ -41,11 +41,13 @@ public class ProductFunctionDTO {
 
         private String thirdActionCode;
 
-        private Integer valueOf;
+        private boolean valueOf;
 
         private List<ValueMap> valueMapping;
 
-        private ConvertFunctionEnum convertFunction;
+        private String convertFunction;
+
+        private List<String> capabilityConfigIds;
 
         private String capabilityConfigId;
 

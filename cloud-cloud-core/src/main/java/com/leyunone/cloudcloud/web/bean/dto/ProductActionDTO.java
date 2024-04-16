@@ -41,11 +41,11 @@ public class ProductActionDTO {
 
         private String thirdActionCode;
 
-        private Integer valueOf;
+        private boolean valueOf;
 
         private List<ValueMap> valueMapping;
 
-        private ConvertFunctionEnum convertFunction;
+        private String convertFunction;
     }
 
     @Getter

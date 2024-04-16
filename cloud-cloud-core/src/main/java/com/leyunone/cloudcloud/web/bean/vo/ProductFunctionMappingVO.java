@@ -37,13 +37,15 @@ public class ProductFunctionMappingVO {
         
         private String thirdActionCode;
 
-        private Integer valueOf;
+        private boolean valueOf;
 
         private List<ValueMap> valueMapping;
 
         private ConvertFunctionEnum convertFunction;
 
         private String capabilityConfigId;
+
+        private List<String> capabilityConfigIds;
 
         private String remark;
     }

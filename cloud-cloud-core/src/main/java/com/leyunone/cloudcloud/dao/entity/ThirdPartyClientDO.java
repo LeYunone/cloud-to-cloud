@@ -51,10 +51,6 @@ public class ThirdPartyClientDO {
 
     private String additionalInformation;
 
-    private String redirectUri;
-
-    private String appSecret;
-
     private String reportUrl;
 
     private ThirdPartyCloudEnum thirdPartyCloud;

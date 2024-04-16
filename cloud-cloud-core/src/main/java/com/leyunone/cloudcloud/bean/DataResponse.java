@@ -17,9 +17,9 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class DataResponse<T> implements Serializable {
 
-    private T data;
+    private T result;
 
-    private boolean status;
+    private boolean success;
 
     private String message;
 
@@ -30,7 +30,7 @@ public class DataResponse<T> implements Serializable {
 
     public static <T> DataResponse<T> of() {
         DataResponse<T> response = new DataResponse<>();
-        response.setStatus(true);
+        response.setSuccess(true);
         response.setCode(ResultCode.SUCCESS.getCode());
         response.setMessage(ResultCode.SUCCESS.getDesc());
         return response;
@@ -38,25 +38,25 @@ public class DataResponse<T> implements Serializable {
 
     public static <T> DataResponse<T> of(T data) {
         DataResponse<T> response = new DataResponse<>();
-        response.setStatus(true);
-        response.setData(data);
+        response.setSuccess(true);
+        response.setResult(data);
         response.setCode(ResultCode.SUCCESS.getCode());
         response.setMessage(ResultCode.SUCCESS.getDesc());
         return response;
     }
 
-    public T getData() {
-        return this.data;
+    public T getResult() {
+        return this.result;
     }
 
-    public void setData(T data) {
-        this.data = data;
+    public void setResult(T result) {
+        this.result = result;
     }
 
     public static <T> DataResponse<T> of(boolean status, ResultCode responseCode, T data) {
         DataResponse<T> response = new DataResponse<>();
-        response.setStatus(status);
-        response.setData(data);
+        response.setSuccess(status);
+        response.setResult(data);
         response.setCode(responseCode.getCode());
         response.setMessage(responseCode.getDesc());
         return response;
@@ -74,7 +74,7 @@ public class DataResponse<T> implements Serializable {
 
     public static DataResponse buildFailure(){
         DataResponse response = new DataResponse();
-        response.setStatus(false);
+        response.setSuccess(false);
         response.setCode(ResultCode.ERROR.getCode());
         response.setMessage(ResultCode.ERROR.getDesc());
         return response;
@@ -82,7 +82,7 @@ public class DataResponse<T> implements Serializable {
 
     public static DataResponse buildSuccess() {
         DataResponse response = new DataResponse();
-        response.setStatus(true);
+        response.setSuccess(true);
         response.setCode(ResultCode.SUCCESS.getCode());
         response.setMessage(ResultCode.SUCCESS.getDesc());
         return response;

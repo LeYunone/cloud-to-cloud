@@ -1,8 +1,8 @@
-Vue.component("baidu-config", {
+Vue.component("google-config", {
     template: `
     <div>
         <div>
-            <div style="text-align: center; font-weight: bold; position: relative; top: -5px;">< 百度配置页面 ></div>
+            <div style="text-align: center; font-weight: bold; position: relative; top: -5px;">< Google配置页面 ></div>
             <el-row >
               <el-col >
                 <el-card shadow="always">
@@ -22,9 +22,6 @@ Vue.component("baidu-config", {
                       <el-form-item label="附加信息">
                         <el-input v-model="clientConfig.additionalInformation"></el-input>
                       </el-form-item>
-                      <el-form-item label="上报URL">
-                        <el-input v-model="clientConfig.reportUrl"></el-input>
-                      </el-form-item>
                       <el-form-item size="large">
                         <el-button type="primary" @click="clientConfigSave">保存</el-button>
                       </el-form-item>
@@ -40,7 +37,7 @@ Vue.component("baidu-config", {
                     <el-input v-model="queryFrom.productId" placeholder="产品id"></el-input>
                   </el-form-item>
                   <el-form-item>
-                    <el-button type="primary" @click="baiduProductType">查询</el-button>
+                    <el-button type="primary" @click="googleProductType">查询</el-button>
                     <el-button style="text-align: right;" type="primary" @click="productTypeDialog = true">新增</el-button>
                   </el-form-item>
                 </el-form>
@@ -77,7 +74,7 @@ Vue.component("baidu-config", {
                         <el-input v-model="queryFrom.productId" placeholder="产品id"></el-input>
                       </el-form-item>
                       <el-form-item>
-                        <el-button type="primary" @click="baiduProductFunction">查询</el-button>
+                        <el-button type="primary" @click="googleProductFunction">查询</el-button>
                         <el-button type="primary" @click="productFunctionDialog = true">新增</el-button>
                       </el-form-item>
                     </el-form>
@@ -120,7 +117,7 @@ Vue.component("baidu-config", {
                         <el-input v-model="queryFrom.productId" placeholder="产品id"></el-input>
                       </el-form-item>
                       <el-form-item>
-                        <el-button type="primary" @click="baiduProductAction">查询</el-button>
+                        <el-button type="primary" @click="googleProductAction">查询</el-button>
                     <el-button type="primary" @click="productActionDialog = true">新增</el-button>
                       </el-form-item>
                     </el-form>
@@ -161,6 +158,31 @@ Vue.component("baidu-config", {
                     >
                     </el-pagination>
                 </el-tab-pane>
+                <el-tab-pane name="productCapability" label="三方属性产商配置">
+                    <el-button type="primary" @click="productCapabilityDialog = true">新增</el-button>
+                    <el-table :data="productCapabilityTable" style="height:500px;overflow: auto;width: 100%">
+                        <el-table-column prop="capabilityConfiguration" label="技能配置"></el-table-column>
+                        <el-table-column prop="instanceName" label="字段名"></el-table-column>
+                        <el-table-column prop="description" label="备注"></el-table-column>
+                        <el-table-column prop="updateTime" label="更新时间"></el-table-column>
+                        <el-table-column label="操作">
+                            <template slot-scope="scope">
+                                <el-button type="text" @click="productCapabilityEdit(scope.row.id)">编辑</el-button>
+                                <el-button type="text" @click="productCapabilityDelete(scope.row.id)">删除</el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                    <el-pagination
+                            @size-change="productCapabilityHandleSizeChange"
+                            @current-change="productCapabilityHandleCurrentChange"
+                            :current-page="productCapabilityCurrentPage"
+                            :page-sizes="[10, 20, 30, 40]"
+                            :page-size="productCapabilityPageSize"
+                            layout="total, sizes, prev, pager, next, jumper"
+                            :productTypeTotal="productCapabilityTotal"
+                    >
+                    </el-pagination>
+                </el-tab-pane>
             </el-tabs>
         </div>
 
@@ -173,12 +195,14 @@ Vue.component("baidu-config", {
                 <el-table :data="productType.productTypes" style="width: 100%">
                     <el-table-column label="产商云产品ID" prop="thirdProductId">
                         <template slot-scope="scope">
-                            <el-autocomplete
-                              class="inline-input"
-                              v-model="scope.row.thirdProductId"
-                              :fetch-suggestions="querySearchProductType"
-                              placeholder="请输入内容"
-                            ></el-autocomplete>
+                            <el-select v-model="scope.row.thirdProductId" placeholder="请选择" clearable filterable>
+                                <el-option
+                                        v-for="item in thirdPids"
+                                        :key="item"
+                                        :label="item"
+                                        :value="item"
+                                ></el-option>
+                            </el-select>
                         </template>
                     </el-table-column>
                     <el-table-column label="第三方产品名" prop="thirdProduct">
@@ -224,6 +248,11 @@ Vue.component("baidu-config", {
                             <el-input v-model="scope.row.thirdSignCode"></el-input>
                         </template>
                     </el-table-column>
+                    <el-table-column label="产商云属性行为" prop="thirdActionCode">
+                        <template slot-scope="scope">
+                            <el-input v-model="scope.row.thirdActionCode"></el-input>
+                        </template>
+                    </el-table-column>
                     <el-table-column label="是否值映射" prop="valueOf">
                         <template slot-scope="scope">
                             <el-switch
@@ -257,6 +286,18 @@ Vue.component("baidu-config", {
                                         :key="item"
                                         :label="item"
                                         :value="item"
+                                ></el-option>
+                            </el-select>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="产商属性配置" prop="capabilityConfigIds">
+                        <template slot-scope="scope">
+                            <el-select multiple v-model="scope.row.capabilityConfigIds" placeholder="NONE" clearable filterable>
+                                <el-option
+                                        v-for="item in deviceCapabilities"
+                                        :key="item.id"
+                                        :label="item.description"
+                                        :value="item.id+''"
                                 ></el-option>
                             </el-select>
                         </template>
@@ -298,6 +339,9 @@ Vue.component("baidu-config", {
                 </template>
                 <el-input type="textarea"  @input="formatJson(productFunctionEditPanelFrom.thirdSignCode)" :autosize="{ minRows: 2, maxRows: 10}" v-model="productFunctionEditPanelFrom.thirdSignCode"></el-input>
               </el-form-item>
+              <el-form-item label="产商云属性行为">
+                 <el-input v-model="productFunctionEditPanelFrom.thirdActionCode"></el-input>
+              </el-form-item>
               <el-form-item label="是否值映射">
                 <el-switch
                   v-model="productFunctionEditPanelFrom.valueOf"
@@ -328,6 +372,16 @@ Vue.component("baidu-config", {
                         ></el-option>
                     </el-select>
               </el-form-item>
+               <el-form-item label="产商属性配置">
+                      <el-select multiple v-model="productFunctionEditPanelFrom.capabilityConfigIds" placeholder="NONE" clearable filterable>
+                                <el-option
+                                        v-for="item in deviceCapabilities"
+                                        :key="item.id"
+                                        :label="item.description"
+                                        :value="item.id+''"
+                                ></el-option>
+                      </el-select>
+                </el-form-item>
               <el-form-item label="备注">
                 <el-input type="textarea" :autosize="{ minRows: 1, maxRows: 5}"  v-model="productFunctionEditPanelFrom.remark"></el-input>
               </el-form-item>
@@ -361,6 +415,11 @@ Vue.component("baidu-config", {
                         
                         <template slot-scope="scope">
                             <el-input v-model="scope.row.thirdSignCode" :rows="2" type="textarea" placeholder="支持 JSON 字符串" @blur="formatJson(scope.row)"></el-input>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="产商云属性行为" prop="thirdActionCode">
+                        <template slot-scope="scope">
+                            <el-input v-model="scope.row.thirdActionCode"></el-input>
                         </template>
                     </el-table-column>
                     
@@ -438,6 +497,9 @@ Vue.component("baidu-config", {
                 </template>
                 <el-input type="textarea"  @blur="formatJson(productActionEditPanelFrom.thirdSignCode)" :autosize="{ minRows: 2, maxRows: 10}" v-model="productActionEditPanelFrom.thirdSignCode"></el-input>
               </el-form-item>
+              <el-form-item label="产商云属性行为">
+                 <el-input v-model="productActionEditPanelFrom.thirdActionCode"></el-input>
+              </el-form-item>
               <el-form-item label="是否值映射">
                 <el-switch
                   v-model="productActionEditPanelFrom.valueOf"
@@ -474,10 +536,31 @@ Vue.component("baidu-config", {
             </el-form>
         </el-dialog>
         
+        <!--产商属性配置表-->
+        <el-dialog title="产商属性配置表" :visible.sync="productCapabilityDialog" width="60%"
+           :before-close="productCapabilityCancel">
+            <el-form ref="productCapability" :model="productCapability" label-width="120px">
+                <el-form-item label="技能配置">
+                        <el-input type="textarea" :autosize="{ minRows: 1, maxRows: 5}"  v-model="productCapability.capabilityConfiguration"></el-input>
+                </el-form-item>
+                <el-form-item label="字段名">
+                        <el-input v-model="productCapability.instanceName"></el-input>
+                </el-form-item>
+                <el-form-item label="描述">
+                        <el-input type="textarea" :autosize="{ minRows: 1, maxRows: 5}"  v-model="productCapability.description"></el-input>
+                </el-form-item>
+            </el-form>
+            
+            <span slot="footer" class="dialog-footer">
+                  <el-button @click="productCapabilityCancel">取消</el-button>
+                  <el-button type="primary" @click="productCapabilitySave">保存</el-button>
+            </span>
+        </el-dialog>
+        
     </div>
   `,
     mounted: function () {
-        this.baiduProductType();
+        this.googleProductType();
         this.productTypeThirdIds();
         this.clientConfigDetail();
         axios({
@@ -488,7 +571,7 @@ Vue.component("baidu-config", {
         axios({
             url: "/cloudToCloud/api/web/config/capability",
             params: {
-                cloud: "BAIDU"
+                cloud: "GOOGLE"
             }
         }).then((res) => {
             this.deviceCapabilities = res.data.result;
@@ -506,7 +589,7 @@ Vue.component("baidu-config", {
                 icon: "",
                 additionalInformation: "",
                 reportUrl: "",
-                thirdPartyCloud: "BAIDU",
+                thirdPartyCloud: "GOOGLE",
                 thirdClientId: "",
                 thirdClientSecret: ""
             },
@@ -518,7 +601,7 @@ Vue.component("baidu-config", {
             productTypeDialog: false, //产品映射弹窗
             productType: {
                 productId: "",
-                thirdPartyCloud: "BAIDU",
+                thirdPartyCloud: "GOOGLE",
                 productTypes: [
                     {
                         id: "",
@@ -538,7 +621,7 @@ Vue.component("baidu-config", {
             productFunctionDialog: false, //产品映射弹窗
             productFunction: {
                 productId: "",
-                thirdPartyCloud: "BAIDU",
+                thirdPartyCloud: "GOOGLE",
                 productFunctions: [
                     {
                         id: "",
@@ -548,6 +631,7 @@ Vue.component("baidu-config", {
                         valueOf: false,
                         valueMapping: [],
                         convertFunction: "",
+                        capabilityConfigIds: [],
                         thirdActionCode: "",
                         remark: ""
                     },
@@ -562,7 +646,7 @@ Vue.component("baidu-config", {
             productActionDialog: false, //产品映射弹窗
             productAction: {
                 productId: "",
-                thirdPartyCloud: "BAIDU",
+                thirdPartyCloud: "GOOGLE",
                 productActions: [
                     {
                         id: "",
@@ -577,7 +661,22 @@ Vue.component("baidu-config", {
                     },
                 ],
             },
-          
+
+            isProductCapabilityUpdate: false,
+            productCapabilityTable: [],
+            productCapabilityCurrentPage: 1, // 当前页数
+            productCapabilityPageSize: 10, // 每页显示条数
+            productCapabilityTotal: 0, // 总条数
+            productCapabilityDialog: false, //产品映射弹窗
+            productCapability: {
+                thirdPartyCloud: "GOOGLE",
+                id: "",
+                capabilitySemantics: "",
+                capabilityConfiguration: "",
+                instanceName: "",
+                valueSemantics: "",
+                description: ""
+            },
             thirdPids: [],
             convertFunctions: [],
             deviceCapabilities: [],
@@ -603,22 +702,12 @@ Vue.component("baidu-config", {
                 valueOf: false,
                 valueMapping: [],
                 convertFunction: "",
+                capabilityConfigIds: [],
                 remark: ""
             }
         };
     },
     methods: {
-        querySearchProductType(queryString, cb) {
-            var restaurants = this.thirdPids;
-            var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
-            // 调用 callback 返回建议列表的数据
-            cb(results);
-        },
-        createFilter(queryString) {
-            return (restaurant) => {
-                return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
-            };
-        },
         changeStatus(e, row) {
             row.valueOf = e;
         },
@@ -632,20 +721,20 @@ Vue.component("baidu-config", {
         paneHandler(tab, event) {
             this.queryFrom.productId = "";
             if (this.panelActiveName === "productType") {
-                this.baiduProductType();
+                this.googleProductType();
             } else if (this.panelActiveName === "productFunction") {
-                this.baiduProductFunction();
+                this.googleProductFunction();
             } else if (this.panelActiveName === "productAction") {
-                this.baiduProductAction();
+                this.googleProductAction();
             } else if (this.panelActiveName === "productCapability") {
-                this.baiduProductCapability();
+                this.googleProductCapability();
             }
         },
         clientConfigDetail() {
             axios({
                 url: "/cloudToCloud/api/web/config/clientConfig",
                 params: {
-                    "cloud": "BAIDU"
+                    "cloud": "GOOGLE"
                 }
             }).then((res) => {
                 this.clientConfig = res.data.result;
@@ -677,7 +766,7 @@ Vue.component("baidu-config", {
             axios({
                 url: "/cloudToCloud/api/web/productType/thirdProducts",
                 params: {
-                    thirdPartyCloud: "BAIDU",
+                    thirdPartyCloud: "GOOGLE",
                 },
             }).then((res) => {
                 this.thirdPids = res.data.result;
@@ -685,19 +774,19 @@ Vue.component("baidu-config", {
         },
         productTypeHandleSizeChange(size) {
             this.productTypePageSize = size;
-            this.baiduProductType();
+            this.googleProductType();
         },
         productTypeHandleCurrentChange(index) {
             this.productTypeCurrentPage = index;
-            this.baiduProductType();
+            this.googleProductType();
         },
-        baiduProductType() {
+        googleProductType() {
             axios({
                 url: "/cloudToCloud/api/web/productType/list",
                 params: {
                     index: this.productTypeCurrentPage,
                     size: this.productTypePageSize,
-                    thirdPartyCloud: "BAIDU",
+                    thirdPartyCloud: "GOOGLE",
                     productId: this.queryFrom.productId
                 },
             }).then((res) => {
@@ -711,7 +800,7 @@ Vue.component("baidu-config", {
                 url: "/cloudToCloud/api/web/productType/detail",
                 params: {
                     productId: productId,
-                    thirdPartyCloud: "BAIDU"
+                    thirdPartyCloud: "GOOGLE"
                 }
             }).then((res) => {
                 var result = res.data;
@@ -733,7 +822,7 @@ Vue.component("baidu-config", {
                 url: "/cloudToCloud/api/web/productType/save",
                 data: {
                     productId: this.productType.productId,
-                    thirdPartyCloud: "BAIDU",
+                    thirdPartyCloud: "GOOGLE",
                     productTypes: this.productType.productTypes,
                 },
             }).then((res) => {
@@ -741,7 +830,7 @@ Vue.component("baidu-config", {
                 if (result.success) {
                     this.productTypeDialog = false;
                     this.productType = this.$options.data().productType;
-                    this.baiduProductType();
+                    this.googleProductType();
                     this.$message.success("保存成功");
                 } else {
                     this.$message.error(result.message);
@@ -754,12 +843,12 @@ Vue.component("baidu-config", {
                 url: "/cloudToCloud/api/web/productType/delete",
                 data: {
                     productId: productId,
-                    thirdPartyCloud: "BAIDU",
+                    thirdPartyCloud: "GOOGLE",
                 },
             }).then((res) => {
                 var result = res.data;
                 if (result.success) {
-                    this.baiduProductType();
+                    this.googleProductType();
                     this.$message.success("删除成功");
                 } else {
                     this.$message.error(result.message);
@@ -797,6 +886,7 @@ Vue.component("baidu-config", {
                 valueOf: false,
                 valueMapping: [],
                 convertFunction: "",
+                capabilityConfigIds: [],
                 thirdActionCode: "",
                 remark: ""
             });
@@ -805,19 +895,19 @@ Vue.component("baidu-config", {
         },
         productFunctionHandleSizeChange(size) {
             this.productFunctionPageSize = size;
-            this.baiduProductFunction();
+            this.googleProductFunction();
         },
         productFunctionHandleCurrentChange(index) {
             this.productFunctionCurrentPage = index;
-            this.baiduProductFunction();
+            this.googleProductFunction();
         },
-        baiduProductFunction() {
+        googleProductFunction() {
             axios({
                 url: "/cloudToCloud/api/web/productFunction/list",
                 params: {
                     index: this.productFunctionCurrentPage,
                     size: this.productFunctionPageSize,
-                    thirdPartyCloud: "BAIDU",
+                    thirdPartyCloud: "GOOGLE",
                     productId: this.queryFrom.productId
                 },
             }).then((res) => {
@@ -831,7 +921,7 @@ Vue.component("baidu-config", {
                 url: "/cloudToCloud/api/web/productFunction/detail",
                 params: {
                     productId: productId,
-                    thirdPartyCloud: "BAIDU"
+                    thirdPartyCloud: "GOOGLE"
                 },
             }).then((res) => {
                 var result = res.data;
@@ -853,15 +943,18 @@ Vue.component("baidu-config", {
                 url: "/cloudToCloud/api/web/productFunction/save",
                 data: {
                     productId: this.productFunction.productId,
-                    thirdPartyCloud: "BAIDU",
-                    productFunctions: this.productFunction.productFunctions,
+                    thirdPartyCloud: "GOOGLE",
+                    productFunctions: this.productFunction.productFunctions.map(item =>{
+                        const { capabilityConfigId, ...rest } = item;
+                        return rest;
+                    }),
                 },
             }).then((res) => {
                 var result = res.data;
                 if (result.success) {
                     this.productFunctionDialog = false;
                     this.productFunction = this.$options.data().productFunction;
-                    this.baiduProductFunction();
+                    this.googleProductFunction();
                     this.$message.success("保存成功");
                 } else {
                     this.$message.error(result.message);
@@ -874,12 +967,12 @@ Vue.component("baidu-config", {
                 url: "/cloudToCloud/api/web/productFunction/delete",
                 data: {
                     productId: productId,
-                    thirdPartyCloud: "BAIDU",
+                    thirdPartyCloud: "GOOGLE",
                 },
             }).then((res) => {
                 var result = res.data;
                 if (result.success) {
-                    this.baiduProductFunction();
+                    this.googleProductFunction();
                     this.$message.success("删除成功");
                 } else {
                     this.$message.error(result.message);
@@ -946,19 +1039,19 @@ Vue.component("baidu-config", {
         },
         productActionHandleSizeChange(size) {
             this.productActionPageSize = size;
-            this.baiduProductAction();
+            this.googleProductAction();
         },
         productActionHandleCurrentChange(index) {
             this.productActionCurrentPage = index;
-            this.baiduProductAction();
+            this.googleProductAction();
         },
-        baiduProductAction() {
+        googleProductAction() {
             axios({
                 url: "/cloudToCloud/api/web/action/list",
                 params: {
                     index: this.productActionCurrentPage,
                     size: this.productActionPageSize,
-                    thirdPartyCloud: "BAIDU",
+                    thirdPartyCloud: "GOOGLE",
                     productId: this.queryFrom.productId
                 },
             }).then((res) => {
@@ -972,7 +1065,7 @@ Vue.component("baidu-config", {
                 url: "/cloudToCloud/api/web/action/detail",
                 params: {
                     productId: productId,
-                    thirdPartyCloud: "BAIDU"
+                    thirdPartyCloud: "GOOGLE"
                 },
             }).then((res) => {
                 var result = res.data;
@@ -994,7 +1087,7 @@ Vue.component("baidu-config", {
                 url: "/cloudToCloud/api/web/action/save",
                 data: {
                     productId: this.productAction.productId,
-                    thirdPartyCloud: "BAIDU",
+                    thirdPartyCloud: "GOOGLE",
                     productActions: this.productAction.productActions,
                 },
             }).then((res) => {
@@ -1002,7 +1095,7 @@ Vue.component("baidu-config", {
                 if (result.success) {
                     this.productActionDialog = false;
                     this.productAction = this.$options.data().productAction;
-                    this.baiduProductAction();
+                    this.googleProductAction();
                     this.$message.success("保存成功");
                 } else {
                     this.$message.error(result.message);
@@ -1015,12 +1108,12 @@ Vue.component("baidu-config", {
                 url: "/cloudToCloud/api/web/action/delete",
                 data: {
                     productId: productId,
-                    thirdPartyCloud: "BAIDU",
+                    thirdPartyCloud: "GOOGLE",
                 },
             }).then((res) => {
                 var result = res.data;
                 if (result.success) {
-                    this.baiduProductAction();
+                    this.googleProductAction();
                     this.$message.success("删除成功");
                 } else {
                     this.$message.error(result.message);
@@ -1033,5 +1126,85 @@ Vue.component("baidu-config", {
             this.productAction = this.$options.data().productAction;
             this.isProductFunctionUpdate = false;
         },
+
+        //属性配置
+        productCapabilityHandleSizeChange(size) {
+            this.productCapabilityPageSize = size;
+            this.googleProductCapability();
+        },
+        productCapabilityHandleCurrentChange(index) {
+            this.productCapabilityCurrentPage = index;
+            this.googleProductCapability();
+        },
+        googleProductCapability() {
+            axios({
+                url: "/cloudToCloud/api/web/productCapability/list",
+                params: {
+                    index: this.productCapabilityCurrentPage,
+                    size: this.productCapabilityPageSize,
+                    thirdPartyCloud: "GOOGLE",
+                },
+            }).then((res) => {
+                var result = res.data.result;
+                this.productCapabilityTotal = result.total;
+                this.productCapabilityTable = result.records;
+            });
+        },
+        productCapabilityEdit(id) {
+            axios({
+                url: "/cloudToCloud/api/web/productCapability/detail",
+                params: {
+                    id: id,
+                    thirdPartyCloud: "GOOGLE"
+                },
+            }).then((res) => {
+                var result = res.data.result;
+                this.productCapability.productId = result.productId;
+                this.productCapability.thirdPartyCloud = result.thirdPartyCloud;
+                this.productCapability.productCapabilitys = result.productCapabilitys;
+                this.isProductCapabilityUpdate = true;
+                this.productCapabilityDialog = true;
+            });
+        },
+        productCapabilitySave() {
+            axios({
+                method: "POST",
+                url: "/cloudToCloud/api/web/productCapability/save",
+                data: this.productCapability,
+            }).then((res) => {
+                var result = res.data;
+                if (result.success) {
+                    this.productCapabilityDialog = false;
+                    this.productCapability = this.$options.data().productCapability;
+                    this.googleProductCapability();
+                    this.$message.success("保存成功");
+                } else {
+                    this.$message.error(result.message);
+                }
+            });
+        },
+        productCapabilityDelete(id) {
+            axios({
+                method: "POST",
+                url: "/cloudToCloud/api/web/productCapability/delete",
+                data: {
+                    id: id
+                },
+            }).then((res) => {
+                var result = res.data;
+                if (result.success) {
+                    this.googleProductCapability();
+                    this.$message.success("删除成功");
+                } else {
+                    this.$message.error(result.message);
+                }
+            });
+        },
+        productCapabilityCancel() {
+            console.log("clear")
+            this.productCapabilityDialog = false;
+            this.productCapability = this.$options.data().productCapability;
+            this.isProductCapabilityUpdate = false;
+        }
     },
 });

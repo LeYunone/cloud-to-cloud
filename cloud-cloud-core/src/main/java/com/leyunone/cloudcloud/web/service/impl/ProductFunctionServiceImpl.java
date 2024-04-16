@@ -5,44 +5,44 @@ import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.leyunone.cloudcloud.bean.enums.ConvertFunctionEnum;
 import com.leyunone.cloudcloud.dao.FunctionMappingRepository;
 import com.leyunone.cloudcloud.dao.ProductTypeMappingRepository;
-import com.leyunone.cloudcloud.dao.entity.ProductTypeMappingDO;
 import com.leyunone.cloudcloud.dao.entity.FunctionMappingDO;
+import com.leyunone.cloudcloud.dao.entity.ProductTypeMappingDO;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.util.CollectionFunctionUtils;
+import com.leyunone.cloudcloud.util.DeepSearchUtils;
 import com.leyunone.cloudcloud.web.bean.dto.ProductFunctionDTO;
 import com.leyunone.cloudcloud.web.bean.query.ProductTypeQuery;
 import com.leyunone.cloudcloud.web.bean.vo.ProductFunctionMappingVO;
 import com.leyunone.cloudcloud.web.bean.vo.ProductFunctionVO;
 import com.leyunone.cloudcloud.web.service.ProductFunctionService;
+import com.leyunone.cloudcloud.util.DaoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * :)
  *
- * @Author leyunone
+ * @Author LeYunone
  * @Date 2024/3/26 15:29
  */
 @Service
 public class ProductFunctionServiceImpl implements ProductFunctionService {
 
     @Autowired
-    private FunctionMappingRepository functionMappingRepository;
+    private FunctionMappingRepository productMappingRepository;
     @Autowired
     private ProductTypeMappingRepository productTypeMappingRepository;
 
     @Override
     public ProductFunctionMappingVO getDetail(String productId, ThirdPartyCloudEnum cloud) {
         List<ProductTypeMappingDO> productTypeMappingDOS = productTypeMappingRepository.selectByProductId(productId, cloud.name());
-        List<FunctionMappingDO> functionMappingDOS = functionMappingRepository.selectByProductIdsAndThirdPartyCloud(productId, cloud.name());
+        List<FunctionMappingDO> functionMappingDOS = productMappingRepository.selectByProductIdsAndThirdPartyCloud(productId, cloud.name());
 
         ProductFunctionMappingVO productFunctionMappingVO = new ProductFunctionMappingVO();
         productFunctionMappingVO.setProductId(productId);
@@ -55,9 +55,12 @@ public class ProductFunctionServiceImpl implements ProductFunctionService {
             function.setFunctionId(functionMapping.getFunctionId());
             function.setThirdSignCode(functionMapping.getThirdSignCode());
             function.setThirdActionCode(functionMapping.getThirdActionCode());
-            function.setValueOf(functionMapping.getValueOf() ? 1 : 0);
+            function.setValueOf(functionMapping.getValueOf());
             function.setConvertFunction(functionMapping.getConvertFunction());
-            function.setCapabilityConfigId(functionMapping.getCapabilityConfigId());
+            if (StrUtil.isNotBlank(functionMapping.getCapabilityConfigId())) {
+                function.setCapabilityConfigIds(CollectionUtil.newArrayList(functionMapping.getCapabilityConfigId().split(",")));
+                function.setCapabilityConfigId(functionMapping.getCapabilityConfigId());
+            }
             function.setRemark(functionMapping.getRemark());
             if (StrUtil.isNotBlank(functionMapping.getValueMapping())) {
                 Map<String, Object> innerMap = JSON.parseObject(functionMapping.getValueMapping()).getInnerMap();
@@ -80,11 +83,13 @@ public class ProductFunctionServiceImpl implements ProductFunctionService {
 
     @Override
     public Page<ProductFunctionVO> listByCon(ProductTypeQuery query) {
-        Page<FunctionMappingDO> functionMappingDOPage = functionMappingRepository.selectPageOrder(query);
+        Page<FunctionMappingDO> functionMappingDOPage = productMappingRepository.selectPageOrder(query);
         List<String> pids = functionMappingDOPage.getRecords().stream().map(FunctionMappingDO::getProductId).collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(pids)) return new Page<>();
+
         List<ProductTypeMappingDO> productTypeMappingDOS = productTypeMappingRepository.selectByProductIds(pids, query.getThirdPartyCloud().name());
 
-        List<FunctionMappingDO> functionMappingDOS = functionMappingRepository.selectByProductIdsAndThirdPartyCloud(pids, query.getThirdPartyCloud().name());
+        List<FunctionMappingDO> functionMappingDOS = productMappingRepository.selectByProductIdsAndThirdPartyCloud(pids, query.getThirdPartyCloud().name());
         Map<String, List<FunctionMappingDO>> functionMap = CollectionFunctionUtils.groupTo(functionMappingDOS, FunctionMappingDO::getProductId);
         Map<String, List<ProductTypeMappingDO>> productMap = CollectionFunctionUtils.groupTo(productTypeMappingDOS, ProductTypeMappingDO::getProductId);
 
@@ -117,10 +122,15 @@ public class ProductFunctionServiceImpl implements ProductFunctionService {
             functionMappingDO.setProductId(dto.getProductId());
             functionMappingDO.setSignCode(f.getSignCode());
             functionMappingDO.setFunctionId(f.getFunctionId());
-            functionMappingDO.setThirdSignCode(f.getThirdSignCode());
+            try {
+                //找到最终key
+                functionMappingDO.setThirdSignCode(DeepSearchUtils.findDeepestKey(JSONObject.parseObject(f.getThirdSignCode())));
+            } catch (Exception e) {
+                functionMappingDO.setThirdSignCode(f.getThirdSignCode());
+            }
             functionMappingDO.setThirdActionCode(f.getThirdActionCode());
             functionMappingDO.setThirdPartyCloud(dto.getThirdPartyCloud());
-            functionMappingDO.setValueOf(f.getValueOf().equals(1));
+            functionMappingDO.setValueOf(f.isValueOf());
             if (CollectionUtil.isNotEmpty(f.getValueMapping())) {
                 Map<String, Object> o = new HashMap<>();
                 f.getValueMapping().forEach(fm -> {
@@ -130,13 +140,21 @@ public class ProductFunctionServiceImpl implements ProductFunctionService {
             }
             functionMappingDO.setRemark(f.getRemark());
 //            functionMappingDO.setLegalValue();
-            functionMappingDO.setConvertFunction(f.getConvertFunction());
-            functionMappingDO.setCapabilityConfigId(f.getCapabilityConfigId());
+            if (StrUtil.isNotBlank(f.getConvertFunction())) {
+                functionMappingDO.setConvertFunction(ConvertFunctionEnum.valueOf(f.getConvertFunction()));
+            }
+            if (CollectionUtil.isNotEmpty(f.getCapabilityConfigIds())) {
+                functionMappingDO.setCapabilityConfigId(CollectionUtil.join(f.getCapabilityConfigIds(), ","));
+            }
+            if (StrUtil.isNotBlank(f.getCapabilityConfigId())) {
+                functionMappingDO.setCapabilityConfigId(f.getCapabilityConfigId());
+            }
             return functionMappingDO;
         }).collect(Collectors.toList());
-        List<FunctionMappingDO> functionMappingDOS = functionMappingRepository.selectByProductIdsAndThirdPartyCloud(CollectionUtil.newArrayList(dto.getProductId()),
+        List<FunctionMappingDO> functionMappingDOS = productMappingRepository.selectByProductIdsAndThirdPartyCloud(CollectionUtil.newArrayList(dto.getProductId()),
                 dto.getThirdPartyCloud().name());
-        DaoUtils.comparisonDb(functionMappingRepository, FunctionMappingDO::getId, functionMappingDOS, newFunctionMapping, FunctionMappingDO.class);
+        productMappingRepository.updateNull(CollectionUtil.newArrayList(dto.getProductId()));
+        DaoUtils.comparisonDb(productMappingRepository, FunctionMappingDO::getId, functionMappingDOS, newFunctionMapping, FunctionMappingDO.class);
     }
 
     @Override
@@ -148,7 +166,7 @@ public class ProductFunctionServiceImpl implements ProductFunctionService {
     public void delete(ProductFunctionDTO dto) {
         if (StrUtil.isNotBlank(dto.getProductId())) {
             //删除整个产品映射关系
-            productTypeMappingRepository.deleteByProductId(dto.getProductId(), dto.getThirdPartyCloud());
+            productMappingRepository.deleteByProductId(dto.getProductId(), dto.getThirdPartyCloud());
         }
     }
 }

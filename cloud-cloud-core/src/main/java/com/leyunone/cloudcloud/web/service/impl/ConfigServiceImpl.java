@@ -35,7 +35,6 @@ public class ConfigServiceImpl implements ConfigService {
         thirdPartyClientDO.setMainUrl(dto.getMainUrl());
         thirdPartyClientDO.setIcon(dto.getIcon());
         thirdPartyClientDO.setAdditionalInformation(dto.getAdditionalInformation());
-        thirdPartyClientDO.setAppSecret("b998qT663T6J9KYAUEUvsUBEE6j8Mnec");
         thirdPartyClientDO.setReportUrl(dto.getReportUrl());
         thirdPartyClientDO.setThirdPartyCloud(dto.getThirdPartyCloud());
         thirdPartyClientDO.setThirdClientId(dto.getThirdClientId());

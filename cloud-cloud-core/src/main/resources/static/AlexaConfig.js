@@ -2,11 +2,54 @@ Vue.component("alexa-config", {
     template: `
     <div>
         <div>
-            <h2>Alexa配置页面</h2>
-            <div class="tab-content">Alexa配置内容</div>
-            <el-tabs type="border-card">
-                <el-tab-pane label="产品映射">
-                    <el-button type="primary" @click="productTypeDialog = true">新增</el-button>
+            <div style="text-align: center; font-weight: bold; position: relative; top: -5px;">< Alexa配置页面 ></div>
+            <el-row >
+              <el-col >
+                <el-card shadow="always">
+                    <el-form :inline="true" ref="form" :model="clientConfig" label-width="125px">
+                      <el-form-item label="客户端id">
+                        <el-input v-model="clientConfig.clientId"></el-input>
+                      </el-form-item>
+                      <el-form-item label="客户端秘钥">
+                        <el-input v-model="clientConfig.clientSecret"></el-input>
+                      </el-form-item>
+                      <el-form-item label="目标项目路由">
+                        <el-input v-model="clientConfig.mainUrl"></el-input>
+                      </el-form-item>
+                      <el-form-item label="图标">
+                        <el-input v-model="clientConfig.icon"></el-input>
+                      </el-form-item>
+                      <el-form-item label="附加信息">
+                        <el-input v-model="clientConfig.additionalInformation"></el-input>
+                      </el-form-item>
+                      <el-form-item label="上报URL">
+                        <el-input v-model="clientConfig.reportUrl"></el-input>
+                      </el-form-item>
+                      <el-form-item label="产商云客户端id">
+                        <el-input v-model="clientConfig.thirdClientId"></el-input>
+                      </el-form-item>
+                      <el-form-item label="产商云客户端秘钥">
+                        <el-input v-model="clientConfig.thirdClientSecret"></el-input>
+                      </el-form-item>
+                      <el-form-item size="large">
+                        <el-button type="primary" @click="clientConfigSave">保存</el-button>
+                      </el-form-item>
+                    </el-form>
+                </el-card>
+              </el-col>
+            </el-row>
+            
+            <el-tabs v-model="panelActiveName" type="border-card" @tab-click="paneHandler">
+                <el-tab-pane name="productType" label="产品映射">
+                <el-form :inline="true"  class="demo-form-inline">
+                  <el-form-item label="开发云产品id">
+                    <el-input v-model="queryFrom.productId" placeholder="产品id"></el-input>
+                  </el-form-item>
+                  <el-form-item>
+                    <el-button type="primary" @click="alexaProductType">查询</el-button>
+                    <el-button style="text-align: right;" type="primary" @click="productTypeDialog = true">新增</el-button>
+                  </el-form-item>
+                </el-form>
                     <el-table :data="productTypeTable" style="height:500px;overflow: auto;width: 100%">
                         <el-table-column prop="productId" label="开发云产品ID"></el-table-column>
                         <el-table-column prop="thirdProductIds" label="产商云产品ID">
@@ -34,10 +77,17 @@ Vue.component("alexa-config", {
                     >
                     </el-pagination>
                 </el-tab-pane>
-
-                <el-tab-pane label="属性映射">
-                    <el-button type="primary" @click="productFunctionDialog = true">新增</el-button>
-                    <el-table :data="productFunctionTable" style="width: 100%">
+                <el-tab-pane name="productFunction" label="属性映射">
+                    <el-form :inline="true"  class="demo-form-inline">
+                      <el-form-item label="开发云产品id">
+                        <el-input v-model="queryFrom.productId" placeholder="产品id"></el-input>
+                      </el-form-item>
+                      <el-form-item>
+                        <el-button type="primary" @click="alexaProductFunction">查询</el-button>
+                        <el-button type="primary" @click="productFunctionDialog = true">新增</el-button>
+                      </el-form-item>
+                    </el-form>
+                    <el-table :data="productFunctionTable" style="height:500px;overflow: auto;width: 100%">
                         <el-table-column prop="productId" label="开发云产品ID"></el-table-column>
                         <el-table-column prop="thirdProductIds" label="产商云产品ID">
                             <template slot-scope="scope">
@@ -70,10 +120,17 @@ Vue.component("alexa-config", {
                     >
                     </el-pagination>
                 </el-tab-pane>
-                <!--控制-->
-                <el-tab-pane label="行为映射">
+                <el-tab-pane name="productAction" label="行为映射">
+                    <el-form :inline="true"  class="demo-form-inline">
+                      <el-form-item label="开发云产品id">
+                        <el-input v-model="queryFrom.productId" placeholder="产品id"></el-input>
+                      </el-form-item>
+                      <el-form-item>
+                        <el-button type="primary" @click="alexaProductAction">查询</el-button>
                     <el-button type="primary" @click="productActionDialog = true">新增</el-button>
-                    <el-table :data="productActionTable" style="width: 100%">
+                      </el-form-item>
+                    </el-form>
+                    <el-table :data="productActionTable" style="height:500px;overflow: auto;width: 100%">
                         <el-table-column prop="productId" label="开发云产品ID"></el-table-column>
                         <el-table-column prop="thirdProductIds" label="产商云产品ID">
                             <template slot-scope="scope">
@@ -83,6 +140,11 @@ Vue.component("alexa-config", {
                         <el-table-column prop="signCodes" label="开发云属性code">
                             <template slot-scope="scope">
                                 <span v-html="scope.row.signCodes.join('<br>')"></span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="thirdSignCodes" label="产商云属性">
+                            <template slot-scope="scope">
+                                <span v-html="scope.row.thirdSignCodes.join('<br>')"></span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="thirdPartyCloud" label="产商云"></el-table-column>
@@ -102,6 +164,31 @@ Vue.component("alexa-config", {
                             :page-size="productActionPageSize"
                             layout="total, sizes, prev, pager, next, jumper"
                             :productTypeTotal="productActionTotal"
+                    >
+                    </el-pagination>
+                </el-tab-pane>
+                <el-tab-pane name="productCapability" label="三方属性产商配置">
+                    <el-button type="primary" @click="productCapabilityDialog = true">新增</el-button>
+                    <el-table :data="productCapabilityTable" style="height:500px;overflow: auto;width: 100%">
+                        <el-table-column prop="capabilityConfiguration" label="技能配置"></el-table-column>
+                        <el-table-column prop="instanceName" label="字段名"></el-table-column>
+                        <el-table-column prop="description" label="备注"></el-table-column>
+                        <el-table-column prop="updateTime" label="更新时间"></el-table-column>
+                        <el-table-column label="操作">
+                            <template slot-scope="scope">
+                                <el-button type="text" @click="productCapabilityEdit(scope.row.id)">编辑</el-button>
+                                <el-button type="text" @click="productCapabilityDelete(scope.row.id)">删除</el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                    <el-pagination
+                            @size-change="productCapabilityHandleSizeChange"
+                            @current-change="productCapabilityHandleCurrentChange"
+                            :current-page="productCapabilityCurrentPage"
+                            :page-sizes="[10, 20, 30, 40]"
+                            :page-size="productCapabilityPageSize"
+                            layout="total, sizes, prev, pager, next, jumper"
+                            :productTypeTotal="productCapabilityTotal"
                     >
                     </el-pagination>
                 </el-tab-pane>
@@ -130,16 +217,6 @@ Vue.component("alexa-config", {
                     <el-table-column label="第三方产品名" prop="thirdProduct">
                         <template slot-scope="scope">
                             <el-input v-model="scope.row.thirdProduct"></el-input>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="第三方产品名 第二形式" prop="thirdProduct2">
-                        <template slot-scope="scope">
-                            <el-input v-model="scope.row.thirdProduct2"></el-input>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="第三方品牌" prop="thirdBrand">
-                        <template slot-scope="scope">
-                            <el-input v-model="scope.row.thirdBrand"></el-input>
                         </template>
                     </el-table-column>
                     <el-table-column label="操作">
@@ -187,13 +264,16 @@ Vue.component("alexa-config", {
                     </el-table-column>
                     <el-table-column label="是否值映射" prop="valueOf">
                         <template slot-scope="scope">
-                            <el-select v-model="scope.row.valueOf">
-                                <el-option label="否" value="0"></el-option>
-                                <el-option label="是" value="1"></el-option>
-                            </el-select>
+                            <el-switch
+                              v-model="scope.row.valueOf"
+                              active-text="是"
+                              inactive-text="否"
+                              @change="changeStatus($event,scope.row)"
+                              >
+                            </el-switch>
                         </template>
                     </el-table-column>
-                    <el-table-column label="映射关系" prop="valueOf" width="300">
+                    <el-table-column label="映射关系" prop="valueMapping" width="300">
                         <template slot-scope="scope">
                             <div v-for="(item, index) in scope.row.valueMapping">
                                 <el-input v-model="item.key" style="width: 80px;margin-right: 5px;"></el-input>
@@ -219,6 +299,18 @@ Vue.component("alexa-config", {
                             </el-select>
                         </template>
                     </el-table-column>
+                    <el-table-column label="产商属性配置" prop="capabilityConfigId">
+                        <template slot-scope="scope">
+                            <el-select v-model="scope.row.capabilityConfigId" placeholder="NONE" clearable filterable>
+                                <el-option
+                                        v-for="item in deviceCapabilities"
+                                        :key="item.id"
+                                        :label="item.description"
+                                        :value="item.id +''"
+                                ></el-option>
+                            </el-select>
+                        </template>
+                    </el-table-column>
                     <el-table-column label="备注" prop="remark">
                         <template slot-scope="scope">
                             <el-input v-model="scope.row.remark"></el-input>
@@ -226,6 +318,7 @@ Vue.component("alexa-config", {
                     </el-table-column>
                     <el-table-column label="操作">
                         <template slot-scope="scope">
+                            <el-button type="text" @click="productFunctionEditRow(scope.row,scope.$index)">编辑</el-button>
                             <el-button type="text" @click="productFunctionRemoveRow(scope.$index)">删除</el-button>
                         </template>
                     </el-table-column>
@@ -237,6 +330,72 @@ Vue.component("alexa-config", {
           <el-button type="primary" @click="productFunctionSave">保存</el-button>
         </span>
         </el-dialog>
+        <!--属性映射表 编辑面板-->
+        <el-dialog title="编辑面板" :visible.sync="productFunctionEditDialog" width="60%">
+            <el-form ref="productFunctionEditPanelFrom" :model="productFunctionEditPanelFrom" label-width="120px">
+              <el-form-item label="开发云属性">
+                <el-input v-model="productFunctionEditPanelFrom.signCode"></el-input>
+              </el-form-item>
+              <el-form-item label="开发云属性标识">
+                <el-input v-model="productFunctionEditPanelFrom.functionId"></el-input>
+              </el-form-item>
+              <el-form-item >
+                <template #label>
+                   <el-tooltip class="item" effect="dark" content='控制协议产商云请求入参的解析结构，比如：{"brightness": 65} 说明brightness为控制指令的key，
+  {"color":{"spectrumRGB":16711935}} 说明取color中的spectrumRGB'>
+                              <i class="el-icon-question">产商云属性</i>
+                            </el-tooltip>
+                </template>
+                <el-input type="textarea"  @input="formatJson(productFunctionEditPanelFrom.thirdSignCode)" :autosize="{ minRows: 2, maxRows: 10}" v-model="productFunctionEditPanelFrom.thirdSignCode"></el-input>
+              </el-form-item>
+              <el-form-item label="产商云属性行为">
+                 <el-input v-model="productFunctionEditPanelFrom.thirdActionCode"></el-input>
+              </el-form-item>
+              <el-form-item label="是否值映射">
+                <el-switch
+                  v-model="productFunctionEditPanelFrom.valueOf"
+                  active-text="是"
+                  inactive-text="否"
+                  @change="changeStatus($event,productFunctionEditPanelFrom)"
+                  >
+                </el-switch>
+              </el-form-item>
+              <el-form-item label="映射关系">
+                <div v-for="(item, index) in productFunctionEditPanelFrom.valueMapping">
+                    <el-input v-model="item.key" style="width: 150px;margin-right: 5px;"></el-input>
+                    <span>=</span>
+                    <el-input v-model="item.value" style="width:150px;margin-right: 5px;"></el-input>
+                    <el-button type="text" @click="mappingRemoveRow(productFunctionEditPanelFrom.valueMapping, index)">
+                        删除
+                    </el-button>
+                </div>
+                <el-button @click="functionMappingAddRowEditPanel">新增</el-button>
+              </el-form-item>
+              <el-form-item label="转换函数">
+                    <el-select v-model="productFunctionEditPanelFrom.convertFunction" placeholder="NONE" clearable filterable>
+                        <el-option
+                                v-for="item in convertFunctions"
+                                :key="item"
+                                :label="item"
+                                :value="item"
+                        ></el-option>
+                    </el-select>
+              </el-form-item>
+               <el-form-item label="产商属性配置">
+                      <el-select v-model="productFunctionEditPanelFrom.capabilityConfigId" placeholder="NONE" clearable filterable>
+                                <el-option
+                                        v-for="item in deviceCapabilities"
+                                        :key="item.id"
+                                        :label="item.description"
+                                        :value="item.id+''"
+                                ></el-option>
+                      </el-select>
+                </el-form-item>
+              <el-form-item label="备注">
+                <el-input type="textarea" :autosize="{ minRows: 1, maxRows: 5}"  v-model="productFunctionEditPanelFrom.remark"></el-input>
+              </el-form-item>
+            </el-form>
+        </el-dialog>
 
         <!--控制映射表-->
         <el-dialog title="产品行为表单" :visible.sync="productActionDialog" width="80%"
@@ -245,7 +404,6 @@ Vue.component("alexa-config", {
                 <el-form-item label="开发云产品id">
                     <el-input v-model="productAction.productId" :disabled="isProductActionUpdate"></el-input>
                 </el-form-item>
-
                 <el-table :data="productAction.productActions" style="width: 100%">
                     <el-table-column label="开发云属性" prop="signCode">
                         <template slot-scope="scope">
@@ -257,31 +415,35 @@ Vue.component("alexa-config", {
                             <el-input v-model="scope.row.functionId"></el-input>
                         </template>
                     </el-table-column>
-                    <el-table-column label="产商云属性" prop="thirdSignCode">
-                        <template slot-scope="scope">
-                            <el-input v-model="scope.row.thirdSignCode"></el-input>
+                    <el-table-column prop="thirdSignCode">
+                        <template slot="header" slot-scope="scope">
+                            <el-tooltip class="item" effect="dark" content='控制协议产商云请求入参的解析结构，比如：{"brightness": 65} 说明brightness为控制指令的key，\n  {"color":{"spectrumRGB":16711935}} 说明取color中的spectrumRGB'>
+                              <i class="el-icon-question">产商云属性</i>
+                            </el-tooltip>
                         </template>
-                    </el-table-column>
-                    <el-table-column label="产商云属性行为" prop="thirdActionCode">
+                        
                         <template slot-scope="scope">
-                            <el-input v-model="scope.row.thirdActionCode"></el-input>
+                            <el-input v-model="scope.row.thirdSignCode" :rows="2" type="textarea" placeholder="支持 JSON 字符串" @blur="formatJson(scope.row)"></el-input>
                         </template>
                     </el-table-column>
                     <el-table-column label="是否值映射" prop="valueOf">
                         <template slot-scope="scope">
-                            <el-select v-model="scope.row.valueOf">
-                                <el-option label="否" value="0"></el-option>
-                                <el-option label="是" value="1"></el-option>
-                            </el-select>
+                            <el-switch
+                              v-model="scope.row.valueOf"
+                               active-text="是"
+                               inactive-text="否"
+                               @change="changeStatus($event,scope.row)"
+                             >
+                            </el-switch>
                         </template>
                     </el-table-column>
-                    <el-table-column label="映射关系" prop="valueOf" width="300">
+                    <el-table-column label="映射关系" prop="valueMapping" width="300">
                         <template slot-scope="scope">
                             <div v-for="(item, index) in scope.row.valueMapping">
                                 <el-input v-model="item.key" style="width: 80px;margin-right: 5px;"></el-input>
                                 <span>=</span>
                                 <el-input v-model="item.value" style="width:80px;margin-right: 5px;"></el-input>
-                                <el-button type="text" @click="actionMappingRemoveRow(scope.row.valueMapping, index)">
+                                <el-button type="text" @click="mappingRemoveRow(scope.row.valueMapping, index)">
                                     删除
                                 </el-button>
                             </div>
@@ -308,6 +470,7 @@ Vue.component("alexa-config", {
                     </el-table-column>
                     <el-table-column label="操作">
                         <template slot-scope="scope">
+                            <el-button type="text" @click="productActionEditRow(scope.row,scope.$index)">编辑</el-button>
                             <el-button type="text" @click="productActionRemoveRow(scope.$index)">删除</el-button>
                         </template>
                     </el-table-column>
@@ -319,21 +482,117 @@ Vue.component("alexa-config", {
           <el-button type="primary" @click="productActionSave">保存</el-button>
         </span>
         </el-dialog>
+        
+        <!--控制映射表 编辑面板-->
+        <el-dialog title="编辑面板" :visible.sync="productActionEditDialog" width="60%">
+            <el-form ref="productActionEditPanelFrom" :model="productActionEditPanelFrom" label-width="120px">
+              <el-form-item label="开发云属性">
+                <el-input v-model="productActionEditPanelFrom.signCode"></el-input>
+              </el-form-item>
+              <el-form-item label="开发云属性标识">
+                <el-input v-model="productActionEditPanelFrom.functionId"></el-input>
+              </el-form-item>
+              <el-form-item >
+                <template #label>
+                   <el-tooltip class="item" effect="dark" content='控制协议产商云请求入参的解析结构，比如：{"brightness": 65} 说明brightness为控制指令的key，\n  {"color":{"spectrumRGB":16711935}} 说明取color中的spectrumRGB'>
+                              <i class="el-icon-question">产商云属性</i>
+                            </el-tooltip>
+                </template>
+                <el-input type="textarea"  @blur="formatJson(productActionEditPanelFrom.thirdSignCode)" :autosize="{ minRows: 2, maxRows: 10}" v-model="productActionEditPanelFrom.thirdSignCode"></el-input>
+              </el-form-item>
+              <el-form-item label="是否值映射">
+                <el-switch
+                  v-model="productActionEditPanelFrom.valueOf"
+                  active-text="是"
+                  inactive-text="否"
+                  @change="changeStatus($event,productActionEditPanelFrom)"
+                  >
+                </el-switch>
+              </el-form-item>
+              <el-form-item label="映射关系">
+                <div v-for="(item, index) in productActionEditPanelFrom.valueMapping">
+                    <el-input v-model="item.key" style="width: 150px;margin-right: 5px;"></el-input>
+                    <span>=</span>
+                    <el-input v-model="item.value" style="width:150px;margin-right: 5px;"></el-input>
+                    <el-button type="text" @click="mappingRemoveRow(productActionEditPanelFrom.valueMapping, index)">
+                        删除
+                    </el-button>
+                </div>
+                <el-button @click="actionMappingAddRowEditPanel">新增</el-button>
+              </el-form-item>
+              <el-form-item label="转换函数">
+                    <el-select v-model="productActionEditPanelFrom.convertFunction" placeholder="NONE" clearable filterable>
+                        <el-option
+                                v-for="item in convertFunctions"
+                                :key="item"
+                                :label="item"
+                                :value="item"
+                        ></el-option>
+                    </el-select>
+              </el-form-item>
+              <el-form-item label="备注">
+                <el-input type="textarea" :autosize="{ minRows: 1, maxRows: 5}"  v-model="productActionEditPanelFrom.remark"></el-input>
+              </el-form-item>
+            </el-form>
+        </el-dialog>
+        
+        <!--产商属性配置表-->
+        <el-dialog title="产商属性配置表" :visible.sync="productCapabilityDialog" width="60%"
+           :before-close="productCapabilityCancel">
+            <el-form ref="productCapability" :model="productCapability" label-width="120px">
+                <el-form-item label="技能配置">
+                        <el-input type="textarea" :autosize="{ minRows: 1, maxRows: 5}"  v-model="productCapability.capabilityConfiguration"></el-input>
+                </el-form-item>
+                <el-form-item label="字段名">
+                        <el-input v-model="productCapability.instanceName"></el-input>
+                </el-form-item>
+                <el-form-item label="描述">
+                        <el-input type="textarea" :autosize="{ minRows: 1, maxRows: 5}"  v-model="productCapability.description"></el-input>
+                </el-form-item>
+            </el-form>
+            
+            <span slot="footer" class="dialog-footer">
+                  <el-button @click="productCapabilityCancel">取消</el-button>
+                  <el-button type="primary" @click="productCapabilitySave">保存</el-button>
+            </span>
+        </el-dialog>
+        
     </div>
   `,
     mounted: function () {
         this.alexaProductType();
-        this.alexaProductFunction();
         this.productTypeThirdIds();
-        this.alexaProductAction();
+        this.clientConfigDetail();
         axios({
             url: "/cloudToCloud/api/web/config/convertFunctions",
         }).then((res) => {
             this.convertFunctions = res.data.result;
         });
+        axios({
+            url: "/cloudToCloud/api/web/config/capability",
+            params: {
+                cloud: "ALEXA"
+            }
+        }).then((res) => {
+            this.deviceCapabilities = res.data.result;
+        })
     },
     data: function () {
         return {
+            queryFrom: {
+                productId: ""
+            },
+            clientConfig: {
+                clientId: "",
+                clientSecret: "",
+                mainUrl: "",
+                icon: "",
+                additionalInformation: "",
+                reportUrl: "",
+                thirdPartyCloud: "ALEXA",
+                thirdClientId: "",
+                thirdClientSecret: ""
+            },
             isProductTypeUpdate: false,
             productTypeTable: [],
             productTypeCurrentPage: 1, // 当前页数
@@ -369,10 +628,11 @@ Vue.component("alexa-config", {
                         signCode: "",
                         functionId: "",
                         thirdSignCode: "",
-                        valueOf: '0',
-                        valueMapping: [{key: "", value: ""}],
+                        valueOf: false,
+                        valueMapping: [],
                         convertFunction: "",
                         capabilityConfigId: "",
+                        thirdActionCode: "",
                         remark: ""
                     },
                 ],
@@ -393,19 +653,108 @@ Vue.component("alexa-config", {
                         signCode: "",
                         functionId: "",
                         thirdSignCode: "",
-                        valueOf: '0',
-                        valueMapping: [{key: "", value: ""}],
+                        valueOf: false,
+                        valueMapping: [],
+                        thirdActionCode: "",
                         convertFunction: "",
                         remark: ""
                     },
                 ],
             },
 
+            isProductCapabilityUpdate: false,
+            productCapabilityTable: [],
+            productCapabilityCurrentPage: 1, // 当前页数
+            productCapabilityPageSize: 10, // 每页显示条数
+            productCapabilityTotal: 0, // 总条数
+            productCapabilityDialog: false, //产品映射弹窗
+            productCapability: {
+                thirdPartyCloud: "ALEXA",
+                id: "",
+                capabilitySemantics: "",
+                capabilityConfiguration: "",
+                instanceName: "",
+                valueSemantics: "",
+                description: ""
+            },
             thirdPids: [],
-            convertFunctions: []
+            convertFunctions: [],
+            deviceCapabilities: [],
+            panelActiveName: "productType",
+
+            productActionEditDialog: false,
+            productActionEditPanelFrom: {
+                index: 1,
+                signCode: "",
+                functionId: "",
+                thirdSignCode: "",
+                valueOf: false,
+                valueMapping: [],
+                convertFunction: "",
+                remark: ""
+            },
+            productFunctionEditDialog: false,
+            productFunctionEditPanelFrom: {
+                index: 1,
+                signCode: "",
+                functionId: "",
+                thirdSignCode: "",
+                valueOf: false,
+                valueMapping: [],
+                convertFunction: "",
+                capabilityConfigId: "",
+                remark: ""
+            }
         };
     },
     methods: {
+        changeStatus(e, row) {
+            row.valueOf = e;
+        },
+        formatJson(row) {
+            try {
+                row.thirdSignCode = JSON.stringify(JSON.parse(row.thirdSignCode), null, 2);
+            } catch (error) {
+                // JSON 解析失败，不进行格式化操作
+            }
+        },
+        paneHandler(tab, event) {
+            this.queryFrom.productId = "";
+            if (this.panelActiveName === "productType") {
+                this.alexaProductType();
+            } else if (this.panelActiveName === "productFunction") {
+                this.alexaProductFunction();
+            } else if (this.panelActiveName === "productAction") {
+                this.alexaProductAction();
+            } else if (this.panelActiveName === "productCapability") {
+                this.alexaProductCapability();
+            }
+        },
+        clientConfigDetail() {
+            axios({
+                url: "/cloudToCloud/api/web/config/clientConfig",
+                params: {
+                    "cloud": "ALEXA"
+                }
+            }).then((res) => {
+                this.clientConfig = res.data.result;
+            })
+        },
+        clientConfigSave() {
+            axios({
+                url: "/cloudToCloud/api/web/config/saveClientConfig",
+                method: "POST",
+                data: this.clientConfig
+            }).then((res) => {
+                var result = res.data;
+                if (result.success) {
+                    this.$message.success("保存成功");
+                } else {
+                    this.$message.error(result.message);
+                }
+            })
+        },
+
         //产品类型方法
         productTypeRemoveRow(index) {
             this.productType.productTypes.splice(index, 1);
@@ -438,10 +787,10 @@ Vue.component("alexa-config", {
                     index: this.productTypeCurrentPage,
                     size: this.productTypePageSize,
                     thirdPartyCloud: "ALEXA",
+                    productId: this.queryFrom.productId
                 },
             }).then((res) => {
                 var result = res.data.result;
-
                 this.productTypeTotal = result.total;
                 this.productTypeTable = result.records;
             });
@@ -452,17 +801,18 @@ Vue.component("alexa-config", {
                 params: {
                     productId: productId,
                     thirdPartyCloud: "ALEXA"
-                },
+                }
             }).then((res) => {
-                var result = res.data.result;
-                if(result.success){
-                    this.productType.productId = result.productId;
-                    this.productType.thirdPartyCloud = result.thirdPartyCloud;
-                    this.productType.productTypes = result.productTypes;
+                var result = res.data;
+                if (result.success) {
+                    var data = result.result;
+                    this.productType.productId = data.productId;
+                    this.productType.thirdPartyCloud = data.thirdPartyCloud;
+                    this.productType.productTypes = data.productTypes;
                     this.isProductTypeUpdate = true;
                     this.productTypeDialog = true;
-                }else{
-                    this.$message.error(data.message);
+                } else {
+                    this.$message.error(result.message);
                 }
             });
         },
@@ -476,9 +826,15 @@ Vue.component("alexa-config", {
                     productTypes: this.productType.productTypes,
                 },
             }).then((res) => {
-                this.productTypeDialog = false;
-                this.productType = this.$options.data().productType;
-                this.alexaProductType();
+                var result = res.data;
+                if (result.success) {
+                    this.productTypeDialog = false;
+                    this.productType = this.$options.data().productType;
+                    this.alexaProductType();
+                    this.$message.success("保存成功");
+                } else {
+                    this.$message.error(result.message);
+                }
             });
         },
         productTypeDelete(productId) {
@@ -490,7 +846,13 @@ Vue.component("alexa-config", {
                     thirdPartyCloud: "ALEXA",
                 },
             }).then((res) => {
-                this.alexaProductType();
+                var result = res.data;
+                if (result.success) {
+                    this.alexaProductType();
+                    this.$message.success("删除成功");
+                } else {
+                    this.$message.error(result.message);
+                }
             });
         },
         productTypeCancel() {
@@ -516,7 +878,18 @@ Vue.component("alexa-config", {
             this.productFunction.productFunctions.splice(index, 1);
         },
         productFunctionAddRow() {
-            this.productFunction.productFunctions.push({});
+            this.productFunction.productFunctions.push({
+                id: "",
+                signCode: "",
+                functionId: "",
+                thirdSignCode: "",
+                valueOf: false,
+                valueMapping: [],
+                convertFunction: "",
+                capabilityConfigId: "",
+                thirdActionCode: "",
+                remark: ""
+            });
         },
         productFunctionThirdIds() {
         },
@@ -535,10 +908,10 @@ Vue.component("alexa-config", {
                     index: this.productFunctionCurrentPage,
                     size: this.productFunctionPageSize,
                     thirdPartyCloud: "ALEXA",
+                    productId: this.queryFrom.productId
                 },
             }).then((res) => {
                 var result = res.data.result;
-
                 this.productFunctionTotal = result.total;
                 this.productFunctionTable = result.records;
             });
@@ -551,27 +924,42 @@ Vue.component("alexa-config", {
                     thirdPartyCloud: "ALEXA"
                 },
             }).then((res) => {
-                var result = res.data.result;
-                this.productFunction.productId = result.productId;
-                this.productFunction.thirdPartyCloud = result.thirdPartyCloud;
-                this.productFunction.productFunctions = result.productFunctions;
-                this.isProductFunctionUpdate = true;
-                this.productFunctionDialog = true;
+                var result = res.data;
+                if (result.success) {
+                    var data = result.result;
+                    this.productFunction.productId = data.productId;
+                    this.productFunction.thirdPartyCloud = data.thirdPartyCloud;
+                    this.productFunction.productFunctions = data.productFunctions;
+                    this.isProductFunctionUpdate = true;
+                    this.productFunctionDialog = true;
+                } else {
+                    this.$message.error(result.message);
+                }
             });
         },
         productFunctionSave() {
+            console.log(this.productFunction.productFunctions)
             axios({
                 method: "POST",
                 url: "/cloudToCloud/api/web/productFunction/save",
                 data: {
                     productId: this.productFunction.productId,
                     thirdPartyCloud: "ALEXA",
-                    productFunctions: this.productFunction.productFunctions,
+                    productFunctions: this.productFunction.productFunctions.map(item =>{
+                        const { capabilityConfigIds, ...rest } = item;
+                        return rest;
+                    }),
                 },
             }).then((res) => {
-                this.productFunctionDialog = false;
-                this.productFunction = this.$options.data().productFunction;
-                this.alexaProductFunction();
+                var result = res.data;
+                if (result.success) {
+                    this.productFunctionDialog = false;
+                    this.productFunction = this.$options.data().productFunction;
+                    this.alexaProductFunction();
+                    this.$message.success("保存成功");
+                } else {
+                    this.$message.error(result.message);
+                }
             });
         },
         productFunctionDelete(productId) {
@@ -583,7 +971,13 @@ Vue.component("alexa-config", {
                     thirdPartyCloud: "ALEXA",
                 },
             }).then((res) => {
-                this.alexaProductFunction();
+                var result = res.data;
+                if (result.success) {
+                    this.alexaProductFunction();
+                    this.$message.success("删除成功");
+                } else {
+                    this.$message.error(result.message);
+                }
             });
         },
         productFunctionCancel() {
@@ -594,7 +988,7 @@ Vue.component("alexa-config", {
         },
 
         //属性映射方法
-        actionMappingRemoveRow(mapping, index) {
+        mappingRemoveRow(mapping, index) {
             mapping.splice(index, 1);
         }
         ,
@@ -604,78 +998,127 @@ Vue.component("alexa-config", {
                 value: ""
             })
         },
+        actionMappingAddRowEditPanel() {
+            this.productActionEditPanelFrom.valueMapping.push({
+                key: "",
+                value: ""
+            })
+        },
+        functionMappingAddRowEditPanel() {
+            this.productFunctionEditPanelFrom.valueMapping.push({
+                key: "",
+                value: ""
+            })
+        },
         productActionRemoveRow(index) {
             this.productAction.productActions.splice(index, 1);
         },
+        productActionEditRow(row, index) {
+            this.productActionEditPanelFrom = row;
+            this.productActionEditPanelFrom.index = index;
+            this.productActionEditDialog = true;
+        },
+        productFunctionEditRow(row, index) {
+            this.productFunctionEditPanelFrom = row;
+            this.productFunctionEditPanelFrom.index = index;
+            this.productFunctionEditDialog = true;
+        },
         productActionAddRow() {
-            this.productAction.productActions.push({});
+            this.productAction.productActions.push({
+                id: "",
+                signCode: "",
+                functionId: "",
+                thirdSignCode: "",
+                valueOf: false,
+                valueMapping: [],
+                thirdActionCode: "",
+                convertFunction: "",
+                remark: ""
+            });
         },
         productActionThirdIds() {
         },
         productActionHandleSizeChange(size) {
             this.productActionPageSize = size;
-            this.alexaProductFunction();
+            this.alexaProductAction();
         },
         productActionHandleCurrentChange(index) {
             this.productActionCurrentPage = index;
-            this.alexaProductFunction();
+            this.alexaProductAction();
         },
         alexaProductAction() {
             axios({
-                url: "/cloudToCloud/api/web/productAction/list",
+                url: "/cloudToCloud/api/web/action/list",
                 params: {
                     index: this.productActionCurrentPage,
                     size: this.productActionPageSize,
                     thirdPartyCloud: "ALEXA",
+                    productId: this.queryFrom.productId
                 },
             }).then((res) => {
                 var result = res.data.result;
-
                 this.productActionTotal = result.total;
                 this.productActionTable = result.records;
             });
         },
         productActionEdit(productId) {
             axios({
-                url: "/cloudToCloud/api/web/productAction/detail",
+                url: "/cloudToCloud/api/web/action/detail",
                 params: {
                     productId: productId,
                     thirdPartyCloud: "ALEXA"
                 },
             }).then((res) => {
-                var result = res.data.result;
-                this.productAction.productId = result.productId;
-                this.productAction.thirdPartyCloud = result.thirdPartyCloud;
-                this.productAction.productActions = result.productActions;
-                this.isProductActionUpdate = true;
-                this.productActionDialog = true;
+                var result = res.data;
+                if (result.success) {
+                    var data = result.result;
+                    this.productAction.productId = data.productId;
+                    this.productAction.thirdPartyCloud = data.thirdPartyCloud;
+                    this.productAction.productActions = data.productActions;
+                    this.isProductActionUpdate = true;
+                    this.productActionDialog = true;
+                } else {
+                    this.$message.error(result.message);
+                }
             });
         },
         productActionSave() {
             axios({
                 method: "POST",
-                url: "/cloudToCloud/api/web/productAction/save",
+                url: "/cloudToCloud/api/web/action/save",
                 data: {
                     productId: this.productAction.productId,
                     thirdPartyCloud: "ALEXA",
                     productActions: this.productAction.productActions,
                 },
             }).then((res) => {
-                this.productActionDialog = false;
-                this.productAction = this.$options.data().productAction;
-                this.alexaProductAction();
+                var result = res.data;
+                if (result.success) {
+                    this.productActionDialog = false;
+                    this.productAction = this.$options.data().productAction;
+                    this.alexaProductAction();
+                    this.$message.success("保存成功");
+                } else {
+                    this.$message.error(result.message);
+                }
             });
         },
         productActionDelete(productId) {
             axios({
                 method: "POST",
-                url: "/cloudToCloud/api/web/productAction/delete",
+                url: "/cloudToCloud/api/web/action/delete",
                 data: {
                     productId: productId,
                     thirdPartyCloud: "ALEXA",
                 },
             }).then((res) => {
-                this.alexaProductAction();
+                var result = res.data;
+                if (result.success) {
+                    this.alexaProductAction();
+                    this.$message.success("删除成功");
+                } else {
+                    this.$message.error(result.message);
+                }
             });
         },
         productActionCancel() {
@@ -683,6 +1126,86 @@ Vue.component("alexa-config", {
             this.productActionDialog = false;
             this.productAction = this.$options.data().productAction;
             this.isProductFunctionUpdate = false;
+        },
+
+        //属性配置
+        productCapabilityHandleSizeChange(size) {
+            this.productCapabilityPageSize = size;
+            this.alexaProductCapability();
+        },
+        productCapabilityHandleCurrentChange(index) {
+            this.productCapabilityCurrentPage = index;
+            this.alexaProductCapability();
+        },
+        alexaProductCapability() {
+            axios({
+                url: "/cloudToCloud/api/web/productCapability/list",
+                params: {
+                    index: this.productCapabilityCurrentPage,
+                    size: this.productCapabilityPageSize,
+                    thirdPartyCloud: "ALEXA",
+                },
+            }).then((res) => {
+                var result = res.data.result;
+                this.productCapabilityTotal = result.total;
+                this.productCapabilityTable = result.records;
+            });
+        },
+        productCapabilityEdit(id) {
+            axios({
+                url: "/cloudToCloud/api/web/productCapability/detail",
+                params: {
+                    id: id,
+                    thirdPartyCloud: "ALEXA"
+                },
+            }).then((res) => {
+                var result = res.data.result;
+                this.productCapability.productId = result.productId;
+                this.productCapability.thirdPartyCloud = result.thirdPartyCloud;
+                this.productCapability.productCapabilitys = result.productCapabilitys;
+                this.isProductCapabilityUpdate = true;
+                this.productCapabilityDialog = true;
+            });
+        },
+        productCapabilitySave() {
+            axios({
+                method: "POST",
+                url: "/cloudToCloud/api/web/productCapability/save",
+                data: this.productCapability,
+            }).then((res) => {
+                var result = res.data;
+                if (result.success) {
+                    this.productCapabilityDialog = false;
+                    this.productCapability = this.$options.data().productCapability;
+                    this.alexaProductCapability();
+                    this.$message.success("保存成功");
+                } else {
+                    this.$message.error(result.message);
+                }
+            });
+        },
+        productCapabilityDelete(id) {
+            axios({
+                method: "POST",
+                url: "/cloudToCloud/api/web/productCapability/delete",
+                data: {
+                    id: id
+                },
+            }).then((res) => {
+                var result = res.data;
+                if (result.success) {
+                    this.alexaProductCapability();
+                    this.$message.success("删除成功");
+                } else {
+                    this.$message.error(result.message);
+                }
+            });
+        },
+        productCapabilityCancel() {
+            console.log("clear")
+            this.productCapabilityDialog = false;
+            this.productCapability = this.$options.data().productCapability;
+            this.isProductCapabilityUpdate = false;
         }
     },
 });

@@ -22,8 +22,6 @@ public class ThirdPartyCloudConfigInfo {
 
     private String additionalInformation;
 
-    private String redirectUri;
-
     private String reportUrl;
 
     private ThirdPartyCloudEnum thirdPartyCloud;

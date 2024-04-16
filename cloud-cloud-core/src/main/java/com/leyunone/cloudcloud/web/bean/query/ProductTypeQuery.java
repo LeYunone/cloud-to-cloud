@@ -15,4 +15,6 @@ import lombok.Setter;
 public class ProductTypeQuery extends CommonPage {
 
     private ThirdPartyCloudEnum thirdPartyCloud;
+
+    private String productId;
 }

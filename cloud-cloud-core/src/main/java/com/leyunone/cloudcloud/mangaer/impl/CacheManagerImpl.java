@@ -2,6 +2,7 @@ package com.leyunone.cloudcloud.mangaer.impl;
 
 import cn.hutool.core.util.StrUtil;
 import com.leyunone.cloudcloud.mangaer.CacheManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 @Service
 public class CacheManagerImpl implements CacheManager {
 
+    @Autowired
     private RedisTemplate<Object, Object> redisTemplate;
 
     @Override

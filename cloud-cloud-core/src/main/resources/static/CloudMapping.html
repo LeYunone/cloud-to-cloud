@@ -20,11 +20,11 @@
             </div>
 
             <el-menu-item index="baidu">百度</el-menu-item>
+            <el-menu-item index="xiaomi">小米</el-menu-item>
+            <el-menu-item index="alexa">Alexa</el-menu-item>
+            <el-menu-item index="google">Google</el-menu-item>
             <el-menu-item index="tmall">天猫精灵</el-menu-item>
             <el-menu-item index="huawei">华为</el-menu-item>
-            <el-menu-item index="alexa">Alexa</el-menu-item>
-            <el-menu-item index="xiaomi">小米</el-menu-item>
-            <el-menu-item index="google">Google</el-menu-item>
         </el-menu>
     </el-aside>
     <el-main style="flex: 1; padding: 20px; height: 100%;width: 100%;">
@@ -35,7 +35,11 @@
 </html>
 
 <script src="BaiduConfig.js"></script>
-<script src="TmaillConfig.js"></script>
+<script src="AlexaConfig.js"></script>
+<script src="GoogleConfig.js"></script>
+<script src="TmallConfig.js"></script>
+<script src="XiaomiConfig.js"></script>
+<script src="HiLinkConfig.js"></script>
 <script>
     new Vue({
         el: '#app',
@@ -68,32 +72,14 @@
         background-color: #4d648d;
         color: white;
         border: none;
-        padding: 10px;
         cursor: pointer;
-    }
-
-    .tab-content {
-        padding: 20px;
-        background-color: #f5f5f5;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        margin-top: 20px;
     }
 
     /* 新添加的选项卡样式 */
     .el-tabs {
-        margin-top: 20px;
+        margin-top: 10px;
     }
-
-    .el-tab-pane {
-        padding: 20px;
+    .el-switch {
+        z-index: 9999;
     }
-
-    .tab-content {
-        background-color: #f5f5f5;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        margin-top: 20px;
-    }
-
 </style>

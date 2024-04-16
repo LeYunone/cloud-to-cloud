@@ -16,6 +16,6 @@ public class ViewController {
 
     @GetMapping("/")
     public String htmlView() {
-        return "redirect:/cloudMapping.html";
+        return "redirect:/CloudMapping.html";
     }
 }

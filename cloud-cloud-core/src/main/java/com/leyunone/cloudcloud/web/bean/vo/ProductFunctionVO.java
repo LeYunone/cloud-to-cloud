@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,9 +20,9 @@ public class ProductFunctionVO {
 
     private String productId;
 
-    private List<String> thirdProductIds;
+    private List<String> thirdProductIds = new ArrayList<>();
 
-    private List<String> thirdSignCodes;
+    private List<String> thirdSignCodes = new ArrayList<>();
 
     private LocalDateTime updateTime;
 

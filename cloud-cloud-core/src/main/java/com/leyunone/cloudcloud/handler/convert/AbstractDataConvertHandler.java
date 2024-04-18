@@ -23,6 +23,7 @@ public abstract class AbstractDataConvertHandler<R, P> implements ConvertHandler
     protected ProductMappingService productMappingService;
 
     protected AbstractDataConvertHandler(ProductMappingService productMappingService) {
+        this.productMappingService = productMappingService;
     }
 
     protected Object valueOf(String value, StatusMapping mapping) {
@@ -63,10 +64,7 @@ public abstract class AbstractDataConvertHandler<R, P> implements ConvertHandler
     }
 
     protected Object getControlValue(JSONObject params, ActionMapping actionMapping) {
-        /**
-         * Google取值规则：默认直接根据code值取值
-         *               有枚举走对象取值
-         */
+        if(ObjectUtil.isNull(actionMapping)) return null;
         String command = actionMapping.getThirdActionCode();
         String[] codes = actionMapping.getThirdSignCode().split("#");
         //最终值

@@ -278,6 +278,8 @@ Vue.component("tmall-config", {
             })
         },
         clientConfigSave() {
+            this.clientConfig.thirdPartyCloud = 'TMALL';
+
             axios({
                 url: "/cloudToCloud/api/web/config/saveClientConfig",
                 method: "POST",

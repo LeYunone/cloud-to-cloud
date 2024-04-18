@@ -21,12 +21,4 @@ public abstract class AbstractAlexaDataConverterTemplate<R, P> extends AbstractD
         super( productMappingManager);
     }
 
-    protected Map<String, AlexaProductMapping> convertToMapByProductId(List<ProductMapping> productMappings) {
-        return productMappings
-                .stream()
-                .filter(p -> p instanceof AlexaProductMapping)
-                .map(p -> (AlexaProductMapping) p)
-                .collect(Collectors.toMap(ProductMapping::getProductId, v -> v, (v1, v2) -> v2));
-    }
-
 }

@@ -132,15 +132,8 @@ public class AlexaMappingAssembler extends AbstractStrategyMappingAssembler<Alex
                 List<ActionMappingDO> actionMappingDOS = actionMaps.get(f.getSignCode());
                 if (CollectionUtil.isNotEmpty(actionMappingDOS)) {
                     actionMappingDOS.forEach(am -> {
-                        capabilityMapping.put(am.getThirdActionCode(), ActionMapping.builder()
-                                .defaultValue(am.getDefaultValue())
-                                .signCode(am.getSignCode())
-                                .functionId(am.getFunctionId())
-                                .valueMapping(StrUtil.isNotBlank(am.getValueMapping()) ? JSONObject.parseObject(am.getValueMapping()).getInnerMap() : null)
-                                .operation(am.getOperation())
-                                .thirdSignCode(am.getThirdSignCode())
-                                .valueOf(am.getValueOf())
-                                .build()
+                        capabilityMapping.put(am.getThirdActionCode(),
+                                super.convertActionMapping(CollectionUtil.newArrayList(am)).get(0)
                         );
                     });
                 }

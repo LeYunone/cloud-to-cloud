@@ -1,5 +1,7 @@
 package com.leyunone.cloudcloud.dao.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
@@ -29,12 +31,14 @@ public class DeviceDO {
      * 设备Id
      */
     @TableId
-    private Long deviceId;
+    private String deviceId;
 
     private String productId;
 
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
+    @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 
 

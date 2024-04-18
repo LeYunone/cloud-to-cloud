@@ -11,6 +11,7 @@ import com.leyunone.cloudcloud.bean.mapping.ProductMapping;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.service.mapping.ProductMappingService;
 import com.leyunone.cloudcloud.util.CollectionFunctionUtils;
+import com.leyunone.cloudcloud.util.ConvertUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -45,7 +46,7 @@ public class AlexaActionConverter extends AbstractAlexaDataConverterTemplate<Lis
             //TODO 发现设备时未填充，或cookie丢失
         }
         List<ProductMapping> mapping = productMappingService.getMapping(productId, ThirdPartyCloudEnum.ALEXA);
-        Map<String, AlexaProductMapping> productMappingMap = super.convertToMapByProductId(mapping);
+        Map<String, AlexaProductMapping> productMappingMap = ConvertUtils.convertToMapByProductId(mapping);
         AlexaProductMapping alexaProductMapping = productMappingMap.get(productId);
         List<AlexaProductMapping.Capability> capabilityList = alexaProductMapping.getCapabilityList();
         String namespace = r.getDirective().getHeader().getNamespace();
@@ -66,6 +67,7 @@ public class AlexaActionConverter extends AbstractAlexaDataConverterTemplate<Lis
                     ActionMapping capabilityMapping = capability.getCapabilityMapping().get(name);
                     value = super.getControlValue(r.getDirective().getPayload(), capabilityMapping);
                     codeCommand.setOperation(capabilityMapping.getOperation());
+                    codeCommand.setProductId(capabilityMapping.getProductId());
                     codeCommand.setSignCode(capabilityMapping.getSignCode());
                     codeCommand.setValue(value);
                     codeCommand.setFunctionId(capabilityMapping.getFunctionId());

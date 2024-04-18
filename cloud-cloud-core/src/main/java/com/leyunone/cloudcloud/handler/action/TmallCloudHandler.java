@@ -49,6 +49,11 @@ public class TmallCloudHandler extends AbstractCloudCloudHandler {
     }
 
     @Override
+    protected void checkSceneData(String request) {
+        
+    }
+
+    @Override
     protected String getKey() {
         return ThirdPartyCloudEnum.TMALL.name();
     }

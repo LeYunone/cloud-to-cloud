@@ -14,10 +14,11 @@ import com.google.auth.http.HttpCredentialsAdapter;
 import com.leyunone.cloudcloud.bean.enums.ReportTypeEnum;
 import com.leyunone.cloudcloud.bean.info.DeviceCloudInfo;
 import com.leyunone.cloudcloud.bean.info.DeviceInfo;
-import com.leyunone.cloudcloud.dao.entity.ThirdPartyClientDO;
+import com.leyunone.cloudcloud.bean.info.ThirdPartyCloudConfigInfo;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.handler.convert.google.GoogleStatusConvert;
 import com.leyunone.cloudcloud.handler.factory.DeviceReportHandlerFactory;
+import com.leyunone.cloudcloud.service.ThirdPartyConfigService;
 import org.slf4j.Logger;
 import com.google.auth.oauth2.GoogleCredentials;
 import org.slf4j.LoggerFactory;
@@ -63,14 +64,14 @@ public class GoogleDeviceStatusReportHandler extends AbstractGoogleDeviceMessage
     private final GoogleStatusConvert googleStatusConvert;
     private final Logger logger = LoggerFactory.getLogger(GoogleDeviceStatusReportHandler.class);
 
-    public GoogleDeviceStatusReportHandler(DeviceReportHandlerFactory factory, RestTemplate restTemplate, GoogleStatusConvert googleStatusConvert) {
-        super(factory, restTemplate);
+    public GoogleDeviceStatusReportHandler(DeviceReportHandlerFactory factory, RestTemplate restTemplate, ThirdPartyConfigService thirdPartyConfigService, GoogleStatusConvert googleStatusConvert) {
+        super(factory, restTemplate, thirdPartyConfigService);
         this.googleStatusConvert = googleStatusConvert;
     }
 
 
     @Override
-    public void handler2(DeviceInfo deviceInfo, ThirdPartyClientDO config, DeviceCloudInfo.ThirdMapping thirdMapping) {
+    public void handler2(DeviceInfo deviceInfo, ThirdPartyCloudConfigInfo config, DeviceCloudInfo.ThirdMapping thirdMapping) {
         if (ObjectUtil.isNull(GoogleDeviceStatusReportHandler.credentials) || ObjectUtil.isNull(GoogleDeviceStatusReportHandler.homeGraphService))
             return;
         try {

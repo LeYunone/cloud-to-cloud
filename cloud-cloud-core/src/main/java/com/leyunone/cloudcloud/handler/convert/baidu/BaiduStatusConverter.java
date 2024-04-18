@@ -1,6 +1,7 @@
 package com.leyunone.cloudcloud.handler.convert.baidu;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.leyunone.cloudcloud.bean.third.baidu.BaiduAttributes;
 import com.leyunone.cloudcloud.bean.info.DeviceInfo;
 import com.leyunone.cloudcloud.bean.mapping.ProductMapping;
@@ -45,6 +46,7 @@ public class BaiduStatusConverter extends AbstractBaiduDataConverterTemplate<Lis
      */
     @Override
     public List<BaiduAttributes> convert(DeviceInfo r) {
+        if(ObjectUtil.isNull(r)) return new ArrayList<>();
         String productId = r.getProductId();
         List<ProductMapping> mappings = productMappingService.getMapping(productId, ThirdPartyCloudEnum.BAIDU);
         List<BaiduAttributes> baiduAttributes = new ArrayList<>();

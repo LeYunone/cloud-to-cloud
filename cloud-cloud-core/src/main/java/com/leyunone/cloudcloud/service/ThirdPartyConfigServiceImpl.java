@@ -1,6 +1,7 @@
 package com.leyunone.cloudcloud.service;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.leyunone.cloudcloud.bean.info.ThirdPartyCloudConfigInfo;
 import com.leyunone.cloudcloud.dao.ThirdPartyClientRepository;
 import com.leyunone.cloudcloud.dao.entity.ThirdPartyClientDO;
@@ -28,7 +29,9 @@ public class ThirdPartyConfigServiceImpl implements ThirdPartyConfigService {
     public ThirdPartyCloudConfigInfo getConfig(String clientId) {
         ThirdPartyClientDO thirdPartyClientDO = thirdPartyClientRepository.selectByClientId(clientId);
         ThirdPartyCloudConfigInfo thirdPartyCloudConfigInfo = new ThirdPartyCloudConfigInfo();
-        BeanUtil.copyProperties(thirdPartyClientDO, thirdPartyCloudConfigInfo);
+        if(ObjectUtil.isNotNull(thirdPartyClientDO)){
+            BeanUtil.copyProperties(thirdPartyClientDO, thirdPartyCloudConfigInfo);
+        }
         return thirdPartyCloudConfigInfo;
     }
 }

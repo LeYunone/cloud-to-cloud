@@ -3,8 +3,11 @@ package com.leyunone.cloudcloud.handler.report;
 import cn.hutool.core.util.StrUtil;
 import com.leyunone.cloudcloud.bean.enums.ReportTypeEnum;
 import com.leyunone.cloudcloud.bean.info.DeviceCloudInfo;
+import com.leyunone.cloudcloud.dao.ThirdPartyClientRepository;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.handler.factory.DeviceReportHandlerFactory;
+import com.leyunone.cloudcloud.service.ThirdPartyConfigService;
+import com.leyunone.cloudcloud.service.ThirdPartyConfigServiceImpl;
 import com.leyunone.cloudcloud.strategy.AbstractStrategyAutoRegisterComponent;
 import org.springframework.web.client.RestTemplate;
 
@@ -19,8 +22,12 @@ public abstract class AbstractDeviceMessageReportHandler extends AbstractStrateg
 
     protected RestTemplate restTemplate;
 
-    public AbstractDeviceMessageReportHandler(DeviceReportHandlerFactory factory, RestTemplate restTemplate) {
+    protected ThirdPartyConfigService thirdPartyConfigService;
+
+    public AbstractDeviceMessageReportHandler(DeviceReportHandlerFactory factory, RestTemplate restTemplate, ThirdPartyConfigService thirdPartyConfigService) {
         super(factory);
+        this.restTemplate = restTemplate;
+        this.thirdPartyConfigService = thirdPartyConfigService;
     }
 
     @Override

@@ -17,15 +17,19 @@ import lombok.*;
 @NoArgsConstructor
 public class DeviceFunctionDTO {
     
+    private String productId;
+    
     private String deviceId;
 
     private String signCode;
 
     private Integer functionId;
+    
+    private boolean scene;
 
     private Object value;
     
-    private Long timestamp;
+    private Long timestamp = System.currentTimeMillis();
 
     private OperationEnum operation;
 }

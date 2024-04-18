@@ -103,7 +103,12 @@ public class ProductFunctionServiceImpl implements ProductFunctionService {
             productFunctionVO.setUpdateTime(f.getUpdateTime());
             productFunctionVO.setThirdPartyCloud(query.getThirdPartyCloud());
             if (CollectionUtil.isNotEmpty(fs)) {
-                productFunctionVO.setThirdSignCodes(fs.stream().map(FunctionMappingDO::getThirdSignCode).collect(Collectors.toList()));
+                productFunctionVO.setThirdCodes(fs.stream().map(m -> {
+                    ProductFunctionVO.Mapping pm = new ProductFunctionVO.Mapping();
+                    pm.setThirdActionCode(m.getThirdActionCode());
+                    pm.setThirdSignCode(m.getThirdSignCode());
+                    return pm;
+                }).collect(Collectors.toList()));
             }
             if (CollectionUtil.isNotEmpty(ps)) {
                 productFunctionVO.setThirdProductIds(ps.stream().map(ProductTypeMappingDO::getThirdProductId).collect(Collectors.toList()));

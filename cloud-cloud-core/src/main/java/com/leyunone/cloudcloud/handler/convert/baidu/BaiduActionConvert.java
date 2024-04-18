@@ -45,10 +45,12 @@ public class BaiduActionConvert extends AbstractBaiduDataConverterTemplate<Devic
         Map<String, ActionMapping> actionMap = actionMappings
                 .stream()
                 .collect(Collectors.toMap(k -> k.getThirdActionCode().toUpperCase(), v -> v, (v1, v2) -> v2));
-        ActionMapping actionMapping = actionMap.get(action);
+        ActionMapping actionMapping = actionMap.get(action.toUpperCase());
         Object value = super.getControlValue(r.getPayload(), actionMapping);
         DeviceFunctionDTO deviceFunctionDTO = new DeviceFunctionDTO();
+        deviceFunctionDTO.setProductId(actionMapping.getProductId());
         deviceFunctionDTO.setSignCode(actionMapping.getSignCode());
+        deviceFunctionDTO.setFunctionId(actionMapping.getFunctionId());
         deviceFunctionDTO.setDeviceId(payload.getAppliance().getApplianceId());
         deviceFunctionDTO.setValue(value);
         return deviceFunctionDTO;

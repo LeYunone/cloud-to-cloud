@@ -17,6 +17,7 @@ import com.leyunone.cloudcloud.web.bean.dto.ProductActionDTO;
 import com.leyunone.cloudcloud.web.bean.query.ProductTypeQuery;
 import com.leyunone.cloudcloud.web.bean.vo.ProductActionMappingVO;
 import com.leyunone.cloudcloud.web.bean.vo.ProductActionVO;
+import com.leyunone.cloudcloud.web.bean.vo.ProductFunctionVO;
 import com.leyunone.cloudcloud.web.service.ProductActionService;
 import com.leyunone.cloudcloud.util.DaoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,7 +98,12 @@ public class ProductActionServiceImpl implements ProductActionService {
             productActionVO.setThirdPartyCloud(query.getThirdPartyCloud());
             if (CollectionUtil.isNotEmpty(fs)) {
                 productActionVO.setSignCodes(fs.stream().map(ActionMappingDO::getSignCode).collect(Collectors.toSet()));
-                productActionVO.setThirdSignCodes(fs.stream().map(ActionMappingDO::getThirdSignCode).collect(Collectors.toSet()));
+                productActionVO.setThirdCodes(fs.stream().map(m -> {
+                    ProductActionVO.Mapping pm = new ProductActionVO.Mapping();
+                    pm.setThirdActionCode(m.getThirdActionCode());
+                    pm.setThirdSignCode(m.getThirdSignCode());
+                    return pm;
+                }).collect(Collectors.toList()));
             }
             if (CollectionUtil.isNotEmpty(ps)) {
                 productActionVO.setThirdProductIds(ps.stream().map(ProductTypeMappingDO::getThirdProductId).collect(Collectors.toList()));

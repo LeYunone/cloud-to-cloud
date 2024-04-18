@@ -76,4 +76,9 @@ public class AlexaCloudHandler extends AbstractCloudCloudHandler {
         }
         return JSONObject.toJSONString(action);
     }
+
+    @Override
+    protected void checkSceneData(String request) {
+        
+    }
 }

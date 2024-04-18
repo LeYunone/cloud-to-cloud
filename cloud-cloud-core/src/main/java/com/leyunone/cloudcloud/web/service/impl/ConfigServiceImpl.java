@@ -45,7 +45,9 @@ public class ConfigServiceImpl implements ConfigService {
     public ThirdClientConfigVO clientConfigDetail(ThirdPartyCloudEnum cloud) {
         ThirdPartyClientDO thirdPartyClientDO = thirdPartyClientRepository.selectByCloud(cloud);
         ThirdClientConfigVO vo = new ThirdClientConfigVO();
-        BeanUtil.copyProperties(thirdPartyClientDO, vo);
+        if(ObjectUtil.isNotNull(thirdPartyClientDO)){
+            BeanUtil.copyProperties(thirdPartyClientDO, vo);
+        }
         return vo;
     }
 }

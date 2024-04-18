@@ -5,6 +5,7 @@ import com.leyunone.cloudcloud.bean.enums.ActionTypeEnum;
 import com.leyunone.cloudcloud.dao.ThirdPartyActionRepository;
 import com.leyunone.cloudcloud.dao.entity.ThirdPartyActionDO;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
+import com.leyunone.cloudcloud.util.CollectionFunctionUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class ThirdPartyLoadConfigServiceImpl implements ThirdPartyLoadConfigServ
     @Override
     public void afterPropertiesSet() {
         List<ThirdPartyActionDO> thirdPartyActionDOS = thirdPartyActionRepository.selectByCon(null);
-        Map<ThirdPartyCloudEnum, List<ThirdPartyActionDO>> thirdActions = thirdPartyActionDOS.stream().collect(Collectors.groupingBy(ThirdPartyActionDO::getThirdPartyCloud));
+        Map<ThirdPartyCloudEnum, List<ThirdPartyActionDO>> thirdActions = CollectionFunctionUtils.groupTo(thirdPartyActionDOS, ThirdPartyActionDO::getThirdPartyCloud);
         thirdActions.keySet().forEach(cloud -> actionKeys.put(cloud,
                 thirdActions.get(cloud).stream()
                         .collect(Collectors.groupingBy(ThirdPartyActionDO::getActionType,

@@ -278,6 +278,8 @@ Vue.component("huawei-config", {
             })
         },
         clientConfigSave() {
+            this.clientConfig.thirdPartyCloud = 'HUAWEI';
+
             axios({
                 url: "/cloudToCloud/api/web/config/saveClientConfig",
                 method: "POST",

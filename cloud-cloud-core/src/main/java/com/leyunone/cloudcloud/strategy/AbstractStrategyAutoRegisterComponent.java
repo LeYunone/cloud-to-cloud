@@ -40,6 +40,6 @@ public abstract class AbstractStrategyAutoRegisterComponent implements Initializ
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        getKeys().forEach(key -> factory.register(getKey(), this));
+        getKeys().forEach(key -> factory.register(key, this));
     }
 }

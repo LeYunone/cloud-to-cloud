@@ -55,6 +55,11 @@ public class XiaoMiCloudHandler extends AbstractCloudCloudHandler{
         return JSONObject.toJSONString(action);
     }
 
+    @Override
+    protected void checkSceneData(String request) {
+        
+    }
+
 
     @Override
     protected String getKey() {

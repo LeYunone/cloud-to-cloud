@@ -12,7 +12,7 @@ import com.leyunone.cloudcloud.bean.info.DeviceCloudInfo;
 import com.leyunone.cloudcloud.bean.info.ThirdPartyCloudConfigInfo;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.handler.factory.DeviceReportHandlerFactory;
-import com.leyunone.cloudcloud.mangaer.AlexaTokenManager;
+import com.leyunone.cloudcloud.mangaer.impl.AlexaTokenManager;
 import com.leyunone.cloudcloud.mangaer.CacheManager;
 import com.leyunone.cloudcloud.service.ThirdPartyConfigService;
 import com.leyunone.cloudcloud.util.TimeUtils;
@@ -38,11 +38,11 @@ public class AlexaDeviceOnlineReportHandler extends AbstractAlexaDeviceMessageRe
     private final ThirdPartyConfigService thirdPartyConfigService;
     public static final Logger logger = LoggerFactory.getLogger(AlexaDeviceOnlineReportHandler.class);
 
-    public AlexaDeviceOnlineReportHandler(DeviceReportHandlerFactory factory, RestTemplate restTemplate, CacheManager cacheManager, AlexaTokenManager alexaTokenManager, ThirdPartyConfigService thirdPartyConfigService) {
-        super(factory, restTemplate);
+    public AlexaDeviceOnlineReportHandler(DeviceReportHandlerFactory factory, RestTemplate restTemplate, ThirdPartyConfigService thirdPartyConfigService, CacheManager cacheManager, AlexaTokenManager alexaTokenManager, ThirdPartyConfigService thirdPartyConfigService1) {
+        super(factory, restTemplate, thirdPartyConfigService);
         this.cacheManager = cacheManager;
         this.alexaTokenManager = alexaTokenManager;
-        this.thirdPartyConfigService = thirdPartyConfigService;
+        this.thirdPartyConfigService = thirdPartyConfigService1;
     }
 
 

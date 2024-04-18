@@ -7,6 +7,7 @@ import com.leyunone.cloudcloud.bean.mapping.GoogleProductMapping;
 import com.leyunone.cloudcloud.bean.mapping.ProductMapping;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.service.mapping.ProductMappingService;
+import com.leyunone.cloudcloud.util.ConvertUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,7 +31,7 @@ public class GoogleDeviceInfoConvert extends AbstractGoogleDataConverterTemplate
     public List<GoogleDevice> convert(List<DeviceInfo> r) {
         List<String> pids = r.stream().map(DeviceInfo::getProductId).collect(Collectors.toList());
         List<ProductMapping> productMappings = productMappingService.getMapping(pids, ThirdPartyCloudEnum.GOOGLE);
-        Map<String, GoogleProductMapping> productMappingMap = super.convertToMapByProductId(productMappings);
+        Map<String, GoogleProductMapping> productMappingMap = ConvertUtils.convertToMapByProductId(productMappings);
         return r.stream().filter(d -> productMappingMap.containsKey(d.getProductId()))
                 .map(d -> {
                     GoogleProductMapping googleProductMapping = productMappingMap.get(d.getProductId());

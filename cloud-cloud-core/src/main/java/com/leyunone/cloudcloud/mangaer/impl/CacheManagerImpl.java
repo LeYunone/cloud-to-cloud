@@ -13,6 +13,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -30,7 +31,35 @@ public class CacheManagerImpl implements CacheManager {
 
     @Override
     public <T> T getData(String key, Class<T> clazz) {
-        return null;
+        return (T)redisTemplate.opsForValue().get(key);
+    }
+
+    @Override
+    public <T> Optional<T> getData(String key, Long time,TimeUnit timeUnit, Supplier<T> supplier) {
+        Optional<T> optional = get(key);
+        if (optional == null || !optional.isPresent()) {
+            T t = supplier.get();
+            if (t == null) {
+                return Optional.empty();
+            }
+            addData(key, t, time,timeUnit);
+            return Optional.of(t);
+        }
+        return optional;
+    }
+
+    @Override
+    public <T> Optional<T> get(String key) {
+        if (key == null) {
+            return Optional.empty();
+        } else {
+            T t = (T) redisTemplate.opsForValue().get(key);
+            if (t == null) {
+                return Optional.empty();
+            } else {
+                return Optional.of(t);
+            }
+        }
     }
 
     @Override
@@ -103,7 +132,16 @@ public class CacheManagerImpl implements CacheManager {
 
     @Override
     public boolean deleteData(String key) {
-        if (StrUtil.isEmpty(key)){
+        if (StrUtil.isEmpty(key)) {
+            return false;
+        }
+        redisTemplate.delete(key);
+        return true;
+    }
+
+    @Override
+    public boolean deleteData(List<Object> key) {
+        if (CollectionUtils.isEmpty(key)) {
             return false;
         }
         redisTemplate.delete(key);

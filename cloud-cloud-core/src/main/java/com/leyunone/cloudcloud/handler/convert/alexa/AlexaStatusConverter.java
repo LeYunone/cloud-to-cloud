@@ -12,6 +12,7 @@ import com.leyunone.cloudcloud.bean.mapping.StatusMapping;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.service.mapping.ProductMappingService;
 import com.leyunone.cloudcloud.util.CollectionFunctionUtils;
+import com.leyunone.cloudcloud.util.ConvertUtils;
 import com.leyunone.cloudcloud.util.TimeUtils;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +38,7 @@ public class AlexaStatusConverter extends AbstractAlexaDataConverterTemplate<Lis
     @Override
     public List<AlexaDeviceProperty> convert(DeviceInfo r) {
         List<ProductMapping> mapping = productMappingService.getMapping(r.getProductId(), ThirdPartyCloudEnum.ALEXA);
-        Map<String, AlexaProductMapping> alexaMapping = super.convertToMapByProductId(mapping);
+        Map<String, AlexaProductMapping> alexaMapping = ConvertUtils.convertToMapByProductId(mapping);
         List<AlexaDeviceProperty> properties = new ArrayList<>();
         mapping.forEach(mp -> {
             properties.addAll(this.statusConvert(alexaMapping.get(mp.getProductId()), r.getDeviceFunctions()));

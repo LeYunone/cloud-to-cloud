@@ -1,11 +1,13 @@
 package com.leyunone.cloudcloud.handler.action;
 
 import com.alibaba.fastjson.JSONObject;
+import com.leyunone.cloudcloud.bean.CurrentRequestContext;
 import com.leyunone.cloudcloud.bean.third.baidu.BaiduHeader;
 import com.leyunone.cloudcloud.bean.third.baidu.BaiduStandardRequest;
 import com.leyunone.cloudcloud.bean.info.AccessTokenInfo;
 import com.leyunone.cloudcloud.bean.info.ActionContext;
 import com.leyunone.cloudcloud.bean.info.ThirdPartyCloudConfigInfo;
+import com.leyunone.cloudcloud.constant.VoiceConstants;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.handler.factory.CloudCloudHandlerFactory;
 import com.leyunone.cloudcloud.handler.protocol.AbstractStrategyProtocolHandler;
@@ -47,6 +49,16 @@ public class BaiduCloudHandler extends AbstractCloudCloudHandler {
         AbstractStrategyProtocolHandler cloudProtocolHandler = factory.getStrategy(namespace, AbstractStrategyProtocolHandler.class);
         Object action = cloudProtocolHandler.action(request, new ActionContext(accessToken, config));
         return JSONObject.toJSONString(action);
+    }
+
+    @Override
+    protected void checkSceneData(String request) {
+        try {
+            BaiduStandardRequest baiduStandardRequest = JSONObject.parseObject(request, BaiduStandardRequest.class);
+            String sceneId = baiduStandardRequest.getPayload().getAppliance().getAdditionalApplianceDetails().get(VoiceConstants.SCENES_KEY);
+            CurrentRequestContext.setSceneData(sceneId);
+        } catch (Exception e) {
+        }
     }
 
     @Override

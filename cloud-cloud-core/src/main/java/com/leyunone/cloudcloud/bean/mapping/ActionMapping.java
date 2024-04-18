@@ -30,6 +30,8 @@ public class ActionMapping {
      */
     private String thirdSignCode;
 
+    private String productId;
+
     /**
      * 三方行为标识
      */
@@ -56,15 +58,4 @@ public class ActionMapping {
 
     private ConvertFunctionEnum convertFunction;
 
-    @Mapper
-    public interface Converter {
-
-        Converter INSTANCE  = Mappers.getMapper(Converter.class);
-
-        @Mappings({
-                @Mapping(target = "valueMapping",ignore = true),
-        })
-        ActionMapping convert(ActionMappingDO actionMappingDO);
-
-    }
 }

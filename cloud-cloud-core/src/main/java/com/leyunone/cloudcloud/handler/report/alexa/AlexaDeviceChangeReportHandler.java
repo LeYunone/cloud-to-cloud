@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.leyunone.cloudcloud.bean.enums.ReportTypeEnum;
+import com.leyunone.cloudcloud.bean.info.ThirdPartyCloudConfigInfo;
 import com.leyunone.cloudcloud.bean.third.alexa.AlexaDeviceProperty;
 import com.leyunone.cloudcloud.bean.third.alexa.AlexaDeviceReportBean;
 import com.leyunone.cloudcloud.bean.info.DeviceCloudInfo;
@@ -12,7 +13,8 @@ import com.leyunone.cloudcloud.dao.entity.ThirdPartyClientDO;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.handler.convert.alexa.AlexaStatusConverter;
 import com.leyunone.cloudcloud.handler.factory.DeviceReportHandlerFactory;
-import com.leyunone.cloudcloud.mangaer.AlexaTokenManager;
+import com.leyunone.cloudcloud.mangaer.impl.AlexaTokenManager;
+import com.leyunone.cloudcloud.service.ThirdPartyConfigService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
@@ -36,15 +38,15 @@ public class AlexaDeviceChangeReportHandler extends AbstractAlexaDeviceMessageRe
     private final AlexaStatusConverter alexaStatusConverter;
     private final AlexaTokenManager alexaTokenManager;
 
-    public AlexaDeviceChangeReportHandler(DeviceReportHandlerFactory factory, RestTemplate restTemplate,AlexaStatusConverter alexaStatusConverter, AlexaTokenManager alexaTokenManager) {
-        super(factory,restTemplate);
+    public AlexaDeviceChangeReportHandler(DeviceReportHandlerFactory factory, RestTemplate restTemplate, ThirdPartyConfigService thirdPartyConfigService, AlexaStatusConverter alexaStatusConverter, AlexaTokenManager alexaTokenManager) {
+        super(factory, restTemplate, thirdPartyConfigService);
         this.alexaStatusConverter = alexaStatusConverter;
         this.alexaTokenManager = alexaTokenManager;
     }
 
 
     @Override
-    public void handler2(DeviceInfo deviceInfo, ThirdPartyClientDO config, DeviceCloudInfo.ThirdMapping thirdMapping) {
+    public void handler2(DeviceInfo deviceInfo, ThirdPartyCloudConfigInfo config, DeviceCloudInfo.ThirdMapping thirdMapping) {
         List<AlexaDeviceProperty> properties = alexaStatusConverter.convert(deviceInfo);
         String tokenOrRefresh = alexaTokenManager.getTokenOrRefresh(thirdMapping.getUserId());
         if(StrUtil.isBlank(tokenOrRefresh)) return;

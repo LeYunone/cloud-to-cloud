@@ -1,5 +1,6 @@
 package com.leyunone.cloudcloud.dao.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -7,6 +8,9 @@ import com.leyunone.cloudcloud.dao.DeviceMappingRepository;
 import com.leyunone.cloudcloud.dao.base.repository.BaseRepository;
 import com.leyunone.cloudcloud.dao.entity.DeviceMappingDO;
 import com.leyunone.cloudcloud.dao.mapper.DeviceMappingMapper;
+import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
+import org.apache.ibatis.session.ExecutorType;
+import org.apache.ibatis.session.SqlSession;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -22,33 +26,33 @@ import java.util.List;
  * @date 2024-02-14
  */
 @Repository
-public class DeviceMappingRepositoryImpl extends BaseRepository<DeviceMappingMapper, DeviceMappingDO,Object> implements DeviceMappingRepository {
+public class DeviceMappingRepositoryImpl extends BaseRepository<DeviceMappingMapper, DeviceMappingDO, Object> implements DeviceMappingRepository {
 
     @Resource
-    DeviceMappingMapper deviceMappingMapper;
+    private DeviceMappingMapper deviceMappingMapper;
 
     @Autowired
-    SqlSessionTemplate sqlSessionTemplate;
+    private SqlSessionTemplate sqlSessionTemplate;
 
     @Override
-    public List<DeviceMappingDO> selectByDeviceIds(List<Long> deviceIds) {
+    public List<DeviceMappingDO> selectByDeviceIds(List<String> deviceIds) {
         return deviceMappingMapper.selectList(new LambdaQueryWrapper<DeviceMappingDO>()
                 .in(DeviceMappingDO::getDeviceId, deviceIds)
         );
     }
 
     @Override
-    public List<DeviceMappingDO> selectByUserIdAndCloudId(String userId, String cloud) {
+    public List<DeviceMappingDO> selectByUserIdAndCloudId(String userId, ThirdPartyCloudEnum cloud) {
         return deviceMappingMapper.selectList(new LambdaQueryWrapper<DeviceMappingDO>().eq(DeviceMappingDO::getUserId, userId).eq(DeviceMappingDO::getThirdPartyCloud, cloud));
     }
 
     @Override
-    public void deleteByCloudAndUserId(String userId, String cloud) {
+    public void deleteByCloudAndUserId(String userId, ThirdPartyCloudEnum cloud) {
         deviceMappingMapper.delete(new LambdaQueryWrapper<DeviceMappingDO>().eq(DeviceMappingDO::getUserId, userId).eq(DeviceMappingDO::getThirdPartyCloud, cloud));
     }
 
     @Override
-    public List<DeviceMappingDO> selectByDeviceId(Long deviceId) {
+    public List<DeviceMappingDO> selectByDeviceId(String deviceId) {
         return deviceMappingMapper.selectList(new LambdaQueryWrapper<DeviceMappingDO>()
                 .eq(DeviceMappingDO::getDeviceId, deviceId)
         );
@@ -65,28 +69,21 @@ public class DeviceMappingRepositoryImpl extends BaseRepository<DeviceMappingMap
 
     @Override
     public void updateBatchByDeviceIdAndCloudAndUserId(List<DeviceMappingDO> dos) {
-//        if (CollectionUtils.isEmpty(dos)) {
-//            return;
-//        }
-//        SqlSession sqlSession = sqlSessionTemplate.getSqlSessionFactory().openSession(ExecutorType.BATCH, false);
-//        try {
-//            dos.forEach(d -> {
-//                d.update(new LambdaQueryWrapper<DeviceMappingDO>()
-//                        .eq(DeviceMappingDO::getThirdPartyCloud, d.getThirdPartyCloud())
-//                        .eq(DeviceMappingDO::getUserId, d.getUserId())
-//                        .eq(DeviceMappingDO::getDeviceId, d.getDeviceId())
-//                );
-//            });
-//        } finally {
-//            sqlSession.commit();
-//            sqlSession.clearCache();
-//            sqlSession.close();
-//        }
-    }
-
-
-    private String getCacheKeyForDeviceIdAndThirdCloud(Long deviceId, String thirdCloud) {
-        return String.join("_", this.getClass().getName(), deviceId.toString(), thirdCloud);
+        if (CollectionUtil.isEmpty(dos)) {
+            return;
+        }
+        SqlSession sqlSession = sqlSessionTemplate.getSqlSessionFactory().openSession(ExecutorType.BATCH, false);
+        try {
+            dos.forEach(d -> {
+                this.baseMapper.update(d, new UpdateWrapper<DeviceMappingDO>().lambda().eq(DeviceMappingDO::getThirdPartyCloud, d.getThirdPartyCloud())
+                        .eq(DeviceMappingDO::getUserId, d.getUserId())
+                        .eq(DeviceMappingDO::getDeviceId, d.getDeviceId()));
+            });
+        } finally {
+            sqlSession.commit();
+            sqlSession.clearCache();
+            sqlSession.close();
+        }
     }
 
 }

@@ -26,9 +26,18 @@ public class ProductActionVO {
     
     private Set<String> signCodes = new HashSet<>();
     
-    private Set<String> thirdSignCodes = new HashSet<>();
+    private List<Mapping> thirdCodes = new ArrayList<>();
 
     private LocalDateTime updateTime;
 
     private ThirdPartyCloudEnum thirdPartyCloud;
+    
+    @Getter
+    @Setter
+    public static class Mapping{
+        
+        private String thirdSignCode;
+        
+        private String thirdActionCode;
+    }
 }

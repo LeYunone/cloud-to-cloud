@@ -2,8 +2,10 @@ package com.leyunone.cloudcloud.service.report;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.leyunone.cloudcloud.bean.enums.ReportTypeEnum;
 import com.leyunone.cloudcloud.bean.info.DeviceCloudInfo;
 import com.leyunone.cloudcloud.dao.UserAuthorizeRepository;
 import com.leyunone.cloudcloud.dao.entity.UserAuthorizeDO;
@@ -12,13 +14,15 @@ import com.leyunone.cloudcloud.handler.factory.DeviceReportHandlerFactory;
 import com.leyunone.cloudcloud.handler.factory.DeviceSyncHandlerFactory;
 import com.leyunone.cloudcloud.handler.report.AbstractDeviceMessageReportHandler;
 import com.leyunone.cloudcloud.handler.report.AbstractSyncInfoReportHandler;
-import com.leyunone.cloudcloud.mangaer.DeviceManager;
+import com.leyunone.cloudcloud.mangaer.DeviceRelationManager;
 import com.leyunone.cloudcloud.util.CollectionFunctionUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.stream.Collectors;
 
 
@@ -33,16 +37,18 @@ import java.util.stream.Collectors;
 @Service
 public class ReportMessageReportShuntHandlerImpl implements ReportMessageReportShuntHandler {
 
-    private final DeviceManager deviceManager;
     private final DeviceReportHandlerFactory deviceReportHandlerFactory;
     private final UserAuthorizeRepository userAuthorizeRepository;
     private final DeviceSyncHandlerFactory deviceSyncHandlerFactory;
+    private final DeviceRelationManager deviceRelationManager;
+    @Autowired
+    private ThreadPoolExecutor reportThread;
 
-    public ReportMessageReportShuntHandlerImpl(DeviceManager deviceManager, DeviceReportHandlerFactory deviceReportHandlerFactory, UserAuthorizeRepository userAuthorizeRepository, DeviceSyncHandlerFactory deviceSyncHandlerFactory) {
-        this.deviceManager = deviceManager;
+    public ReportMessageReportShuntHandlerImpl(DeviceReportHandlerFactory deviceReportHandlerFactory, UserAuthorizeRepository userAuthorizeRepository, DeviceSyncHandlerFactory deviceSyncHandlerFactory, DeviceRelationManager deviceRelationManager) {
         this.deviceReportHandlerFactory = deviceReportHandlerFactory;
         this.userAuthorizeRepository = userAuthorizeRepository;
         this.deviceSyncHandlerFactory = deviceSyncHandlerFactory;
+        this.deviceRelationManager = deviceRelationManager;
     }
 
     /**
@@ -53,24 +59,34 @@ public class ReportMessageReportShuntHandlerImpl implements ReportMessageReportS
     @Override
     public void messageShunt(String msg) {
         JSONObject jsonObject = JSON.parseObject(msg);
-        Long deviceId = jsonObject.getLong("deviceId");
-        DeviceCloudInfo deviceEntity = deviceManager.selectByDeviceId(deviceId);
+        String deviceId = jsonObject.getString("deviceId");
+        DeviceCloudInfo deviceEntity = deviceRelationManager.selectByDeviceId(deviceId);
         if (null == deviceEntity) {
             log.trace("device is not exist id:{}", deviceId);
             return;
         }
         List<DeviceCloudInfo.ThirdMapping> mapping = deviceEntity.getMapping();
         mapping.forEach(m -> {
+            //用戶
             try {
                 ThirdPartyCloudEnum cloud = m.getThirdPartyCloud();
-                AbstractDeviceMessageReportHandler template = deviceReportHandlerFactory.getStrategy(cloud.name(), AbstractDeviceMessageReportHandler.class);
-                if (null != template) {
-                    template.handler(msg, m);
+                for (ReportTypeEnum type : ReportTypeEnum.values()) {
+//                    reportThread.execute(() -> {
+                        AbstractDeviceMessageReportHandler template = deviceReportHandlerFactory.getStrategy(this.generateKey(cloud, type), AbstractDeviceMessageReportHandler.class);
+                        if (null != template) {
+                            template.handler(msg, m);
+                        }
+//                    });
                 }
             } catch (Exception e) {
+                e.printStackTrace();
                 log.warn("device message report third cloud error, third cloud" + m.getThirdPartyCloud() + "msg" + msg + ",ex", e);
             }
         });
+    }
+
+    private String generateKey(ThirdPartyCloudEnum cloudEnum, ReportTypeEnum typeEnum) {
+        return StrUtil.join("_", typeEnum, cloudEnum);
     }
 
     @Override
@@ -85,5 +101,5 @@ public class ReportMessageReportShuntHandlerImpl implements ReportMessageReportS
             }
         });
     }
-    
+
 }

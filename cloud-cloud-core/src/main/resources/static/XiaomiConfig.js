@@ -88,9 +88,12 @@ Vue.component("xiaomi-config", {
                                 <span v-html="scope.row.thirdProductIds.join('<br>')"></span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="thirdSignCodes" label="产商云属性code">
+                        <el-table-column prop="thirdCodes" label="产商云属性">
                             <template slot-scope="scope">
-                                <span v-html="scope.row.thirdSignCodes.join('<br>')"></span>
+                                <span v-for="(item, index) in scope.row.thirdCodes" :key="index">
+                                    <span>sid: {{ item.thirdActionCode }}   |  pid: {{ item.thirdSignCode }}</span>
+                                    <br>
+                                </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="thirdPartyCloud" label="产商云"></el-table-column>
@@ -166,7 +169,7 @@ Vue.component("xiaomi-config", {
                     </el-table-column>
                     <el-table-column label="开发云属性标识" prop="functionId">
                         <template slot-scope="scope">
-                            <el-input v-model="scope.row.functionId"></el-input>
+                            <el-input type="number" v-model="scope.row.functionId"></el-input>
                         </template>
                     </el-table-column>
                     <el-table-column label="小米sid" prop="thirdSignCode">
@@ -242,7 +245,7 @@ Vue.component("xiaomi-config", {
                 <el-input v-model="productFunctionEditPanelFrom.signCode"></el-input>
               </el-form-item>
               <el-form-item label="开发云属性标识">
-                <el-input v-model="productFunctionEditPanelFrom.functionId"></el-input>
+                <el-input type="number" v-model="productFunctionEditPanelFrom.functionId"></el-input>
               </el-form-item>
               <el-form-item >
                 <template #label>
@@ -466,6 +469,8 @@ Vue.component("xiaomi-config", {
             })
         },
         clientConfigSave() {
+            this.clientConfig.thirdPartyCloud = 'XIAOMI';
+
             axios({
                 url: "/cloudToCloud/api/web/config/saveClientConfig",
                 method: "POST",

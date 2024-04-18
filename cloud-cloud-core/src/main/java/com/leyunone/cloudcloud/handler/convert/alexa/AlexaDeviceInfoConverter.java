@@ -8,6 +8,7 @@ import com.leyunone.cloudcloud.bean.mapping.AlexaProductMapping;
 import com.leyunone.cloudcloud.bean.mapping.ProductMapping;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.service.mapping.ProductMappingService;
+import com.leyunone.cloudcloud.util.ConvertUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -34,7 +35,7 @@ public class AlexaDeviceInfoConverter extends AbstractAlexaDataConverterTemplate
     public List<AlexaDevice> convert(List<DeviceInfo> r) {
         List<String> pids = r.stream().map(DeviceInfo::getProductId).collect(Collectors.toList());
         List<ProductMapping> mapping = productMappingService.getMapping(pids, ThirdPartyCloudEnum.ALEXA);
-        Map<String, AlexaProductMapping> productMappings = super.convertToMapByProductId(mapping);
+        Map<String, AlexaProductMapping> productMappings = ConvertUtils.convertToMapByProductId(mapping);
 
         return r.stream().filter(deviceInfo -> productMappings.containsKey(deviceInfo.getProductId())).map(deviceInfo -> {
             String pid = deviceInfo.getProductId();

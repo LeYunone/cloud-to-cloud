@@ -50,7 +50,7 @@ public abstract class AbstractStrategyMappingAssembler<R extends ProductMapping>
                 .stream()
                 .map(fm -> {
                     StatusMapping statusMapping = new StatusMapping();
-                    BeanUtil.copyProperties(fm, statusMapping);
+                    BeanUtil.copyProperties(fm, statusMapping, "valueMapping");
                     String valueMapping = fm.getValueMapping();
                     Map<String, Object> map = new HashMap<>();
                     if (StrUtil.isNotBlank(valueMapping)) {
@@ -110,7 +110,8 @@ public abstract class AbstractStrategyMappingAssembler<R extends ProductMapping>
         return actionMappingDos
                 .stream()
                 .map(am -> {
-                    ActionMapping actionMapping = ActionMapping.Converter.INSTANCE.convert(am);
+                    ActionMapping actionMapping = new ActionMapping();
+                    BeanUtil.copyProperties(am,actionMapping,"valueMapping");
                     String valueMapping = am.getValueMapping();
                     if (!org.springframework.util.StringUtils.isEmpty(valueMapping)) {
                         JSONObject jsonObject = JSON.parseObject(valueMapping);

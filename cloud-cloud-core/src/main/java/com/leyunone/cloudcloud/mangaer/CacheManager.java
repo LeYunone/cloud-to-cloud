@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public interface CacheManager {
 
@@ -18,6 +19,9 @@ public interface CacheManager {
      */
     <T> T getData(String key, Class<T> clazz);
 
+    <T> Optional<T> getData(String key,Long time, TimeUnit unit,Supplier<T> supplier);
+
+    <T> Optional<T> get(String key);
 
     /**
      * 添加string类型
@@ -58,5 +62,8 @@ public interface CacheManager {
                                   Function<T, String> generateKey);
 
     boolean deleteData(String key);
+
+    boolean deleteData(List<Object> key);
+
 
 }

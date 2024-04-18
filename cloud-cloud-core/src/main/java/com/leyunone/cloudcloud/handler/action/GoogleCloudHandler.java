@@ -59,6 +59,11 @@ public class GoogleCloudHandler extends AbstractCloudCloudHandler {
     }
 
     @Override
+    protected void checkSceneData(String request) {
+        
+    }
+
+    @Override
     protected String getKey() {
         return ThirdPartyCloudEnum.GOOGLE.name();
     }

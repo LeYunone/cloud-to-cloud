@@ -2,6 +2,7 @@ package com.leyunone.cloudcloud.bean.enums;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.leyunone.cloudcloud.bean.mapping.ActionMapping;
 
 import java.util.HashMap;
@@ -62,8 +63,9 @@ public enum ActionValueEnum {
         }
         if (actionMapping.isValueOf()) {
             //转化
-            value = actionMapping.getValueMapping().get(String.valueOf(value)).toString();
+            value = actionMapping.getValueMapping().get(String.valueOf(value));
         }
+
         return value;
     }
 
@@ -75,12 +77,8 @@ public enum ActionValueEnum {
      */
     Object getValue(Object value, ActionMapping actionMapping) {
         if (ObjectUtil.isNull(value)) {
-            //直接的指令打过来时
-            Map<String, Object> valueMapping = actionMapping.getValueMapping();
-            if (CollectionUtil.isNotEmpty(valueMapping)) {
-                Object first = CollectionUtil.getFirst(valueMapping.values());
-                value = first.toString();
-            } else {
+            value = "";
+            if (StringUtils.isNotBlank(actionMapping.getDefaultValue())) {
                 value = actionMapping.getDefaultValue();
             }
         }

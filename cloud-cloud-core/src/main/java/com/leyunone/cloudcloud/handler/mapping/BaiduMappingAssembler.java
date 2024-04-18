@@ -11,6 +11,7 @@ import com.leyunone.cloudcloud.dao.entity.ProductTypeMappingDO;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.handler.factory.MappingAssemblerFactory;
 import com.leyunone.cloudcloud.mangaer.CacheManager;
+import com.leyunone.cloudcloud.util.CollectionFunctionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -41,15 +42,10 @@ public class BaiduMappingAssembler extends AbstractStrategyMappingAssembler<Baid
     protected List<BaiduProductMapping> dataGet(List<String> pids) {
         List<FunctionMappingDO> functionMappingDos = functionMappingRepository.selectByProductIdsAndThirdPartyCloud(pids, getKey());
         List<ProductTypeMappingDO> productTypeMappingDOS = productTypeMappingRepository.selectByProductIds(pids, getKey());
-        Map<String, List<FunctionMappingDO>> statusMappingMap = functionMappingDos
-                .stream()
-                .collect(Collectors.groupingBy(FunctionMappingDO::getProductId, Collectors.toList()));
-        Map<String, List<ProductTypeMappingDO>> productMappingMap = productTypeMappingDOS.stream().collect(Collectors.groupingBy(ProductTypeMappingDO::getThirdProductId));
-
         List<ActionMappingDO> actionMappingDos = actionMappingRepository.selectByProductIds(pids, getKey());
-        Map<String, List<ActionMappingDO>> actionMappingMap = actionMappingDos
-                .stream()
-                .collect(Collectors.groupingBy(ActionMappingDO::getProductId, Collectors.toList()));
+        Map<String, List<FunctionMappingDO>> statusMappingMap = CollectionFunctionUtils.groupTo(functionMappingDos, FunctionMappingDO::getProductId);
+        Map<String, List<ProductTypeMappingDO>> productMappingMap = CollectionFunctionUtils.groupTo(productTypeMappingDOS, ProductTypeMappingDO::getProductId);
+        Map<String, List<ActionMappingDO>> actionMappingMap = CollectionFunctionUtils.groupTo(actionMappingDos, ActionMappingDO::getProductId);
         return pids
                 .stream()
                 .map(p -> {

@@ -88,9 +88,12 @@ Vue.component("baidu-config", {
                                 <span v-html="scope.row.thirdProductIds.join('<br>')"></span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="thirdSignCodes" label="产商云属性code">
+                        <el-table-column prop="thirdCodes" label="产商云code">
                             <template slot-scope="scope">
-                                <span v-html="scope.row.thirdSignCodes.join('<br>')"></span>
+                                <span v-for="(item, index) in scope.row.thirdCodes" :key="index">
+                                        <span>{{ item.thirdSignCode }}</span>
+                                        <br>
+                                </span>    
                             </template>
                         </el-table-column>
                         <el-table-column prop="thirdPartyCloud" label="产商云"></el-table-column>
@@ -136,9 +139,12 @@ Vue.component("baidu-config", {
                                 <span v-html="scope.row.signCodes.join('<br>')"></span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="thirdSignCodes" label="产商云属性">
+                        <el-table-column prop="thirdCodes" label="产商云属性">
                             <template slot-scope="scope">
-                                <span v-html="scope.row.thirdSignCodes.join('<br>')"></span>
+                                <span v-for="(item, index) in scope.row.thirdCodes" :key="index">
+                                    <span>请求名: {{ item.thirdActionCode }}  |  属性: {{ item.thirdSignCode }}</span>
+                                    <br>
+                                </span>
                             </template>
                         </el-table-column>
                         <el-table-column prop="thirdPartyCloud" label="产商云"></el-table-column>
@@ -216,7 +222,7 @@ Vue.component("baidu-config", {
                     </el-table-column>
                     <el-table-column label="开发云属性标识" prop="functionId">
                         <template slot-scope="scope">
-                            <el-input v-model="scope.row.functionId"></el-input>
+                            <el-input type="number" v-model="scope.row.functionId"></el-input>
                         </template>
                     </el-table-column>
                     <el-table-column label="产商云属性" prop="thirdSignCode">
@@ -287,7 +293,7 @@ Vue.component("baidu-config", {
                 <el-input v-model="productFunctionEditPanelFrom.signCode"></el-input>
               </el-form-item>
               <el-form-item label="开发云属性标识">
-                <el-input v-model="productFunctionEditPanelFrom.functionId"></el-input>
+                <el-input type="number" v-model="productFunctionEditPanelFrom.functionId"></el-input>
               </el-form-item>
               <el-form-item >
                 <template #label>
@@ -349,7 +355,7 @@ Vue.component("baidu-config", {
                     </el-table-column>
                     <el-table-column label="开发云属性标识" prop="functionId">
                         <template slot-scope="scope">
-                            <el-input v-model="scope.row.functionId"></el-input>
+                            <el-input type="number" v-model="scope.row.functionId"></el-input>
                         </template>
                     </el-table-column>
                     <el-table-column prop="thirdSignCode">
@@ -358,12 +364,15 @@ Vue.component("baidu-config", {
                               <i class="el-icon-question">产商云属性</i>
                             </el-tooltip>
                         </template>
-                        
                         <template slot-scope="scope">
                             <el-input v-model="scope.row.thirdSignCode" :rows="2" type="textarea" placeholder="支持 JSON 字符串" @blur="formatJson(scope.row)"></el-input>
                         </template>
                     </el-table-column>
-                    
+                    <el-table-column label="产商云属性行为" prop="thirdActionCode">
+                        <template slot-scope="scope">
+                            <el-input v-model="scope.row.thirdActionCode"></el-input>
+                        </template>
+                    </el-table-column>
                     <el-table-column label="是否值映射" prop="valueOf">
                         <template slot-scope="scope">
                             <el-switch
@@ -428,7 +437,7 @@ Vue.component("baidu-config", {
                 <el-input v-model="productActionEditPanelFrom.signCode"></el-input>
               </el-form-item>
               <el-form-item label="开发云属性标识">
-                <el-input v-model="productActionEditPanelFrom.functionId"></el-input>
+                <el-input type="number" v-model="productActionEditPanelFrom.functionId"></el-input>
               </el-form-item>
               <el-form-item >
                 <template #label>
@@ -437,6 +446,9 @@ Vue.component("baidu-config", {
                             </el-tooltip>
                 </template>
                 <el-input type="textarea"  @blur="formatJson(productActionEditPanelFrom.thirdSignCode)" :autosize="{ minRows: 2, maxRows: 10}" v-model="productActionEditPanelFrom.thirdSignCode"></el-input>
+              </el-form-item>
+              <el-form-item label="产商云属性行为">
+                <el-input type="number" v-model="productFunctionEditPanelFrom.thirdActionCode"></el-input>
               </el-form-item>
               <el-form-item label="是否值映射">
                 <el-switch
@@ -600,6 +612,7 @@ Vue.component("baidu-config", {
                 signCode: "",
                 functionId: "",
                 thirdSignCode: "",
+                thirdActionCode:"",
                 valueOf: false,
                 valueMapping: [],
                 convertFunction: "",
@@ -615,8 +628,8 @@ Vue.component("baidu-config", {
             cb(results);
         },
         createFilter(queryString) {
-            return (restaurant) => {
-                return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+            return (thirdPids) => {
+                return (thirdPids.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
             };
         },
         changeStatus(e, row) {
@@ -652,6 +665,7 @@ Vue.component("baidu-config", {
             })
         },
         clientConfigSave() {
+            this.clientConfig.thirdPartyCloud = "BAIDU"
             axios({
                 url: "/cloudToCloud/api/web/config/saveClientConfig",
                 method: "POST",

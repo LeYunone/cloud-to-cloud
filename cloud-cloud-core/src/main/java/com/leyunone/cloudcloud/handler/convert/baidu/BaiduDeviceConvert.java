@@ -1,20 +1,19 @@
 package com.leyunone.cloudcloud.handler.convert.baidu;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.leyunone.cloudcloud.bean.third.baidu.BaiduAttributes;
 import com.leyunone.cloudcloud.bean.third.baidu.BaiduDevice;
 import com.leyunone.cloudcloud.bean.info.DeviceInfo;
 import com.leyunone.cloudcloud.bean.mapping.ActionMapping;
 import com.leyunone.cloudcloud.bean.mapping.BaiduProductMapping;
 import com.leyunone.cloudcloud.bean.mapping.ProductMapping;
+import com.leyunone.cloudcloud.constant.VoiceConstants;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.service.mapping.ProductMappingService;
 import com.leyunone.cloudcloud.util.ConvertUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -33,15 +32,26 @@ public class BaiduDeviceConvert extends AbstractBaiduDataConverterTemplate<List<
 
     @Override
     public List<BaiduDevice> convert(List<DeviceInfo> r) {
+        if(CollectionUtil.isEmpty(r)) return new ArrayList<>();
         List<String> productIds = r
                 .stream()
                 .map(DeviceInfo::getProductId).distinct().collect(Collectors.toList());
         List<ProductMapping> productMappings = productMappingService.getMapping(productIds, ThirdPartyCloudEnum.BAIDU);
-        Map<String, BaiduProductMapping> baiduProductMappingMap = ConvertUtils.convertToMapByProductId(productMappings, BaiduProductMapping.class);
+        Map<String, BaiduProductMapping> baiduProductMappingMap = ConvertUtils.convertToMapByProductId(productMappings);
         return r
                 .stream()
                 .map(d -> {
                     String productId = d.getProductId();
+                    Map<String, String> additionalApplianceDetails = new HashMap<>(16);
+                    if(d.isScene()) {
+                        productId = VoiceConstants.SCENE_PRODUCT_ID;
+                        /**
+                         * 场景设备
+                         * 百度特指 productId = scene
+                         */
+                        additionalApplianceDetails.put(VoiceConstants.SCENES_KEY,String.valueOf(d.getDeviceId()));
+                    }
+                    additionalApplianceDetails.put("productId", d.getProductId());
                     BaiduProductMapping baiduProductMapping = baiduProductMappingMap.get(productId);
                     if (null == baiduProductMapping) {
                         return null;
@@ -49,8 +59,7 @@ public class BaiduDeviceConvert extends AbstractBaiduDataConverterTemplate<List<
                     List<ActionMapping> actionMappings = baiduProductMapping.getActionMappings();
                     List<String> actions = actionMappings.stream().map(ActionMapping::getThirdActionCode).filter(Objects::nonNull).distinct().collect(Collectors.toList());
                     List<BaiduAttributes> baiduAttributes = convert(baiduProductMapping.getStatusMappings(), d.getDeviceFunctions());
-                    Map<String, String> additionalApplianceDetails = new HashMap<>(16);
-                    additionalApplianceDetails.put("productId", d.getProductId());
+
                     return BaiduDevice.builder()
                             .applianceId(d.getDeviceId())
                             .applianceTypes(baiduProductMapping.getThirdProductIds())

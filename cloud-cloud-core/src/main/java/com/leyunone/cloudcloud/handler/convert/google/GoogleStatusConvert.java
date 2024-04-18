@@ -12,6 +12,7 @@ import com.leyunone.cloudcloud.bean.mapping.StatusMapping;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.service.mapping.ProductMappingService;
 import com.leyunone.cloudcloud.util.CollectionFunctionUtils;
+import com.leyunone.cloudcloud.util.ConvertUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ public class GoogleStatusConvert extends AbstractGoogleDataConverterTemplate<Map
         Map<String, Map<String,Object>> result = new HashMap<>();
         List<ProductMapping> mappings = productMappingService.getMapping(r.stream()
                 .map(DeviceInfo::getProductId).collect(Collectors.toList()), ThirdPartyCloudEnum.GOOGLE);
-        Map<String, GoogleProductMapping> productMappingMap = super.convertToMapByProductId(mappings);
+        Map<String, GoogleProductMapping> productMappingMap = ConvertUtils.convertToMapByProductId(mappings);
         r.forEach(d -> {
             GoogleProductMapping googleProductMapping = productMappingMap.get(d.getProductId());
             if (ObjectUtil.isNull(googleProductMapping)) return;

@@ -22,10 +22,19 @@ public class ProductFunctionVO {
 
     private List<String> thirdProductIds = new ArrayList<>();
 
-    private List<String> thirdSignCodes = new ArrayList<>();
-
+    private List<Mapping> thirdCodes = new ArrayList<>();
+    
     private LocalDateTime updateTime;
 
     private ThirdPartyCloudEnum thirdPartyCloud;
     
+    
+    @Getter
+    @Setter
+    public static class Mapping{
+        
+        private String thirdSignCode;
+        
+        private String thirdActionCode;
+    }
 }

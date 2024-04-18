@@ -1,4 +1,4 @@
-package com.leyunone.cloudcloud.mangaer;
+package com.leyunone.cloudcloud.mangaer.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
@@ -13,6 +13,7 @@ import com.leyunone.cloudcloud.bean.info.ThirdPartyCloudConfigInfo;
 import com.leyunone.cloudcloud.dao.UserAuthorizeRepository;
 import com.leyunone.cloudcloud.dao.entity.UserAuthorizeDO;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
+import com.leyunone.cloudcloud.mangaer.CacheManager;
 import com.leyunone.cloudcloud.service.ThirdPartyConfigService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

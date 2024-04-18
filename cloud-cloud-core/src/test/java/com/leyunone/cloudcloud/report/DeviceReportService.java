@@ -29,6 +29,10 @@ public class DeviceReportService {
 
     @Test
     public void baidu() throws IOException {
+    }
+
+    @Test
+    public void baidu2() {
         DeviceMessageDTO deviceMessageDTO = new DeviceMessageDTO();
         List<DeviceFunctionDTO> functions = new ArrayList<>();
         DeviceFunctionDTO function = new DeviceFunctionDTO();
@@ -37,14 +41,8 @@ public class DeviceReportService {
         function.setValue("0");
         functions.add(function);
         deviceMessageDTO.setDeviceFunctions(functions);
-        deviceMessageDTO.setDeviceId("123");
-        deviceMessageDTO.setProductId("c71c5181d04148669e12a319f4946b7e");
-        deviceMessageConsumer.receiveDeviceLog(JSONObject.toJSONString(deviceMessageDTO), null, null);
-    }
-
-    @Test
-    public void baidu2() {
-        String message = "{\"functions\":[{\"functionId\":2,\"functionType\":1,\"signCode\":\"switch\",\"value\":\"1\"}],\"productId\":\"50ddd58d44f54f4681bffd0f237d240f\",\"messageId\":7150038410685976577,\"sessionId\":7150038410685976576,\"thenMode\":1,\"type\":\"SHADOW_FUNCTION\",\"deviceId\":412110622948462592}";
-        deviceMessageReportShuntHandler.messageShunt(message);
+        deviceMessageDTO.setDeviceId("1");
+        deviceMessageDTO.setProductId("6b920ee9b5cd430693cdfe683f8936bb");
+        deviceMessageReportShuntHandler.messageShunt(JSONObject.toJSONString(deviceMessageDTO));
     }
 }

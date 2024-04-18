@@ -39,12 +39,10 @@ public class GoogleTest {
         ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
 
         ThirdPartyCloudConfigInfo thirdPartyCloudConfigEntity = new ThirdPartyCloudConfigInfo();
-        thirdPartyCloudConfigEntity.setClientId("0043da-4f3a-9eef");
-        thirdPartyCloudConfigEntity.setSkillId("d1fd03c3-c1b3-3f8a-c6e9-5deb0b8d9ddb");
+        thirdPartyCloudConfigEntity.setClientId("testgoogle");
         thirdPartyCloudConfigEntity.setReportUrl("api.amazonalexa.com");
         thirdPartyCloudConfigEntity.setThirdPartyCloud(ThirdPartyCloudEnum.ALEXA);
         thirdPartyCloudConfigEntity.setMainUrl("http://127.0.0.1:8401/smarthome/api/test");
-        thirdPartyCloudConfigEntity.setClientSecret("d7e37547ba92");
         actionContext = new ActionContext(accessTokenEntity, thirdPartyCloudConfigEntity);
     }
 

@@ -1,8 +1,6 @@
 package com.leyunone.cloudcloud.dao.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.leyunone.cloudcloud.bean.enums.ConvertFunctionEnum;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
@@ -82,9 +80,9 @@ public class FunctionMappingDO {
     private String legalValue;
     
     private ConvertFunctionEnum convertFunction;
-    
+    @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
-    
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     private String capabilityConfigId;

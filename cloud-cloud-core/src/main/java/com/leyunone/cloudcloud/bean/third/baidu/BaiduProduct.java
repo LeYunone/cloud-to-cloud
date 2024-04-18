@@ -16,7 +16,7 @@ import java.util.List;
 @Setter
 public class BaiduProduct {
     
-    private Long deviceId;
+    private String deviceId;
 
     /**
      * 产品id

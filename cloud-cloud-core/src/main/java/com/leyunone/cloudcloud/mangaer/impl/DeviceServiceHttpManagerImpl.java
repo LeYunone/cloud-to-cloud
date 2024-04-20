@@ -57,7 +57,7 @@ public class DeviceServiceHttpManagerImpl implements DeviceServiceHttpManager {
     private List<DeviceInfo> getTestDevice() {
         return CollectionUtil.newArrayList(
                 DeviceInfo.builder()
-                        .productId("6b920ee9b5cd430693cdfe683f8936bb")
+                        .productId("开关产品id")
                         .deviceId("1")
                         .deviceName("开关设备")
                         .groupName("卧室")
@@ -68,14 +68,59 @@ public class DeviceServiceHttpManagerImpl implements DeviceServiceHttpManager {
                                 .functionId(1)
                                 .value("0")
                                 .build()))
-                        .build()
+                        .build(),
+                DeviceInfo.builder()
+                        .productId("RGB产品id")
+                        .deviceId("2")
+                        .deviceName("RGB灯")
+                        .groupName("卧室")
+                        .online(true)
+                        .deviceFunctions(CollectionUtil.newArrayList(DeviceFunctionDTO.builder()
+                                        .signCode("switch")
+                                        .deviceId("2")
+                                        .value("1")
+                                        .functionId(1)
+                                        .build(),
+                                DeviceFunctionDTO.builder()
+                                        .deviceId("2")
+                                        .signCode("rgb")
+                                        .value("{\"r\":255,\"g\":255,\"b\":255}")
+                                        .functionId(2)
+                                        .build()
+                        ))
+                        .build(),
+                DeviceInfo.builder()
+                        .productId("HVAC产品id")
+                        .deviceName("HVAC设备")
+                        .groupName("客厅")
+                        .online(true)
+                        .deviceId("3")
+                        .deviceFunctions(CollectionUtil.newArrayList(DeviceFunctionDTO.builder()
+                                        .signCode("switch")
+                                        .deviceId("3")
+                                        .value("1")
+                                        .build(), DeviceFunctionDTO.builder()
+                                        .signCode("wind_speed")
+                                        .deviceId("3")
+                                        .value("1")
+                                        .build(), DeviceFunctionDTO.builder()
+                                        .signCode("control_mode")
+                                        .deviceId("3")
+                                        .value("1")
+                                        .build(), DeviceFunctionDTO.builder()
+                                        .signCode("set_temperature")
+                                        .deviceId("3")
+                                        .value("24")
+                                        .build())
+                                        )
+                .build()
         );
     }
 
     @Override
     public DeviceInfo getDeviceStatusByDeviceId(String userId, String deviceId, ThirdPartyCloudConfigInfo cloudConfig) {
         logger.debug("{}平台：查询设备状态.请求路由：{}，通过设备id：{}，", cloudConfig.getThirdPartyCloud(), cloudConfig.getMainUrl() + SdkConstants.QUERY_INTERFACE, deviceId);
-        return CollectionUtil.getFirst(this.getDevicesStatusByDeviceIds(userId, CollectionUtil.newArrayList(deviceId), cloudConfig));
+        return this.getDevicesStatusByDeviceIds(userId, CollectionUtil.newArrayList(deviceId), cloudConfig).get(2);
     }
 
     @Override

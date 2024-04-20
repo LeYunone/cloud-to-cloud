@@ -82,6 +82,7 @@ public class GoogleControlConvert extends AbstractGoogleDataConverterTemplate<Li
                         codeCommand.setSignCode(actionMapping.getSignCode());
                         codeCommand.setValue(String.valueOf(value));
                         codeCommand.setFunctionId(actionMapping.getFunctionId());
+                        codeCommand.setProductId(actionMapping.getProductId());
                         codeCommand.setOperation(actionMapping.getOperation());
                         codeCommand.setDeviceId(d.getId());
                         functionCodeCommands.add(codeCommand);

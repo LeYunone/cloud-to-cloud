@@ -97,7 +97,8 @@ Vue.component("alexa-config", {
                         <el-table-column prop="thirdCodes" label="产商云属性">
                             <template slot-scope="scope">
                                 <span v-for="(item, index) in scope.row.thirdCodes" :key="index">
-                                    <span>接口: {{ item.thirdActionCode }}   |  属性名: {{ item.thirdSignCode }}</span>
+                                    <span>接口: {{ item.thirdActionCode }}</span>
+                                    <span>属性名: {{ item.thirdSignCode }}</span>
                                     <br>
                                 </span>
                             </template>
@@ -145,10 +146,11 @@ Vue.component("alexa-config", {
                                 <span v-html="scope.row.signCodes.join('<br>')"></span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="thirdCodes" label="产商云属性">
+                        <el-table-column prop="thirdCodes" label="产商控制值">
                             <template slot-scope="scope">
                                 <span v-for="(item, index) in scope.row.thirdCodes" :key="index">
-                                        <span>{{ item.thirdSignCode }}</span>
+                                        <span>控制名：{{item.thirdActionCode}}</span>
+                                        <span>控制属性：{{ item.thirdSignCode }}</span>
                                         <br>
                                 </span>    
                             </template>
@@ -176,8 +178,10 @@ Vue.component("alexa-config", {
                 <el-tab-pane name="productCapability" label="三方属性产商配置">
                     <el-button type="primary" @click="productCapabilityDialog = true">新增</el-button>
                     <el-table :data="productCapabilityTable" style="height:500px;overflow: auto;width: 100%">
-                        <el-table-column prop="capabilityConfiguration" label="技能配置"></el-table-column>
-                        <el-table-column prop="instanceName" label="字段名"></el-table-column>
+                        <el-table-column prop="capabilitySemantics" label="capabilityResources"></el-table-column>
+                        <el-table-column prop="capabilityConfiguration" label="configuration"></el-table-column>
+                        <el-table-column prop="instanceName" label="instance"></el-table-column>
+                        <el-table-column prop="valueSemantics" label="semantics"></el-table-column>
                         <el-table-column prop="description" label="备注"></el-table-column>
                         <el-table-column prop="updateTime" label="更新时间"></el-table-column>
                         <el-table-column label="操作">
@@ -258,12 +262,12 @@ Vue.component("alexa-config", {
                             <el-input type="number" v-model="scope.row.functionId"></el-input>
                         </template>
                     </el-table-column>
-                    <el-table-column label="产商云属性" prop="thirdSignCode">
+                    <el-table-column label="Alexa属性名" prop="thirdSignCode">
                         <template slot-scope="scope">
                             <el-input v-model="scope.row.thirdSignCode"></el-input>
                         </template>
                     </el-table-column>
-                    <el-table-column label="产商云属性行为" prop="thirdActionCode">
+                    <el-table-column label="Alexa接口名" prop="thirdActionCode">
                         <template slot-scope="scope">
                             <el-input v-model="scope.row.thirdActionCode"></el-input>
                         </template>
@@ -349,12 +353,12 @@ Vue.component("alexa-config", {
                 <template #label>
                    <el-tooltip class="item" effect="dark" content='控制协议产商云请求入参的解析结构，比如：{"brightness": 65} 说明brightness为控制指令的key，
   {"color":{"spectrumRGB":16711935}} 说明取color中的spectrumRGB'>
-                              <i class="el-icon-question">产商云属性</i>
+                              <i class="el-icon-question">Alexa属性名</i>
                             </el-tooltip>
                 </template>
                 <el-input type="textarea"  @input="formatJson(productFunctionEditPanelFrom.thirdSignCode)" :autosize="{ minRows: 2, maxRows: 10}" v-model="productFunctionEditPanelFrom.thirdSignCode"></el-input>
               </el-form-item>
-              <el-form-item label="产商云属性行为">
+              <el-form-item label="Alexa接口名">
                  <el-input v-model="productFunctionEditPanelFrom.thirdActionCode"></el-input>
               </el-form-item>
               <el-form-item label="是否值映射">
@@ -424,12 +428,17 @@ Vue.component("alexa-config", {
                     <el-table-column prop="thirdSignCode">
                         <template slot="header" slot-scope="scope">
                             <el-tooltip class="item" effect="dark" content='控制协议产商云请求入参的解析结构，比如：{"brightness": 65} 说明brightness为控制指令的key，\n  {"color":{"spectrumRGB":16711935}} 说明取color中的spectrumRGB'>
-                              <i class="el-icon-question">产商云属性</i>
+                              <i class="el-icon-question">Alexa控制属性值</i>
                             </el-tooltip>
                         </template>
                         
                         <template slot-scope="scope">
                             <el-input v-model="scope.row.thirdSignCode" :rows="2" type="textarea" placeholder="支持 JSON 字符串" @blur="formatJson(scope.row)"></el-input>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="控制名" prop="thirdActionCode">
+                        <template slot-scope="scope">
+                            <el-input v-model="scope.row.thirdActionCode"></el-input>
                         </template>
                     </el-table-column>
                     <el-table-column label="是否值映射" prop="valueOf">
@@ -501,10 +510,13 @@ Vue.component("alexa-config", {
               <el-form-item >
                 <template #label>
                    <el-tooltip class="item" effect="dark" content='控制协议产商云请求入参的解析结构，比如：{"brightness": 65} 说明brightness为控制指令的key，\n  {"color":{"spectrumRGB":16711935}} 说明取color中的spectrumRGB'>
-                              <i class="el-icon-question">产商云属性</i>
+                              <i class="el-icon-question">Alexa控制属性值</i>
                             </el-tooltip>
                 </template>
                 <el-input type="textarea"  @blur="formatJson(productActionEditPanelFrom.thirdSignCode)" :autosize="{ minRows: 2, maxRows: 10}" v-model="productActionEditPanelFrom.thirdSignCode"></el-input>
+              </el-form-item>
+               <el-form-item label="控制名">
+                <el-input v-model="productActionEditPanelFrom.thirdActionCode"></el-input>
               </el-form-item>
               <el-form-item label="是否值映射">
                 <el-switch
@@ -543,14 +555,20 @@ Vue.component("alexa-config", {
         </el-dialog>
         
         <!--产商属性配置表-->
-        <el-dialog title="产商属性配置表" :visible.sync="productCapabilityDialog" width="60%"
+        <el-dialog title="产商属性配置表" :visible.sync="productCapabilityDialog" width="50%"
            :before-close="productCapabilityCancel">
-            <el-form ref="productCapability" :model="productCapability" label-width="120px">
-                <el-form-item label="技能配置">
-                        <el-input type="textarea" :autosize="{ minRows: 1, maxRows: 5}"  v-model="productCapability.capabilityConfiguration"></el-input>
+            <el-form ref="productCapability" :model="productCapability" label-width="140px">
+                <el-form-item label="capabilityResources">
+                        <el-input type="textarea" :autosize="{ minRows: 3, maxRows: 5}"  v-model="productCapability.capabilitySemantics"></el-input>
                 </el-form-item>
-                <el-form-item label="字段名">
+                <el-form-item label="configuration">
+                        <el-input type="textarea" :autosize="{ minRows: 3, maxRows: 5}"  v-model="productCapability.capabilityConfiguration"></el-input>
+                </el-form-item>
+                <el-form-item label="instance">
                         <el-input v-model="productCapability.instanceName"></el-input>
+                </el-form-item>
+                <el-form-item label="semantics">
+                        <el-input type="textarea" :autosize="{ minRows: 3, maxRows: 5}" v-model="productCapability.valueSemantics"></el-input>
                 </el-form-item>
                 <el-form-item label="描述">
                         <el-input type="textarea" :autosize="{ minRows: 1, maxRows: 5}"  v-model="productCapability.description"></el-input>
@@ -694,6 +712,7 @@ Vue.component("alexa-config", {
                 signCode: "",
                 functionId: "",
                 thirdSignCode: "",
+                thirdActionCode:"",
                 valueOf: false,
                 valueMapping: [],
                 convertFunction: "",
@@ -952,8 +971,8 @@ Vue.component("alexa-config", {
                 data: {
                     productId: this.productFunction.productId,
                     thirdPartyCloud: "ALEXA",
-                    productFunctions: this.productFunction.productFunctions.map(item =>{
-                        const { capabilityConfigIds, ...rest } = item;
+                    productFunctions: this.productFunction.productFunctions.map(item => {
+                        const {capabilityConfigIds, ...rest} = item;
                         return rest;
                     }),
                 },
@@ -1167,9 +1186,7 @@ Vue.component("alexa-config", {
                 },
             }).then((res) => {
                 var result = res.data.result;
-                this.productCapability.productId = result.productId;
-                this.productCapability.thirdPartyCloud = result.thirdPartyCloud;
-                this.productCapability.productCapabilitys = result.productCapabilitys;
+                this.productCapability = result;
                 this.isProductCapabilityUpdate = true;
                 this.productCapabilityDialog = true;
             });

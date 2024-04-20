@@ -31,7 +31,7 @@ public class ProductCapabilityServiceImpl implements ProductCapabilityService {
     public ProductCapabilityVO getDetail(Integer id) {
         DeviceCapabilityDO deviceCapabilityDO = deviceCapabilityRepository.selectById(id);
         ProductCapabilityVO productCapabilityVO = new ProductCapabilityVO();
-        BeanUtil.copyProperties(productCapabilityVO, deviceCapabilityDO);
+        BeanUtil.copyProperties(deviceCapabilityDO, productCapabilityVO);
         return productCapabilityVO;
     }
 
@@ -57,9 +57,9 @@ public class ProductCapabilityServiceImpl implements ProductCapabilityService {
     }
 
     @Override
-    public List<String> thirdCapability(ThirdPartyCloudEnum thirdPartyCloud) {
+    public List<DeviceCapabilityDO> thirdCapability(ThirdPartyCloudEnum thirdPartyCloud) {
         List<DeviceCapabilityDO> deviceCapabilityDOS = deviceCapabilityRepository.selectByCloud(thirdPartyCloud);
-        return deviceCapabilityDOS.stream().map(DeviceCapabilityDO::getDescription).collect(Collectors.toList());
+        return deviceCapabilityDOS;
     }
 
     @Override

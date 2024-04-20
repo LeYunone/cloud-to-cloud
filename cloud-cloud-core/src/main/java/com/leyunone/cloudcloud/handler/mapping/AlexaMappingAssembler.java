@@ -162,7 +162,7 @@ public class AlexaMappingAssembler extends AbstractStrategyMappingAssembler<Alex
                 .stream()
                 .map(fm -> {
                     AlexaFunctionMapping alexaFunctionMapping = new AlexaFunctionMapping();
-                    BeanUtil.copyProperties(fm, alexaFunctionMapping);
+                    BeanUtil.copyProperties(fm, alexaFunctionMapping,"valueMapping");
                     String valueMapping = fm.getValueMapping();
                     Map<String, Object> map = new HashMap<>();
                     if (StrUtil.isNotBlank(valueMapping)) {

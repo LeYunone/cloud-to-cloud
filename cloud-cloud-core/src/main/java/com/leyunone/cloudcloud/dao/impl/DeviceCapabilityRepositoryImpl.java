@@ -25,11 +25,11 @@ import java.util.concurrent.TimeUnit;
  * @date 2024-02-14
  */
 @Repository
-public class DeviceCapabilityRepositoryImpl extends BaseRepository<DeviceCapabilityMapper, DeviceCapabilityDO,Object> implements DeviceCapabilityRepository {
+public class DeviceCapabilityRepositoryImpl extends BaseRepository<DeviceCapabilityMapper, DeviceCapabilityDO, Object> implements DeviceCapabilityRepository {
 
     private final CacheManager cacheManager;
 
-    public static final String CAPABILITY_KEY = "CAPABILITY_CONFIG";
+    public static final String CAPABILITY_KEY = "CAPABILITY_CONFIG_";
 
     public DeviceCapabilityRepositoryImpl(CacheManager cacheManager) {
         this.cacheManager = cacheManager;
@@ -37,13 +37,13 @@ public class DeviceCapabilityRepositoryImpl extends BaseRepository<DeviceCapabil
 
     @Override
     public List<DeviceCapabilityDO> selectByCloud(ThirdPartyCloudEnum cloud) {
-        String data = cacheManager.getData(CAPABILITY_KEY, String.class);
+        String data = cacheManager.getData(CAPABILITY_KEY + cloud, String.class);
         if (StrUtil.isBlank(data)) {
             LambdaQueryWrapper<DeviceCapabilityDO> lambda = new QueryWrapper<DeviceCapabilityDO>().lambda();
-            lambda.eq(DeviceCapabilityDO::getThirdPartyCloud, cloud.name());
+            lambda.eq(DeviceCapabilityDO::getThirdPartyCloud, cloud);
             List<DeviceCapabilityDO> deviceCapabilityDOS = this.baseMapper.selectList(lambda);
             data = JSONObject.toJSONString(deviceCapabilityDOS);
-            cacheManager.addData(CAPABILITY_KEY, data, 15L, TimeUnit.MINUTES);
+            cacheManager.addData(CAPABILITY_KEY + cloud, data, 15L, TimeUnit.MINUTES);
         }
         return JSONObject.parseArray(data, DeviceCapabilityDO.class);
     }

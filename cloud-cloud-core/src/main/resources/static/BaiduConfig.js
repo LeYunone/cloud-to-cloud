@@ -142,7 +142,8 @@ Vue.component("baidu-config", {
                         <el-table-column prop="thirdCodes" label="产商云属性">
                             <template slot-scope="scope">
                                 <span v-for="(item, index) in scope.row.thirdCodes" :key="index">
-                                    <span>请求名: {{ item.thirdActionCode }}  |  属性: {{ item.thirdSignCode }}</span>
+                                    <span>技能名: {{ item.thirdActionCode }}</span>
+                                    <span>属性: {{ item.thirdSignCode }}</span>
                                     <br>
                                 </span>
                             </template>
@@ -361,14 +362,14 @@ Vue.component("baidu-config", {
                     <el-table-column prop="thirdSignCode">
                         <template slot="header" slot-scope="scope">
                             <el-tooltip class="item" effect="dark" content='控制协议产商云请求入参的解析结构，比如：{"brightness": 65} 说明brightness为控制指令的key，\n  {"color":{"spectrumRGB":16711935}} 说明取color中的spectrumRGB'>
-                              <i class="el-icon-question">产商云属性</i>
+                              <i class="el-icon-question">控制值</i>
                             </el-tooltip>
                         </template>
                         <template slot-scope="scope">
                             <el-input v-model="scope.row.thirdSignCode" :rows="2" type="textarea" placeholder="支持 JSON 字符串" @blur="formatJson(scope.row)"></el-input>
                         </template>
                     </el-table-column>
-                    <el-table-column label="产商云属性行为" prop="thirdActionCode">
+                    <el-table-column label="控制技能" prop="thirdActionCode">
                         <template slot-scope="scope">
                             <el-input v-model="scope.row.thirdActionCode"></el-input>
                         </template>
@@ -442,12 +443,12 @@ Vue.component("baidu-config", {
               <el-form-item >
                 <template #label>
                    <el-tooltip class="item" effect="dark" content='控制协议产商云请求入参的解析结构，比如：{"brightness": 65} 说明brightness为控制指令的key，\n  {"color":{"spectrumRGB":16711935}} 说明取color中的spectrumRGB'>
-                              <i class="el-icon-question">产商云属性</i>
+                              <i class="el-icon-question">控制值</i>
                             </el-tooltip>
                 </template>
                 <el-input type="textarea"  @blur="formatJson(productActionEditPanelFrom.thirdSignCode)" :autosize="{ minRows: 2, maxRows: 10}" v-model="productActionEditPanelFrom.thirdSignCode"></el-input>
               </el-form-item>
-              <el-form-item label="产商云属性行为">
+              <el-form-item label="控制技能">
                 <el-input type="number" v-model="productFunctionEditPanelFrom.thirdActionCode"></el-input>
               </el-form-item>
               <el-form-item label="是否值映射">

@@ -5,6 +5,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -31,7 +32,7 @@ public class CurrentRequestContext {
         if(StringUtils.isBlank(value)) return;
         Set<String> ids = sceneData.get();
         if (CollectionUtil.isEmpty(ids)) {
-            ids = new HashSet<>();
+            ids = new LinkedHashSet<>();
         }
         ids.add(value);
         sceneData.set(ids);
@@ -39,7 +40,12 @@ public class CurrentRequestContext {
 
     public static void setSceneData(Set<String> value) {
         if (CollectionUtil.isEmpty(value)) return;
-        sceneData.set(value);
+        Set<String> values = sceneData.get();
+        if (CollectionUtil.isEmpty(values)) {
+            values = new LinkedHashSet<>();
+        }
+        values.addAll(value);
+        sceneData.set(values);
     }
 
 

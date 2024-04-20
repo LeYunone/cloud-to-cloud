@@ -2,6 +2,7 @@ package com.leyunone.cloudcloud.web.service;
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.leyunone.cloudcloud.dao.entity.DeviceCapabilityDO;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.web.bean.dto.ProductCapabilityDTO;
 import com.leyunone.cloudcloud.web.bean.query.ProductTypeQuery;
@@ -23,7 +24,7 @@ public interface ProductCapabilityService {
 
     void save(ProductCapabilityDTO dto);
 
-    List<String> thirdCapability(ThirdPartyCloudEnum thirdPartyCloud);
+    List<DeviceCapabilityDO> thirdCapability(ThirdPartyCloudEnum thirdPartyCloud);
 
     void delete(ProductCapabilityDTO dto);
 }

@@ -2,6 +2,7 @@ package com.leyunone.cloudcloud.web.controller;
 
 import com.leyunone.cloudcloud.bean.DataResponse;
 import com.leyunone.cloudcloud.bean.enums.ConvertFunctionEnum;
+import com.leyunone.cloudcloud.dao.entity.DeviceCapabilityDO;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.web.bean.dto.ThirdClientConfigDTO;
 import com.leyunone.cloudcloud.web.bean.vo.ThirdClientConfigVO;
@@ -35,7 +36,7 @@ public class ConfigController {
 
     @GetMapping("/capability")
     public DataResponse<?> getCapability(ThirdPartyCloudEnum cloud) {
-        List<String> capabilities = productCapabilityService.thirdCapability(cloud);
+        List<DeviceCapabilityDO> capabilities = productCapabilityService.thirdCapability(cloud);
         return DataResponse.of(capabilities);
     }
 

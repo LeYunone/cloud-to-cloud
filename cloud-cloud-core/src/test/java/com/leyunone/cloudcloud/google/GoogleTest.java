@@ -4,7 +4,9 @@ import com.alibaba.fastjson.parser.ParserConfig;
 import com.leyunone.cloudcloud.bean.info.AccessTokenInfo;
 import com.leyunone.cloudcloud.bean.info.ActionContext;
 import com.leyunone.cloudcloud.bean.info.ThirdPartyCloudConfigInfo;
+import com.leyunone.cloudcloud.bean.third.google.GoogleControlResponse;
 import com.leyunone.cloudcloud.bean.third.google.GoogleDiscoveryResponse;
+import com.leyunone.cloudcloud.bean.third.google.GoogleQueryResponse;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.handler.protocol.google.GoogleControlHandler;
 import com.leyunone.cloudcloud.handler.protocol.google.GoogleDiscoveryHandler;
@@ -62,9 +64,82 @@ public class GoogleTest {
 
     @Test
     public void control() {
+        String request = "{\n" +
+                "  \"requestId\": \"ff36a3cc-ec34-11e6-b1a0-64510650abcf\",\n" +
+                "  \"inputs\": [\n" +
+                "    {\n" +
+                "      \"intent\": \"action.devices.EXECUTE\",\n" +
+                "      \"payload\": {\n" +
+                "        \"commands\": [\n" +
+                "          {\n" +
+                "            \"devices\": [\n" +
+                "              {\n" +
+                "                \"id\": \"1\",\n" +
+                "                \"customData\": {\n" +
+                "                  \"productId\": \"开关产品id\",\n" +
+                "                  \"barValue\": true,\n" +
+                "                  \"bazValue\": \"sheepdip\"\n" +
+                "                }\n" +
+                "              },\n" +
+                "              {\n" +
+                "                \"id\": \"2\",\n" +
+                "                \"customData\": {\n" +
+                "                  \"productId\": \"RGB产品id\",\n" +
+                "                  \"barValue\": false,\n" +
+                "                  \"bazValue\": \"moarsheep\"\n" +
+                "                }\n" +
+                "              }\n" +
+                "            ],\n" +
+                "            \"execution\": [\n" +
+                "              {\n" +
+                "                \"command\": \"action.devices.commands.OnOff\",\n" +
+                "                \"params\": {\n" +
+                "                  \"on\": true\n" +
+                "                }\n" +
+                "              }\n" +
+                "            ]\n" +
+                "          }\n" +
+                "        ]\n" +
+                "      }\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}";
+        GoogleControlResponse action = googleControlHandler.action(request, actionContext);
+        System.out.println(action);
     }
 
     @Test
-    public void stateReport() {
+    public void query() {
+        
+        String request = "{\n" +
+                "  \"requestId\": \"ff36a3cc-ec34-11e6-b1a0-64510650abcf\",\n" +
+                "  \"inputs\": [\n" +
+                "    {\n" +
+                "      \"intent\": \"action.devices.QUERY\",\n" +
+                "      \"payload\": {\n" +
+                "        \"devices\": [\n" +
+                "          {\n" +
+                "            \"id\": \"1\",\n" +
+                "            \"customData\": {\n" +
+                "              \"productId\": \"开关产品id\",\n" +
+                "              \"barValue\": true,\n" +
+                "              \"bazValue\": \"foo\"\n" +
+                "            }\n" +
+                "          },\n" +
+                "          {\n" +
+                "            \"id\": \"2\",\n" +
+                "            \"customData\": {\n" +
+                "              \"productId\": \"RGB产品id\",\n" +
+                "              \"barValue\": false,\n" +
+                "              \"bazValue\": \"bar\"\n" +
+                "            }\n" +
+                "          }\n" +
+                "        ]\n" +
+                "      }\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}";
+        GoogleQueryResponse action = googleQueryHandler.action(request, actionContext);
+        System.out.println(action);
     }
 }

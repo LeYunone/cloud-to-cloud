@@ -41,32 +41,32 @@ Vue.component("google-config", {
                     <el-button style="text-align: right;" type="primary" @click="productTypeDialog = true">新增</el-button>
                   </el-form-item>
                 </el-form>
-                    <el-table :data="productTypeTable" style="height:500px;overflow: auto;width: 100%">
-                        <el-table-column prop="productId" label="开发云产品ID"></el-table-column>
-                        <el-table-column prop="thirdProductIds" label="产商云产品ID">
-                            <template slot-scope="scope">
-                                <span v-html="scope.row.thirdProductIds.join('<br>')"></span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="thirdPartyCloud" label="产商云"></el-table-column>
-                        <el-table-column prop="updateTime" label="更新时间"></el-table-column>
-                        <el-table-column label="操作">
-                            <template slot-scope="scope">
-                                <el-button type="text" @click="productTypeEdit(scope.row.productId)">编辑</el-button>
-                                <el-button type="text" @click="productTypeDelete(scope.row.productId)">删除</el-button>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                    <el-pagination
-                            @size-change="productTypeHandleSizeChange"
-                            @current-change="productTypeHandleCurrentChange"
-                            :current-page="productTypeCurrentPage"
-                            :page-sizes="[10, 20, 30, 40]"
-                            :page-size="productTypePageSize"
-                            layout="total, sizes, prev, pager, next, jumper"
-                            :productTypeTotal="productTypeTotal"
-                    >
-                    </el-pagination>
+                <el-table :data="productTypeTable" style="height:500px;overflow: auto;width: 100%">
+                    <el-table-column prop="productId" label="开发云产品ID"></el-table-column>
+                    <el-table-column prop="thirdProductIds" label="产商云产品ID">
+                        <template slot-scope="scope">
+                            <span v-html="scope.row.thirdProductIds.join('<br>')"></span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="thirdPartyCloud" label="产商云"></el-table-column>
+                    <el-table-column prop="updateTime" label="更新时间"></el-table-column>
+                    <el-table-column label="操作">
+                        <template slot-scope="scope">
+                            <el-button type="text" @click="productTypeEdit(scope.row.productId)">编辑</el-button>
+                            <el-button type="text" @click="productTypeDelete(scope.row.productId)">删除</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <el-pagination
+                        @size-change="productTypeHandleSizeChange"
+                        @current-change="productTypeHandleCurrentChange"
+                        :current-page="productTypeCurrentPage"
+                        :page-sizes="[10, 20, 30, 40]"
+                        :page-size="productTypePageSize"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :productTypeTotal="productTypeTotal"
+                >
+                </el-pagination>
                 </el-tab-pane>
                 <el-tab-pane name="productFunction" label="属性映射">
                     <el-form :inline="true"  class="demo-form-inline">
@@ -88,7 +88,8 @@ Vue.component("google-config", {
                         <el-table-column prop="thirdCodes" label="产商云属性">
                             <template slot-scope="scope">
                                 <span v-for="(item, index) in scope.row.thirdCodes" :key="index">
-                                    <span>技能: {{ item.thirdActionCode }}   |  属性: {{ item.thirdSignCode }}</span>
+                                    <span>技能: {{ item.thirdActionCode }}</span>
+                                    <span>属性: {{ item.thirdSignCode }}</span>
                                     <br>
                                 </span>
                             </template>
@@ -139,7 +140,8 @@ Vue.component("google-config", {
                         <el-table-column prop="thirdCodes" label="产商云属性">
                             <template slot-scope="scope">
                                 <span v-for="(item, index) in scope.row.thirdCodes" :key="index">
-                                    <span>请求名: {{ item.thirdActionCode }}   |  属性: {{ item.thirdSignCode }}</span>
+                                    <span>控制名: {{ item.thirdActionCode }}</span>
+                                    <span>控制值: {{ item.thirdSignCode }}</span>
                                     <br>
                                 </span>
                             </template>
@@ -254,7 +256,7 @@ Vue.component("google-config", {
                             <el-input v-model="scope.row.thirdSignCode"></el-input>
                         </template>
                     </el-table-column>
-                    <el-table-column label="产商云属性行为" prop="thirdActionCode">
+                    <el-table-column label="产商技能名" prop="thirdActionCode">
                         <template slot-scope="scope">
                             <el-input v-model="scope.row.thirdActionCode"></el-input>
                         </template>
@@ -345,7 +347,7 @@ Vue.component("google-config", {
                 </template>
                 <el-input type="textarea"  @input="formatJson(productFunctionEditPanelFrom.thirdSignCode)" :autosize="{ minRows: 2, maxRows: 10}" v-model="productFunctionEditPanelFrom.thirdSignCode"></el-input>
               </el-form-item>
-              <el-form-item label="产商云属性行为">
+              <el-form-item label="技能名">
                  <el-input v-model="productFunctionEditPanelFrom.thirdActionCode"></el-input>
               </el-form-item>
               <el-form-item label="是否值映射">
@@ -415,15 +417,14 @@ Vue.component("google-config", {
                     <el-table-column prop="thirdSignCode">
                         <template slot="header" slot-scope="scope">
                             <el-tooltip class="item" effect="dark" content='控制协议产商云请求入参的解析结构，比如：{"brightness": 65} 说明brightness为控制指令的key，\n  {"color":{"spectrumRGB":16711935}} 说明取color中的spectrumRGB'>
-                              <i class="el-icon-question">产商云属性</i>
+                              <i class="el-icon-question">控制值属性</i>
                             </el-tooltip>
                         </template>
-                        
                         <template slot-scope="scope">
                             <el-input v-model="scope.row.thirdSignCode" :rows="2" type="textarea" placeholder="支持 JSON 字符串" @blur="formatJson(scope.row)"></el-input>
                         </template>
                     </el-table-column>
-                    <el-table-column label="产商云属性行为" prop="thirdActionCode">
+                    <el-table-column label="控制请求名" prop="thirdActionCode">
                         <template slot-scope="scope">
                             <el-input v-model="scope.row.thirdActionCode"></el-input>
                         </template>

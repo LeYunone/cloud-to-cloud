@@ -48,5 +48,7 @@ public class ProductCapabilityVO {
      */
     private String valueSemantics;
     
+    private String description;
+    
     private LocalDateTime updateTime;
 }

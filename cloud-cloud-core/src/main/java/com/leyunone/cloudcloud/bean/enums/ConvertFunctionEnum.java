@@ -97,8 +97,34 @@ public enum ConvertFunctionEnum {
         }
     },
 
+    STRING_TO_INT {
+        @Override
+        public Object convert(String value) {
+            int a;
+            try {
+                a = Integer.parseInt(value);
+            } catch (Exception e) {
+                a = (int) Double.parseDouble(value);
+            }
+            return a;
+        }
 
-    ;
+        @Override
+        public FunctionOrderEnum order() {
+            return FunctionOrderEnum.MAPPING_AFTER;
+        }
+    },
+    STRING_TO_DOUBLE {
+        @Override
+        public Object convert(String value) {
+            return Double.valueOf(value);
+        }
+
+        @Override
+        public FunctionOrderEnum order() {
+            return FunctionOrderEnum.MAPPING_AFTER;
+        }
+    };
 
     /**
      * @return

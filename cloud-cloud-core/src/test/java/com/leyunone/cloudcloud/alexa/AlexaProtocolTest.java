@@ -5,8 +5,7 @@ import com.alibaba.fastjson.parser.ParserConfig;
 import com.leyunone.cloudcloud.bean.info.AccessTokenInfo;
 import com.leyunone.cloudcloud.bean.info.ActionContext;
 import com.leyunone.cloudcloud.bean.info.ThirdPartyCloudConfigInfo;
-import com.leyunone.cloudcloud.bean.third.alexa.AlexaDiscoveryRequest;
-import com.leyunone.cloudcloud.bean.third.alexa.AlexaHeader;
+import com.leyunone.cloudcloud.bean.third.alexa.*;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.handler.protocol.alexa.AlexaDeviceControlHandler;
 import com.leyunone.cloudcloud.handler.protocol.alexa.AlexaDiscoveryHandler;
@@ -59,7 +58,8 @@ public class AlexaProtocolTest {
                 .build());
         alexaDiscoveryRequest.setDirective(directive);
         String request = JSONObject.toJSONString(alexaDiscoveryRequest);
-        alexaDiscoveryHandler.action(request, actionContext);
+        AlexaDiscoveryResponse action = alexaDiscoveryHandler.action(request, actionContext);
+        System.out.println(action);
     }
 
     @Test
@@ -80,7 +80,7 @@ public class AlexaProtocolTest {
                 "        \"token\": \"OAuth2.0 bearer token\"\n" +
                 "      },\n" +
                 "      \"endpointId\": \"465302590452797445\",\n" +
-                "      \"cookie\": {\"productId\":\"1287aeec6e14409d9067a87c9f696aaf\"}\n" +
+                "      \"cookie\": {\"productId\":\"HVAC产品id\"}\n" +
                 "    },\n" +
                 "    \"payload\": {}\n" +
                 "  }\n" +
@@ -102,7 +102,7 @@ public class AlexaProtocolTest {
                 "        \"token\": \"OAuth2.0 bearer token\"\n" +
                 "      },\n" +
                 "      \"endpointId\": \"465302590452797446\",\n" +
-                "      \"cookie\": {\"productId\":\"2082f17119c040558daf7d803d16468d\"}\n" +
+                "      \"cookie\": {\"productId\":\"RGB产品id\"}\n" +
                 "    },\n" +
                 "    \"payload\": {\n" +
                 "      \"color\": {\n" +
@@ -131,7 +131,7 @@ public class AlexaProtocolTest {
                 "        \"token\": \"OAuth2.0 bearer token\"\n" +
                 "      },\n" +
                 "      \"endpointId\": \"465302590452797453\",\n" +
-                "      \"cookie\": {\"productId\":\"b672cf21a8b04068bbfc6299033f0af9\"}\n" +
+                "      \"cookie\": {\"productId\":\"百叶帘产品id\"}\n" +
                 "    },\n" +
                 "    \"payload\": {\n" +
                 "      \"mode\": \"Position.Up\"\n" +
@@ -156,14 +156,15 @@ public class AlexaProtocolTest {
                 "        \"token\": \"OAuth2.0 bearer token\"\n" +
                 "      },\n" +
                 "      \"endpointId\": \"465302590452797456\",\n" +
-                "      \"cookie\": {\"productId\":\"a82da4dce33c4410beb5d2e2f8c8518c\"}\n" +
+                "      \"cookie\": {\"productId\":\"HVAC产品id\"}\n" +
                 "    },\n" +
                 "    \"payload\": {\n" +
                 "      \"rangeValue\": 3\n" +
                 "    }\n" +
                 "  }\n" +
                 "}";
-        alexaDeviceControlHandler.action(requestFan, actionContext);
+        AlexaControlResponse action = alexaDeviceControlHandler.action(requestFan, actionContext);
+        System.out.println(action);
     }
 
     @Test
@@ -183,12 +184,13 @@ public class AlexaProtocolTest {
                 "        \"token\": \"OAuth2.0 bearer token\"\n" +
                 "      },\n" +
                 "      \"endpointId\": \"465302590452797456\",\n" +
-                "      \"cookie\": {\"productId\":\"a82da4dce33c4410beb5d2e2f8c8518c\"}\n" +
+                "      \"cookie\": {\"productId\":\"HVAC产品id\"}\n" +
                 "    },\n" +
                 "    \"payload\": {}\n" +
                 "  }\n" +
                 "}";
-        alexaStateReportHandler.action(request, actionContext);
+        AlexaStateReportResponse action = alexaStateReportHandler.action(request, actionContext);
+        System.out.println(action);
     }
 
 }

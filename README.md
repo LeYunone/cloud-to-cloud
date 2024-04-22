@@ -4,6 +4,8 @@
 
 测试网站：
 
+配置说明：[https://leyunone.com/github-project/voice-cloud-cloud-config.html](https://leyunone.com/github-project/voice-cloud-cloud-config.html)
+
 - 注：学习测试以及使用请拉取 master 分支，release 是开发分支，如果有帮助到你，感谢不留情面的提Issues或pull吐槽
 - 开源不易，点个 star 鼓励一下吧！
 
@@ -116,10 +118,6 @@
 架构大体上使用策略+抽象工厂的模式搭建，通过上述的路线查看代码，只需要修改`DeviceServiceHttpManager`中实际云通讯部分的代码即可完成部署；
 
 **包括上报、同步、协议对接部分的所有开发云的响应参请以本项目中的DeviceInfo和DeviceFunctionDTO为准**
-
-## 数据配置
-
-见：
 
 ## 相关链接
 

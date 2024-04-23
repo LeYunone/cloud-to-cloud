@@ -528,7 +528,8 @@ Google的一个属性与技能一定是一对一的，因此有技能有一定�
 
 第三种：
 
-![image-20240320110122643](C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20240320110122643.png)
+![image-20240320110122643](https://leyunone-img.oss-cn-hangzhou.aliyuncs.com/image/2024-04-23/%24AO%7D7SPA%25E%40%28SF9G%25A%7E4S%5B8.png
+)
 
 识别[]号，将属性值设置为数组逻辑；
 

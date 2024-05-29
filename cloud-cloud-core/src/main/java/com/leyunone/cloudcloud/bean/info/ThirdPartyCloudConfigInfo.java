@@ -33,4 +33,8 @@ public class ThirdPartyCloudConfigInfo {
     private String thirdSecret;
 
     private String thirdClientId;
+
+    private String apiId;
+
+    private String accessTokenUrl;
 }

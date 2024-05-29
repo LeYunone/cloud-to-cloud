@@ -1,5 +1,6 @@
 package com.leyunone.cloudcloud.service;
 
+import com.leyunone.cloudcloud.bean.dto.RequestTokenDTO;
 import com.leyunone.cloudcloud.bean.vo.AccessTokenVO;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,4 +32,5 @@ public interface OAuthService {
 
     AccessTokenVO generateAccessTokenByRefreshToken(String refreshToken,String clientId);
 
+    void requestExchangeAccessToken(RequestTokenDTO requestToken);
 }

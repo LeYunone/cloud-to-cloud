@@ -22,8 +22,14 @@ public class RequestTokenDTO {
     private String code;
     
     private String apiId;
-    
-    private String userId;
-    
+
+    /**
+     * 第三方搜全绑定的业务id 比如用户id
+     */
+    private String businessId;
+
+    /**
+     * 我方授权的应用id
+     */
     private Integer appId;
 }

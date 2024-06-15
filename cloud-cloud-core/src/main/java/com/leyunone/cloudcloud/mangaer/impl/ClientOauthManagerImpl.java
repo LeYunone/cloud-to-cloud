@@ -52,7 +52,7 @@ public class ClientOauthManagerImpl implements ClientOauthManager {
         ClientAccessTokenModel accessTokenModel = JSONObject.parseObject(body, ClientAccessTokenModel.class);
 
         accessTokenModel.setClientId(requestTokenModel.getClientId());
-        accessTokenModel.setUserId(requestTokenModel.getUserId());
+        accessTokenModel.setBusinessId(requestTokenModel.getBusinessId());
         accessTokenModel.setAppId(requestTokenModel.getAppId());
         this.loadClientToken(accessTokenModel);
     }
@@ -87,13 +87,13 @@ public class ClientOauthManagerImpl implements ClientOauthManager {
 
     private void loadClientToken(ClientAccessTokenModel accessTokenModel) {
         //时间毫秒 存储对方的token
-        cacheManager.addData(generateClientAccessToken(accessTokenModel.getClientId(), accessTokenModel.getUserId(), accessTokenModel.getAppId()), accessTokenModel.getAccessToken(), accessTokenModel.getExpiresIn());
+        cacheManager.addData(generateClientAccessToken(accessTokenModel.getClientId(), accessTokenModel.getBusinessId(), accessTokenModel.getAppId()), accessTokenModel.getAccessToken(), accessTokenModel.getExpiresIn());
 
         /**
          * TODO 刷新令牌
          * 使用延时队列每X分钟投递一次对应客户端的刷新令牌
          */
-        cacheManager.addData(generateClientRefreshToken(accessTokenModel.getClientId(), accessTokenModel.getUserId(), accessTokenModel.getAppId()), accessTokenModel.getRefreshToken());
+        cacheManager.addData(generateClientRefreshToken(accessTokenModel.getClientId(), accessTokenModel.getBusinessId(), accessTokenModel.getAppId()), accessTokenModel.getRefreshToken());
     }
 
     private String generateClientAuthCode(String code) {

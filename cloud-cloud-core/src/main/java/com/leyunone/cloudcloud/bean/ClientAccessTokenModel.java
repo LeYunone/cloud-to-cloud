@@ -24,7 +24,7 @@ public class ClientAccessTokenModel {
     /**
      * 我方id
      */
-    private String userId;
+    private String businessId;
     
     private Integer appId;
 }

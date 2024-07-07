@@ -46,7 +46,7 @@ public class TmallMappingAssembler extends AbstractStrategyMappingAssembler<Tmal
     @Override
     protected List<TmallProductMapping> dataGet(List<String> pids) {
         List<FunctionMappingDO> functionMappingDos = functionMappingRepository.selectByProductIdsAndThirdPartyCloud(pids, ThirdPartyCloudEnum.TMALL.name());
-        Map<String, List<FunctionMappingDO>> functionMappingMap = functionMappingDos
+        Map<String, List<FunctionMappingDO>> statusMappingMap = functionMappingDos
                 .stream()
                 .collect(Collectors.groupingBy(FunctionMappingDO::getProductId, Collectors.toList()));
         List<ProductTypeMappingDO> productTypeMappingDOS = productTypeMappingRepository.selectByProductIds(pids, ThirdPartyCloudEnum.TMALL.name());
@@ -54,7 +54,7 @@ public class TmallMappingAssembler extends AbstractStrategyMappingAssembler<Tmal
         return pids
                 .stream()
                 .map(p -> {
-                    List<FunctionMappingDO> functionMappings = functionMappingMap.get(p);
+                    List<FunctionMappingDO> functionMappings = statusMappingMap.get(p);
                     if (CollectionUtils.isEmpty(functionMappings)) {
                         return null;
                     }

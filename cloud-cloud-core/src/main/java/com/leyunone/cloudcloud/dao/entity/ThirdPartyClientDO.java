@@ -1,5 +1,7 @@
 package com.leyunone.cloudcloud.dao.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
@@ -33,13 +35,13 @@ public class ThirdPartyClientDO {
 
     private String clientSecret;
 
-    private Long appId;
+//    private Long appId;
 
-    private Long tenantId;
+//    private Long tenantId;
 
-    private String appUuid;
+//    private String appUuid;
 
-    private String tenantUuid;
+//    private String tenantUuid;
 
     private String mainUrl;
 
@@ -49,16 +51,18 @@ public class ThirdPartyClientDO {
 
     private String additionalInformation;
 
-    private String redirectUri;
-
-    private String appSecret;
-
     private String reportUrl;
 
     private ThirdPartyCloudEnum thirdPartyCloud;
 
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
+    @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
+
+    private String thirdClientId;
+
+    private String thirdClientSecret;
 
 }

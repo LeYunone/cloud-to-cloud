@@ -1,8 +1,11 @@
 package com.leyunone.cloudcloud.dao;
 
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyunone.cloudcloud.dao.base.iservice.IBaseRepository;
 import com.leyunone.cloudcloud.dao.entity.ProductTypeMappingDO;
+import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
+import com.leyunone.cloudcloud.web.bean.query.ProductTypeQuery;
 
 import java.util.List;
 
@@ -16,4 +19,14 @@ import java.util.List;
 public interface ProductTypeMappingRepository extends IBaseRepository<ProductTypeMappingDO> {
 
     List<ProductTypeMappingDO> selectByProductIds(List<String> productIds,String cloud);
+
+    List<ProductTypeMappingDO> selectByProductId(String productIds,String cloud);
+
+    List<ProductTypeMappingDO> selectByCloud(String cloud);
+
+    Page<ProductTypeMappingDO> selectPage(ProductTypeQuery query);
+
+    Page<ProductTypeMappingDO> selectPageOrder(ProductTypeQuery query);
+
+    int deleteByProductId(String productId, ThirdPartyCloudEnum cloud);
 }

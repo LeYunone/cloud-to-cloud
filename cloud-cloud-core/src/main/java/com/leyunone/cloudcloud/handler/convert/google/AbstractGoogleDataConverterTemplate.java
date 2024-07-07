@@ -21,12 +21,4 @@ public abstract class AbstractGoogleDataConverterTemplate<R, P> extends Abstract
         super(productMappingService);
     }
 
-    protected Map<String, GoogleProductMapping> convertToMapByProductId(List<ProductMapping> productMappings) {
-        return productMappings
-                .stream()
-                .filter(p -> p instanceof GoogleProductMapping)
-                .map(p -> (GoogleProductMapping) p)
-                .collect(Collectors.toMap(ProductMapping::getProductId, v -> v, (v1, v2) -> v2));
-    }
-
 }

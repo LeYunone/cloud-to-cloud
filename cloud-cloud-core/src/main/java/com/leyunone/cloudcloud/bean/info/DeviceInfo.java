@@ -34,5 +34,10 @@ public class DeviceInfo {
     private boolean online;
     
     private String groupName;
+
+    /**
+     * 是否为场景设备
+     */
+    private boolean isScene;
     
 }

@@ -3,4 +3,11 @@
 <mapper namespace="com.leyunone.cloudcloud.dao.mapper.ProductTypeMappingMapper">
 
 
+    <select id="selectPageOrder" resultType="com.leyunone.cloudcloud.dao.entity.ProductTypeMappingDO">
+        SELECT product_id, update_time
+        FROM (SELECT product_id, MAX(update_time) AS update_time FROM `m_product_type_mapping`
+              WHERE third_party_cloud = #{con.thirdPartyCloud}
+              GROUP BY product_id) f
+        ORDER BY f.update_time desc
+    </select>
 </mapper>

@@ -3,8 +3,7 @@ package com.leyunone.cloudcloud.bean.mapping;
 import com.leyunone.cloudcloud.bean.enums.ConvertFunctionEnum;
 import com.leyunone.cloudcloud.dao.entity.ActionMappingDO;
 import com.leyunone.cloudcloud.enums.OperationEnum;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -21,9 +20,22 @@ import java.util.Map;
  */
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ActionMapping {
 
-    private String action;
+    /**
+     * 三方参数
+     */
+    private String thirdSignCode;
+
+    private String productId;
+
+    /**
+     * 三方行为标识
+     */
+    private String thirdActionCode;
 
     private Integer functionId;
 
@@ -34,7 +46,7 @@ public class ActionMapping {
      */
     private String defaultValue;
 
-    private Boolean valueOf;
+    private boolean valueOf;
 
     /**
      * 
@@ -46,17 +58,4 @@ public class ActionMapping {
 
     private ConvertFunctionEnum convertFunction;
 
-    @Mapper
-    public interface Converter {
-
-        Converter INSTANCE  = Mappers.getMapper(Converter.class);
-
-        @Mappings({
-                @Mapping(target = "valueMapping",ignore = true),
-                @Mapping(target = "action",source = "thirdPartyCode"),
-                @Mapping(target = "operation",ignore = true)
-        })
-        ActionMapping convert(ActionMappingDO actionMappingDO);
-
-    }
 }

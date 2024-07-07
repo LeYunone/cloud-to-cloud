@@ -16,8 +16,13 @@ public enum OperationEnum {
     SUM,
 
     /**
-     *
+     *  -
      */
-    DECREASE
+    DECREASE,
+
+    /**
+     *  + -
+     */
+    ADJUST
     ;
 }

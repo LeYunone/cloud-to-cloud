@@ -1,16 +1,14 @@
 package com.leyunone.cloudcloud.handler.convert.alexa;
 
 import cn.hutool.core.collection.CollectionUtil;
-import com.alibaba.fastjson.JSONObject;
-import com.leyunone.cloudcloud.bean.alexa.AlexaDevice;
-import com.leyunone.cloudcloud.bean.alexa.AlexaDeviceCapability;
+import com.leyunone.cloudcloud.bean.third.alexa.AlexaDevice;
+import com.leyunone.cloudcloud.bean.third.alexa.AlexaDeviceCapability;
 import com.leyunone.cloudcloud.bean.info.DeviceInfo;
 import com.leyunone.cloudcloud.bean.mapping.AlexaProductMapping;
 import com.leyunone.cloudcloud.bean.mapping.ProductMapping;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
-import com.leyunone.cloudcloud.handler.factory.ConvertHandlerFactory;
 import com.leyunone.cloudcloud.service.mapping.ProductMappingService;
-import com.leyunone.cloudcloud.util.CollectionFunctionUtils;
+import com.leyunone.cloudcloud.util.ConvertUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -37,22 +35,22 @@ public class AlexaDeviceInfoConverter extends AbstractAlexaDataConverterTemplate
     public List<AlexaDevice> convert(List<DeviceInfo> r) {
         List<String> pids = r.stream().map(DeviceInfo::getProductId).collect(Collectors.toList());
         List<ProductMapping> mapping = productMappingService.getMapping(pids, ThirdPartyCloudEnum.ALEXA);
-        Map<String, AlexaProductMapping> productMappings = super.convertToMapByProductId(mapping);
+        Map<String, AlexaProductMapping> productMappings = ConvertUtils.convertToMapByProductId(mapping);
 
-        return r.stream().filter(deviceShadowModel -> productMappings.containsKey(deviceShadowModel.getProductId())).map(deviceShadowModel -> {
-            String pid = deviceShadowModel.getProductId();
+        return r.stream().filter(deviceInfo -> productMappings.containsKey(deviceInfo.getProductId())).map(deviceInfo -> {
+            String pid = deviceInfo.getProductId();
             AlexaProductMapping productMapping = productMappings.get(pid);
 
             Map<String, String> additionalAttributes = new HashMap<>();
             AlexaDevice alexaDevice = new AlexaDevice();
-            alexaDevice.setEndpointId(String.valueOf(deviceShadowModel.getDeviceId()));
+            alexaDevice.setEndpointId(String.valueOf(deviceInfo.getDeviceId()));
             alexaDevice.setManufacturerName("DEV");
-            alexaDevice.setDescription("");
-            alexaDevice.setFriendlyName(deviceShadowModel.getDeviceName());
+            alexaDevice.setDescription("voice skill");
+            alexaDevice.setFriendlyName(deviceInfo.getDeviceName());
             alexaDevice.setAdditionalAttributes(additionalAttributes);
             alexaDevice.setDisplayCategories(productMapping.getThirdProductIds());
             Map<String, String> cookie = new HashMap<>();
-            cookie.put("productId", deviceShadowModel.getProductId());
+            cookie.put("productId", deviceInfo.getProductId());
             alexaDevice.setCookie(cookie);
 
             /**
@@ -69,6 +67,7 @@ public class AlexaDeviceInfoConverter extends AbstractAlexaDataConverterTemplate
                         .version("3")
                         .instance(capability.getInstance())
                         .capabilityResources(capability.getCapabilityResources())
+                        .semantics(capability.getSemantics())
                         .configuration(capability.getConfiguration())
                         .properties(AlexaDeviceCapability.Property
                                 .builder()

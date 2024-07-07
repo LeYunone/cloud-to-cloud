@@ -4,11 +4,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.leyunone.cloudcloud.bean.info.AccessTokenInfo;
 import com.leyunone.cloudcloud.bean.info.ActionContext;
 import com.leyunone.cloudcloud.bean.info.ThirdPartyCloudConfigInfo;
-import com.leyunone.cloudcloud.bean.tmall.TmallHeader;
-import com.leyunone.cloudcloud.bean.tmall.TmallStandardRequest;
+import com.leyunone.cloudcloud.bean.third.tmall.TmallHeader;
+import com.leyunone.cloudcloud.bean.third.tmall.TmallStandardRequest;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
-import com.leyunone.cloudcloud.handler.action.AbstractCloudCloudHandler;
 import com.leyunone.cloudcloud.handler.factory.CloudCloudHandlerFactory;
+import com.leyunone.cloudcloud.handler.protocol.AbstractStrategyProtocolHandler;
 import com.leyunone.cloudcloud.handler.protocol.CloudProtocolHandler;
 import com.leyunone.cloudcloud.mangaer.AccessTokenManager;
 import com.leyunone.cloudcloud.service.ThirdPartyConfigService;
@@ -24,11 +24,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class TmallCloudHandler extends AbstractCloudCloudHandler {
 
-    private final ThirdPartyConfigService thirdPartyConfigService;
 
     protected TmallCloudHandler(CloudCloudHandlerFactory factory, AccessTokenManager accessTokenManager, ThirdPartyConfigService thirdPartyConfigService) {
-        super(factory, accessTokenManager);
-        this.thirdPartyConfigService = thirdPartyConfigService;
+        super(factory, accessTokenManager, thirdPartyConfigService);
     }
 
     @Override
@@ -45,9 +43,14 @@ public class TmallCloudHandler extends AbstractCloudCloudHandler {
         TmallHeader header = tmallStandardRequest.getHeader();
         //根据namespace调用处理器
         String namespace = header.getNamespace();
-        CloudProtocolHandler cloudProtocolHandler = factory.getStrategy(namespace, CloudProtocolHandler.class);
+        AbstractStrategyProtocolHandler cloudProtocolHandler = factory.getStrategy(namespace, AbstractStrategyProtocolHandler.class);
         Object action = cloudProtocolHandler.action(request, new ActionContext(accessToken, config));
         return JSONObject.toJSONString(action);
+    }
+
+    @Override
+    protected void checkSceneData(String request) {
+        
     }
 
     @Override

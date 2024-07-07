@@ -1,14 +1,13 @@
 package com.leyunone.cloudcloud.dao.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -62,6 +61,8 @@ public class ProductTypeMappingDO implements Serializable {
      * 语音平台
      */
     private ThirdPartyCloudEnum thirdPartyCloud;
+    @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime updateTime;
 
 
 }

@@ -1,6 +1,7 @@
 package com.leyunone.cloudcloud.mangaer;
 
 import com.leyunone.cloudcloud.bean.info.DeviceCloudInfo;
+import com.leyunone.cloudcloud.bean.info.DeviceMappingInfo;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 
 import java.util.List;
@@ -14,7 +15,22 @@ import java.util.List;
  */
 public interface DeviceRelationManager {
 
-    void deleteDeviceMappingByUserIdAndCloudId(String userId, ThirdPartyCloudEnum cloud);
+    /**
+     * 不存在就新增存在就更新
+     * @param deviceMappingInfos
+     */
+    void saveDeviceAndMapping(List<DeviceMappingInfo> deviceMappingInfos);
 
-    void saveDeviceAndMapping(List<DeviceCloudInfo> deviceCloudInfos);
+    void deleteDeviceMappingByUserIdAndCloudId(String userId,ThirdPartyCloudEnum cloud);
+
+    List<DeviceCloudInfo> selectByDeviceIds(List<String> deviceIds);
+
+    /**
+     *
+     * @param deviceId
+     * @return
+     */
+    DeviceCloudInfo selectByDeviceId(String deviceId);
+
+    void updateDeviceMappingByCloudAndUserIdAndDeviceId(List<DeviceCloudInfo> entities);
 }

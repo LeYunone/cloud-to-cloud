@@ -3,9 +3,7 @@ package com.leyunone.cloudcloud.util;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.http.Method;
 import com.alibaba.fastjson.JSONObject;
-import com.leyunone.cloudcloud.bean.baidu.BaiduHeader;
-import com.leyunone.cloudcloud.bean.baidu.BaiduStatusReportRequest;
-import com.leyunone.cloudcloud.dao.entity.UserAuthorizeDO;
+import com.leyunone.cloudcloud.bean.third.baidu.BaiduStatusReportRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -28,5 +28,9 @@ public interface AccessTokenManager {
      */
     AccessTokenInfo generateAccessTokenByCode(String code,String clientId);
 
+    AccessTokenInfo generateAccessTokenByRefreshToken(String refreshToken,String clientId);
+
     AccessTokenInfo refreshAccessToken(String accessToken);
+
+    AccessTokenInfo getAccessToken(String token);
 }

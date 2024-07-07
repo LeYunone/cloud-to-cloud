@@ -1,0 +1,61 @@
+server:
+  servlet:
+    context-path: /cloudToCloud/api/
+  port: 8802
+## 数据库配置
+spring:
+  application:
+    name: cloud-to-cloud
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/voice_cloud?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false
+    username: root
+    password: root
+    filters: stat
+    maxActive: 20
+    initialSize: 1
+    maxWait: 60000
+    minIdle: 1
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxOpenPreparedStatements: 20
+  rabbitmq:
+    host: 192.168.151.219
+    port: 5672
+    username: root
+    password: root@2021
+    virtual-host: /iot-hub
+    connection-timeout: 30s
+    listener:
+      simple:
+        acknowledge-mode: manual
+        concurrency: 1
+        max-concurrency: 3
+        prefetch: 5
+  redis:
+    host: 192.168.151.201
+    port: 6379
+    timeout: 12000ms
+    jedis:
+      pool:
+        max-active: 10
+        max-idle: 15
+        max-wait: 3000ms
+        min-idle: 10
+    database: 11
+    password: root@2021
+  servlet:
+    multipart:
+      max-file-size: -1
+      max-request-size: -1
+## 打印日志级别
+### mp日志
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #开启sql日志
+    
+

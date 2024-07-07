@@ -2,11 +2,10 @@ package com.leyunone.cloudcloud.handler.convert.baidu;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
-import com.leyunone.cloudcloud.bean.baidu.BaiduAttributes;
+import com.leyunone.cloudcloud.bean.third.baidu.BaiduAttributes;
 import com.leyunone.cloudcloud.bean.dto.DeviceFunctionDTO;
 import com.leyunone.cloudcloud.bean.mapping.StatusMapping;
 import com.leyunone.cloudcloud.handler.convert.AbstractDataConvertHandler;
-import com.leyunone.cloudcloud.handler.factory.ConvertHandlerFactory;
 import com.leyunone.cloudcloud.service.mapping.ProductMappingService;
 
 import java.util.ArrayList;
@@ -31,18 +30,18 @@ public abstract class AbstractBaiduDataConverterTemplate<R, P> extends AbstractD
         if (CollectionUtil.isEmpty(statusMappings) || CollectionUtil.isEmpty(status)) {
             return new ArrayList<>();
         }
-        Map<String, StatusMapping> functionMappingMap = statusMappings
+        Map<String, StatusMapping> statusMappingMap = statusMappings
                 .stream()
                 .collect(Collectors.toMap(StatusMapping::getSignCode, v -> v, (v1, v2) -> v2));
         return status
                 .stream()
                 .map(s -> {
                     String signCode = s.getSignCode();
-                    StatusMapping statusMapping = functionMappingMap.get(signCode);
+                    StatusMapping statusMapping = statusMappingMap.get(signCode);
                     if (null == statusMapping) {
                         return null;
                     }
-                    String value = s.getValue();
+                    String value = s.getValue().toString();
                     value = valueOf(value, statusMapping).toString();
                     return BaiduAttributes
                             .builder()

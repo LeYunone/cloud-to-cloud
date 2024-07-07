@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.leyunone.cloudcloud.bean.info.ActionContext;
 import com.leyunone.cloudcloud.bean.info.DeviceCloudInfo;
 import com.leyunone.cloudcloud.bean.info.DeviceInfo;
+import com.leyunone.cloudcloud.bean.info.DeviceMappingInfo;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.handler.factory.StrategyFactory;
 import com.leyunone.cloudcloud.mangaer.DeviceRelationManager;
@@ -39,7 +40,7 @@ public abstract class AbstractStrategyProtocolHandler<R,P> extends AbstractStrat
         if (generic instanceof ParameterizedType) {
             Type[] actualTypeArguments = ((ParameterizedType) generic).getActualTypeArguments();
             //DO
-            pClass = (Class<P>) actualTypeArguments[0];
+            pClass = (Class<P>) actualTypeArguments[1];
         }
     }
 
@@ -55,13 +56,11 @@ public abstract class AbstractStrategyProtocolHandler<R,P> extends AbstractStrat
      */
     @Override
     public R action(String request, ActionContext context) {
-        Object savePoint = TransactionAspectSupport.currentTransactionStatus().createSavepoint();
         P requestParam = JSONObject.parseObject(request, pClass);
         R r = null;
         try {
             r = action1(requestParam, context);
         } catch (Exception e) {
-            TransactionAspectSupport.currentTransactionStatus().rollbackToSavepoint(savePoint);
             throw e;
         }
         return r;
@@ -69,41 +68,32 @@ public abstract class AbstractStrategyProtocolHandler<R,P> extends AbstractStrat
 
     protected abstract R action1(P p, ActionContext context);
 
-    protected List<DeviceCloudInfo> convert(List<DeviceInfo> deviceInfos, String clientId, String userId, ThirdPartyCloudEnum cloud) {
+    protected List<DeviceMappingInfo> convert(List<DeviceInfo> deviceInfos, String clientId, String userId, ThirdPartyCloudEnum cloud) {
         return deviceInfos
                 .stream()
-                .map(d -> {
-                    DeviceCloudInfo.ThirdMapping thirdMapping = DeviceCloudInfo.ThirdMapping.builder().userId(userId).cloud(cloud).clientId(clientId).build();
-                    return DeviceCloudInfo
-                            .builder()
-                            .deviceId(d.getDeviceId())
-                            .productId(d.getProductId())
-                            .mapping(Collections.singletonList(thirdMapping))
-                            .build();
-                })
+                .map(d -> new DeviceMappingInfo()
+                        .setDeviceId(d.getDeviceId())
+                        .setProductId(d.getProductId())
+                        .setUserId(userId)
+                        .setThirdPartyCloud(cloud)
+                        .setClientId(clientId))
                 .collect(Collectors.toList());
     }
 
     /**
-     * @param deviceShadowModels 设备信息
+     * @param deviceInfos 设备信息
      * @param userId             用户id
      * @param clientId           客户端id
      * @param thirdFunction      三方云的值关系绑定函数
      */
-    protected void doRelationStore(List<DeviceInfo> deviceShadowModels, String userId, String clientId, ThirdPartyCloudEnum cloud, Consumer<DeviceCloudInfo.ThirdMapping> thirdFunction) {
-        if (CollectionUtils.isEmpty(deviceShadowModels)) {
+    protected void doRelationStore(List<DeviceInfo> deviceInfos, String userId, String clientId, ThirdPartyCloudEnum cloud, Consumer<DeviceMappingInfo> thirdFunction) {
+        if (CollectionUtils.isEmpty(deviceInfos)) {
             deviceRelationManager.deleteDeviceMappingByUserIdAndCloudId(userId, cloud);
             //删除关系数据。
         } else {
-            List<DeviceCloudInfo> deviceEntities = convert(deviceShadowModels, clientId, userId, cloud);
+            List<DeviceMappingInfo> deviceEntities = convert(deviceInfos, clientId, userId, cloud);
             deviceEntities = deviceEntities.stream()
-                    .peek(d -> {
-                        List<DeviceCloudInfo.ThirdMapping> thirdMappings = d.getMapping()
-                                .stream()
-                                .peek(thirdFunction)
-                                .collect(Collectors.toList());
-                        d.setMapping(thirdMappings);
-                    })
+                    .peek(thirdFunction)
                     .collect(Collectors.toList());
             deviceRelationManager.saveDeviceAndMapping(deviceEntities);
         }

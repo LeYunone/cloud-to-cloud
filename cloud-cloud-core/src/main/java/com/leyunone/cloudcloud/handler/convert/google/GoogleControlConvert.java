@@ -1,17 +1,16 @@
 package com.leyunone.cloudcloud.handler.convert.google;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.alibaba.fastjson.JSONObject;
 import com.leyunone.cloudcloud.bean.dto.DeviceFunctionDTO;
-import com.leyunone.cloudcloud.bean.enums.GoogleActionValueEnum;
-import com.leyunone.cloudcloud.bean.google.GoogleControlRequest;
-import com.leyunone.cloudcloud.bean.google.GoogleDevice;
+import com.leyunone.cloudcloud.bean.third.google.GoogleControlRequest;
+import com.leyunone.cloudcloud.bean.third.google.GoogleDevice;
 import com.leyunone.cloudcloud.bean.mapping.ActionMapping;
 import com.leyunone.cloudcloud.bean.mapping.GoogleProductMapping;
 import com.leyunone.cloudcloud.bean.mapping.ProductMapping;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.service.mapping.ProductMappingService;
 import com.leyunone.cloudcloud.util.CollectionFunctionUtils;
+import com.leyunone.cloudcloud.util.ConvertUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -48,7 +47,7 @@ public class GoogleControlConvert extends AbstractGoogleDataConverterTemplate<Li
             List<GoogleDevice> devices = command.getDevices();
             List<String> pids = devices.stream().map(t -> t.getCustomData().getProductId()).collect(Collectors.toList());
             List<ProductMapping> mapping = productMappingService.getMapping(pids, ThirdPartyCloudEnum.GOOGLE);
-            Map<String, GoogleProductMapping> productMappingMap = super.convertToMapByProductId(mapping);
+            Map<String, GoogleProductMapping> productMappingMap = ConvertUtils.convertToMapByProductId(mapping);
             List<GoogleControlRequest.Execution> execution = command.getExecution();
             //一次操作多个设备
             devices.stream().filter(d -> productMappingMap.containsKey(d.getCustomData().getProductId())).forEach(d -> {
@@ -71,18 +70,19 @@ public class GoogleControlConvert extends AbstractGoogleDataConverterTemplate<Li
                  *                        }
                  */
 
-                Map<String, List<ActionMapping>> actionMaps = CollectionFunctionUtils.groupTo(actionMappings, a -> a.getAction().split("_")[1]);
+                Map<String, List<ActionMapping>> actionMaps = CollectionFunctionUtils.groupTo(actionMappings, ActionMapping::getThirdActionCode);
                 //一次发出多个动作
                 execution.forEach(action -> {
                     List<ActionMapping> actionMap = actionMaps.get(action.getCommand());
                     //一个动作映射我方云多个操作
                     actionMap.forEach(actionMapping -> {
-                        Object value = this.getValue(action.getParams(), actionMapping);
+                        Object value = super.getControlValue(action.getParams(), actionMapping);
                         if (ObjectUtil.isNull(value)) return;
                         DeviceFunctionDTO codeCommand = new DeviceFunctionDTO();
                         codeCommand.setSignCode(actionMapping.getSignCode());
                         codeCommand.setValue(String.valueOf(value));
                         codeCommand.setFunctionId(actionMapping.getFunctionId());
+                        codeCommand.setProductId(actionMapping.getProductId());
                         codeCommand.setOperation(actionMapping.getOperation());
                         codeCommand.setDeviceId(d.getId());
                         functionCodeCommands.add(codeCommand);
@@ -93,28 +93,6 @@ public class GoogleControlConvert extends AbstractGoogleDataConverterTemplate<Li
 
         });
         return functionCodeCommands;
-    }
-
-    private Object getValue(JSONObject params, ActionMapping actionMapping) {
-        /**
-         * Google取值规则：默认直接根据code值取值 
-         *               有枚举走对象取值
-         */
-        String action = actionMapping.getAction();
-        String[] thirdCodes = action.split("_");
-        String command = thirdCodes[1];
-        String[] codes = thirdCodes[0].split("#");
-        //最终值
-        Object value = actionMapping.getDefaultValue();
-        for (int i = 0; i < codes.length; i++) {
-            if (i == codes.length - 1) {
-                value = params.get(codes[i]);
-                break;
-            }
-            params = (JSONObject) params.get(codes[i]);
-        }
-        GoogleActionValueEnum byEnumName = GoogleActionValueEnum.getByEnumName(command);
-        return byEnumName.valueConvert(value, actionMapping);
     }
 
 

@@ -1,9 +1,6 @@
 package com.leyunone.cloudcloud.handler.protocol.alexa;
 
-import com.leyunone.cloudcloud.bean.alexa.AlexaDeviceProperty;
-import com.leyunone.cloudcloud.bean.alexa.AlexaEndpoint;
-import com.leyunone.cloudcloud.bean.alexa.AlexaStateReportRequest;
-import com.leyunone.cloudcloud.bean.alexa.AlexaStateReportResponse;
+import com.leyunone.cloudcloud.bean.third.alexa.*;
 import com.leyunone.cloudcloud.bean.info.ActionContext;
 import com.leyunone.cloudcloud.bean.info.DeviceInfo;
 import com.leyunone.cloudcloud.constant.AlexaActionConstants;
@@ -38,12 +35,23 @@ public class AlexaStateReportHandler extends AbstractStrategyAlexaHandler<AlexaS
     protected AlexaStateReportResponse action1(AlexaStateReportRequest alexaStateReportRequest, ActionContext context) {
         String deviceId = alexaStateReportRequest.getDirective().getEndpoint().getEndpointId();
         DeviceInfo deviceInfo = deviceServiceHttpManager.getDeviceStatusByDeviceId(context.getAccessTokenInfo().getUser().getUserId(),
-                Long.parseLong(deviceId), context.getThirdPartyCloudConfigInfo());
+                deviceId, context.getThirdPartyCloudConfigInfo());
         List<AlexaDeviceProperty> properties = alexaStatusConverter.convert(deviceInfo);
         return new AlexaStateReportResponse(AlexaStateReportResponse.Event.builder()
-                .header(alexaStateReportRequest.getDirective().getHeader())
-                .endpoint(AlexaEndpoint.builder().endpointId(deviceId).build())
-                .build()
+                .header(
+                        AlexaHeader.builder()
+                                .namespace("Alexa")
+                                .name("StateReport")
+                                .messageId(alexaStateReportRequest.getDirective().getHeader().getMessageId())
+                                .correlationToken(alexaStateReportRequest.getDirective().getHeader().getCorrelationToken())
+                                .payloadVersion(alexaStateReportRequest.getDirective().getHeader().getPayloadVersion())
+                                .build()
+                )
+                .endpoint(AlexaEndpoint.builder()
+                        .scope(alexaStateReportRequest.getDirective().getEndpoint().getScope())
+                        .endpointId(alexaStateReportRequest.getDirective().getEndpoint().getEndpointId())
+                        .build()
+                ).build()
                 , AlexaStateReportResponse.Context.builder()
                 .properties(properties)
                 .build());

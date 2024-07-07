@@ -2,7 +2,7 @@ package com.leyunone.cloudcloud.bean.enums;
 
 import com.alibaba.fastjson.JSON;
 import com.leyunone.cloudcloud.bean.RGBColor;
-import com.leyunone.cloudcloud.bean.baidu.DeviceControlRequest;
+import com.leyunone.cloudcloud.bean.third.baidu.DeviceControlRequest;
 import com.leyunone.cloudcloud.bean.mapping.ActionMapping;
 import org.springframework.util.StringUtils;
 
@@ -276,12 +276,12 @@ public enum BaiduCommandEnums {
 
     public String valueOfConvert(String value, ActionMapping actionMapping) {
         Map<String, Object> valueMapping = actionMapping.getValueMapping();
-        if (actionMapping.getValueOf()) {
+        if (actionMapping.isValueOf()) {
             value = valueMapping.get(value).toString();
         }
         return value;
     }
-    
+
     private final static Map<String, BaiduCommandEnums> MAP;
 
 

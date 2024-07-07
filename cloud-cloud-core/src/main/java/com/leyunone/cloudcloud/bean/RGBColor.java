@@ -1,6 +1,8 @@
 package com.leyunone.cloudcloud.bean;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * :)
@@ -10,6 +12,7 @@ import lombok.Data;
  * @date 2024-02-09
  */
 @Data
+@NoArgsConstructor
 public class RGBColor {
 
     private int r;

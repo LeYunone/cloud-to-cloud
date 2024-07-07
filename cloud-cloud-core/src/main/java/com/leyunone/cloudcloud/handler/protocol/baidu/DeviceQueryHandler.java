@@ -3,10 +3,10 @@ package com.leyunone.cloudcloud.handler.protocol.baidu;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.leyunone.cloudcloud.bean.CustomConvertModel;
-import com.leyunone.cloudcloud.bean.baidu.BaiduAttributes;
-import com.leyunone.cloudcloud.bean.baidu.BaiduHeader;
-import com.leyunone.cloudcloud.bean.baidu.DeviceQueryRequest;
-import com.leyunone.cloudcloud.bean.baidu.DeviceQueryResponse;
+import com.leyunone.cloudcloud.bean.third.baidu.BaiduAttributes;
+import com.leyunone.cloudcloud.bean.third.baidu.BaiduHeader;
+import com.leyunone.cloudcloud.bean.third.baidu.DeviceQueryRequest;
+import com.leyunone.cloudcloud.bean.third.baidu.DeviceQueryResponse;
 import com.leyunone.cloudcloud.bean.info.ActionContext;
 import com.leyunone.cloudcloud.bean.info.DeviceInfo;
 import com.leyunone.cloudcloud.constant.BaiduActionConstants;
@@ -15,7 +15,6 @@ import com.leyunone.cloudcloud.dao.entity.CustomMappingDO;
 import com.leyunone.cloudcloud.handler.convert.CustomConvert;
 import com.leyunone.cloudcloud.handler.convert.baidu.BaiduStatusConverter;
 import com.leyunone.cloudcloud.handler.factory.CloudProtocolHandlerFactory;
-import com.leyunone.cloudcloud.handler.factory.StrategyFactory;
 import com.leyunone.cloudcloud.mangaer.DeviceRelationManager;
 import com.leyunone.cloudcloud.mangaer.DeviceServiceHttpManager;
 import org.springframework.stereotype.Service;
@@ -48,7 +47,7 @@ public class DeviceQueryHandler extends AbstractStrategyBaiduHandler<JSONObject,
     @Override
     protected JSONObject action1(DeviceQueryRequest deviceQueryRequest, ActionContext context) {
         String applianceId = deviceQueryRequest.getPayload().getAppliance().getApplianceId();
-        DeviceInfo deviceInfo = deviceServiceHttpManager.getDeviceStatusByDeviceId(context.getAccessTokenInfo().getUser().getUserId(),Long.valueOf(applianceId), context.getThirdPartyCloudConfigInfo());
+        DeviceInfo deviceInfo = deviceServiceHttpManager.getDeviceStatusByDeviceId(context.getAccessTokenInfo().getUser().getUserId(),applianceId, context.getThirdPartyCloudConfigInfo());
         CustomMappingDO customMappingDO = customMappingRepository.selectByProductThirdCode(deviceInfo.getProductId(), deviceQueryRequest.getHeader().getName());
         JSONObject result = new JSONObject();
         String name = deviceQueryRequest.getHeader().getName();

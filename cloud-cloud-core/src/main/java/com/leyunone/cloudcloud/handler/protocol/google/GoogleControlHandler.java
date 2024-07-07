@@ -2,8 +2,8 @@ package com.leyunone.cloudcloud.handler.protocol.google;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.leyunone.cloudcloud.bean.dto.DeviceFunctionDTO;
-import com.leyunone.cloudcloud.bean.google.GoogleControlRequest;
-import com.leyunone.cloudcloud.bean.google.GoogleControlResponse;
+import com.leyunone.cloudcloud.bean.third.google.GoogleControlRequest;
+import com.leyunone.cloudcloud.bean.third.google.GoogleControlResponse;
 import com.leyunone.cloudcloud.bean.info.ActionContext;
 import com.leyunone.cloudcloud.bean.info.DeviceInfo;
 import com.leyunone.cloudcloud.constant.GoogleActionConstants;
@@ -42,7 +42,7 @@ public class GoogleControlHandler extends AbstractStrategyGoogleoHandler<GoogleC
     protected GoogleControlResponse action1(GoogleControlRequest googleControlRequest, ActionContext context) {
         List<DeviceFunctionDTO> commands = googleControlConvert.convert(googleControlRequest);
         List<DeviceInfo> devices = deviceServiceHttpManager.commands(context.getAccessTokenInfo().getUser().getUserId(), commands, context.getThirdPartyCloudConfigInfo());
-        Map<String, Object> statusMap = googleStatusConvert.convert(devices);
+        Map<String, Map<String,Object>> statusMap = googleStatusConvert.convert(devices);
         /**
          * 所有设备状态都单个返回，不考虑控制时分的组
          */

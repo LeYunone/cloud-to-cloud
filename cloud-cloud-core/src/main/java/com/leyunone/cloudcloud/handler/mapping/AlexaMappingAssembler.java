@@ -6,10 +6,9 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.leyunone.cloudcloud.bean.mapping.ActionMapping;
 import com.leyunone.cloudcloud.bean.mapping.AlexaFunctionMapping;
 import com.leyunone.cloudcloud.bean.mapping.AlexaProductMapping;
-import com.leyunone.cloudcloud.bean.mapping.StatusMapping;
-import com.leyunone.cloudcloud.constant.AlexaActionConstants;
 import com.leyunone.cloudcloud.dao.ActionMappingRepository;
 import com.leyunone.cloudcloud.dao.DeviceCapabilityRepository;
 import com.leyunone.cloudcloud.dao.FunctionMappingRepository;
@@ -71,8 +70,7 @@ public class AlexaMappingAssembler extends AbstractStrategyMappingAssembler<Alex
         List<DeviceCapabilityDO> deviceCapabilityDOS = deviceCapabilityRepository.selectByCloud(ThirdPartyCloudEnum.ALEXA);
 
         Map<Integer, DeviceCapabilityDO> capabilityMap = CollectionFunctionUtils.mapTo(deviceCapabilityDOS, DeviceCapabilityDO::getId);
-
-        Map<String, List<FunctionMappingDO>> functionMappingMap = CollectionFunctionUtils.groupTo(functionMappingDOS, FunctionMappingDO::getProductId);
+        Map<String, List<FunctionMappingDO>> statusMappingMap = CollectionFunctionUtils.groupTo(functionMappingDOS, FunctionMappingDO::getProductId);
         Map<String, List<ActionMappingDO>> actionMappingMap = CollectionFunctionUtils.groupTo(actionMappingDOS, ActionMappingDO::getProductId);
         Map<String, List<ProductTypeMappingDO>> productTypeMappingMap = CollectionFunctionUtils.groupTo(productTypeMappingDOS, ProductTypeMappingDO::getProductId);
 
@@ -80,23 +78,23 @@ public class AlexaMappingAssembler extends AbstractStrategyMappingAssembler<Alex
          * 必须配置功能映射值
          */
         return pids.stream().map(pid -> {
-            List<FunctionMappingDO> functionMappings = functionMappingMap.get(pid);
+            List<FunctionMappingDO> functionMappings = statusMappingMap.get(pid);
             List<ActionMappingDO> actionMappings = actionMappingMap.get(pid);
+            List<ProductTypeMappingDO> productTypeMappings = productTypeMappingMap.get(pid);
+
             /**
              * 一定需要一个属性映射
              */
-            if (CollectionUtil.isEmpty(functionMappings)) {
+            if (CollectionUtil.isEmpty(functionMappings) || CollectionUtil.isEmpty(productTypeMappings)) {
                 return null;
             }
 
-            List<ProductTypeMappingDO> productTypeMappings = productTypeMappingMap.get(pid);
             AlexaProductMapping alexaProductMapping = new AlexaProductMapping();
             alexaProductMapping.setProductId(pid);
             alexaProductMapping.setAlexaFunctionMappings(this.convert(functionMappings, capabilityMap));
             alexaProductMapping.setCapabilityList(this.convertAction(alexaProductMapping.getAlexaFunctionMappings(), actionMappings, capabilityMap));
             alexaProductMapping.setThirdPartyCloud(ThirdPartyCloudEnum.ALEXA);
-            alexaProductMapping.setThirdProductIds(CollectionUtil.isNotEmpty(productTypeMappings)
-                    ? productTypeMappings.stream().map(ProductTypeMappingDO::getThirdProductId).collect(Collectors.toList()) : null);
+            alexaProductMapping.setThirdProductIds(productTypeMappings.stream().map(ProductTypeMappingDO::getThirdProductId).collect(Collectors.toList()));
             return alexaProductMapping;
         }).filter(ObjectUtil::isNotNull).collect(Collectors.toList());
     }
@@ -112,7 +110,7 @@ public class AlexaMappingAssembler extends AbstractStrategyMappingAssembler<Alex
     private List<AlexaProductMapping.Capability> convertAction(List<AlexaFunctionMapping> functionMappings, List<ActionMappingDO> actionMappings, Map<Integer, DeviceCapabilityDO> capabilityMap) {
         if (CollectionUtil.isEmpty(functionMappings)) return new ArrayList<>();
 
-        Map<String, List<AlexaFunctionMapping>> functionMap = CollectionFunctionUtils.groupTo(functionMappings, AlexaFunctionMapping::getInterfaceStr);
+        Map<String, List<AlexaFunctionMapping>> functionMap = CollectionFunctionUtils.groupTo(functionMappings, AlexaFunctionMapping::getThirdActionCode);
         /**
          * 我方一个code-对方多个code
          */
@@ -128,21 +126,14 @@ public class AlexaMappingAssembler extends AbstractStrategyMappingAssembler<Alex
             AlexaProductMapping.Capability capability = new AlexaProductMapping.Capability();
             capability.setThirdActionCode(key);
             capability.setSupportAttr(functionMapping.stream().map(AlexaFunctionMapping::getThirdSignCode).collect(Collectors.toList()));
-            Map<String, AlexaProductMapping.CapabilityMapping> capabilityMapping = new HashMap<>();
+            Map<String, ActionMapping> capabilityMapping = new HashMap<>();
             //TODO 技能的三方值 而非属性
             functionMapping.forEach(f -> {
                 List<ActionMappingDO> actionMappingDOS = actionMaps.get(f.getSignCode());
-                if(CollectionUtil.isNotEmpty(actionMappingDOS)){
+                if (CollectionUtil.isNotEmpty(actionMappingDOS)) {
                     actionMappingDOS.forEach(am -> {
-                        capabilityMapping.put(am.getThirdPartyCode(), AlexaProductMapping.CapabilityMapping.builder()
-                                .defaultValue(am.getDefaultValue())
-                                .signCode(am.getSignCode())
-                                .functionId(am.getFunctionId())
-                                .valueMapping(StrUtil.isNotBlank(am.getValueMapping()) ? JSONObject.parseObject(am.getValueMapping()).getInnerMap() : null)
-                                .operation(am.getOperation())
-                                .thirdSignCode(am.getThirdPartyCode())
-                                .valueOf(am.getValueOf())
-                                .build()
+                        capabilityMapping.put(am.getThirdActionCode(),
+                                super.convertActionMapping(CollectionUtil.newArrayList(am)).get(0)
                         );
                     });
                 }
@@ -170,19 +161,14 @@ public class AlexaMappingAssembler extends AbstractStrategyMappingAssembler<Alex
         return functionMappingDos
                 .stream()
                 .map(fm -> {
-                    StatusMapping functionMapping = StatusMapping.Converter.INSTANCE.convert(fm);
                     AlexaFunctionMapping alexaFunctionMapping = new AlexaFunctionMapping();
-                    BeanUtil.copyProperties(functionMapping, alexaFunctionMapping);
+                    BeanUtil.copyProperties(fm, alexaFunctionMapping,"valueMapping");
                     String valueMapping = fm.getValueMapping();
                     Map<String, Object> map = new HashMap<>();
                     if (StrUtil.isNotBlank(valueMapping)) {
                         JSONObject jsonObject = JSON.parseObject(valueMapping);
                         map = jsonObject.getInnerMap();
                     }
-                    //取出thirdPartyCode中的接口信息
-                    String[] thirdCodes = functionMapping.getThirdSignCode().split("_");
-                    alexaFunctionMapping.setThirdSignCode(thirdCodes[0]);
-                    alexaFunctionMapping.setInterfaceStr(thirdCodes[1]);
 
                     if (StrUtil.isNotBlank(fm.getCapabilityConfigId())) {
                         alexaFunctionMapping.setCapabilityConfigId(Integer.parseInt(fm.getCapabilityConfigId()));

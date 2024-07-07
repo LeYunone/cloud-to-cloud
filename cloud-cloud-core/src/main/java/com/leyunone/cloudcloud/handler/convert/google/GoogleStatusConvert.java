@@ -1,5 +1,6 @@
 package com.leyunone.cloudcloud.handler.convert.google;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.leyunone.cloudcloud.bean.dto.DeviceFunctionDTO;
@@ -11,6 +12,7 @@ import com.leyunone.cloudcloud.bean.mapping.StatusMapping;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.service.mapping.ProductMappingService;
 import com.leyunone.cloudcloud.util.CollectionFunctionUtils;
+import com.leyunone.cloudcloud.util.ConvertUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,7 +28,7 @@ import java.util.stream.Collectors;
  * @Date 2024/2/27 18:11
  */
 @Service
-public class GoogleStatusConvert extends AbstractGoogleDataConverterTemplate<Map<String, Object>, List<DeviceInfo>> {
+public class GoogleStatusConvert extends AbstractGoogleDataConverterTemplate<Map<String, Map<String,Object>>, List<DeviceInfo>> {
 
     protected GoogleStatusConvert(ProductMappingService productMappingService) {
         super(productMappingService);
@@ -37,13 +39,14 @@ public class GoogleStatusConvert extends AbstractGoogleDataConverterTemplate<Map
      * @return key：设备id    value：属性名-属性值 对象
      */
     @Override
-    public Map<String, Object> convert(List<DeviceInfo> r) {
-        Map<String, Object> result = new HashMap<>();
+    public Map<String, Map<String,Object>> convert(List<DeviceInfo> r) {
+        Map<String, Map<String,Object>> result = new HashMap<>();
         List<ProductMapping> mappings = productMappingService.getMapping(r.stream()
                 .map(DeviceInfo::getProductId).collect(Collectors.toList()), ThirdPartyCloudEnum.GOOGLE);
-        Map<String, GoogleProductMapping> productMappingMap = super.convertToMapByProductId(mappings);
+        Map<String, GoogleProductMapping> productMappingMap = ConvertUtils.convertToMapByProductId(mappings);
         r.forEach(d -> {
             GoogleProductMapping googleProductMapping = productMappingMap.get(d.getProductId());
+            if (ObjectUtil.isNull(googleProductMapping)) return;
             result.put(String.valueOf(d.getDeviceId()), this.statusConvert(d.getDeviceFunctions(), googleProductMapping.getStatusMappings()));
         });
         return result;
@@ -63,7 +66,7 @@ public class GoogleStatusConvert extends AbstractGoogleDataConverterTemplate<Map
         status.stream().filter(t -> statusMap.containsKey(t.getSignCode())).forEach(deviceFunction -> {
             List<StatusMapping> functionMap = statusMap.get(deviceFunction.getSignCode());
             functionMap.forEach(f -> {
-                Object value = super.valueOf(deviceFunction.getValue(), f);
+                Object value = this.valueOf(deviceFunction.getValue().toString(), f);
                 //非该属性映射
                 if (ObjectUtil.isNull(value)) return;
                 /**
@@ -99,7 +102,7 @@ public class GoogleStatusConvert extends AbstractGoogleDataConverterTemplate<Map
                     }
                 }
 
-                result.put(statusCode[0], value);
+                result.put(statusCode[0].replace("[]",""), value);
             });
             /**
              * 在线状态恒为true
@@ -110,10 +113,17 @@ public class GoogleStatusConvert extends AbstractGoogleDataConverterTemplate<Map
     }
 
     private Object buildValueMapping(String[] statusCode, Object value, Map<String, Object> result) {
+        String oneCode = statusCode[0];
+        boolean isArray = false;
+        if (oneCode.contains("[]")) {
+            //数组值
+            isArray = true;
+            oneCode = oneCode.replace("[]", "");
+        }
         //存储属性值
         Object valueStorage = value;
         //初始点位
-        JSONObject preV = (JSONObject) result.getOrDefault(statusCode[0], new JSONObject());
+        JSONObject preV = (JSONObject) result.getOrDefault(oneCode, new JSONObject());
         value = preV;
         for (int i = 1; i < statusCode.length; i++) {
             //当前code对象
@@ -127,7 +137,7 @@ public class GoogleStatusConvert extends AbstractGoogleDataConverterTemplate<Map
             //对象传递,记录当前对象用于下一次遍历赋值
             preV = currentV;
         }
-        return value;
+        return isArray ? CollectionUtil.newArrayList(value) : value;
     }
 
     @Override

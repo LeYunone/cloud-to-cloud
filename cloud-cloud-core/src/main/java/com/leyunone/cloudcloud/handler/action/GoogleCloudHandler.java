@@ -3,17 +3,17 @@ package com.leyunone.cloudcloud.handler.action;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.leyunone.cloudcloud.bean.google.GoogleStandardRequest;
+import com.leyunone.cloudcloud.bean.third.google.GoogleStandardRequest;
 import com.leyunone.cloudcloud.bean.info.AccessTokenInfo;
 import com.leyunone.cloudcloud.bean.info.ActionContext;
 import com.leyunone.cloudcloud.bean.info.ThirdPartyCloudConfigInfo;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.handler.factory.CloudCloudHandlerFactory;
+import com.leyunone.cloudcloud.handler.protocol.AbstractStrategyProtocolHandler;
 import com.leyunone.cloudcloud.handler.protocol.CloudProtocolHandler;
 import com.leyunone.cloudcloud.mangaer.AccessTokenManager;
 import com.leyunone.cloudcloud.service.ThirdPartyConfigService;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.ValidationUtils;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -28,13 +28,12 @@ import javax.servlet.http.HttpServletRequest;
 public class GoogleCloudHandler extends AbstractCloudCloudHandler {
 
     private final HttpServletRequest httpServletRequest;
-    private final ThirdPartyConfigService thirdPartyConfigService;
 
-    protected GoogleCloudHandler(CloudCloudHandlerFactory factory, AccessTokenManager accessTokenManager, HttpServletRequest httpServletRequest, ThirdPartyConfigService thirdPartyConfigService) {
-        super(factory, accessTokenManager);
+    protected GoogleCloudHandler(CloudCloudHandlerFactory factory, AccessTokenManager accessTokenManager, ThirdPartyConfigService thirdPartyConfigService, HttpServletRequest httpServletRequest) {
+        super(factory, accessTokenManager, thirdPartyConfigService);
         this.httpServletRequest = httpServletRequest;
-        this.thirdPartyConfigService = thirdPartyConfigService;
     }
+
 
     @Override
     protected String getAccessToken(String request) {
@@ -45,7 +44,7 @@ public class GoogleCloudHandler extends AbstractCloudCloudHandler {
         if (StrUtil.isBlank(authorization)) {
             //TODO 令牌传输异常
         }
-        return authorization.substring(7);
+        return authorization.replace("Bearer ","").trim();
     }
 
     @Override
@@ -54,9 +53,14 @@ public class GoogleCloudHandler extends AbstractCloudCloudHandler {
         ThirdPartyCloudConfigInfo config = thirdPartyConfigService.getConfig(accessToken.getClientId());
 
         String intent = CollectionUtil.getFirst(googleStandardRequest.getInputs()).getIntent();
-        CloudProtocolHandler outwardCloudHandler = factory.getStrategy(intent, CloudProtocolHandler.class);
+        AbstractStrategyProtocolHandler outwardCloudHandler = factory.getStrategy(intent, AbstractStrategyProtocolHandler.class);
         Object action = outwardCloudHandler.action(request, new ActionContext(accessToken, config));
         return JSONObject.toJSONString(action);
+    }
+
+    @Override
+    protected void checkSceneData(String request) {
+        
     }
 
     @Override

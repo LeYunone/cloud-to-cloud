@@ -6,9 +6,12 @@ import com.leyunone.cloudcloud.bean.dto.DeviceFunctionDTO;
 import com.leyunone.cloudcloud.bean.dto.DeviceMessageDTO;
 import com.leyunone.cloudcloud.bean.info.DeviceCloudInfo;
 import com.leyunone.cloudcloud.bean.info.DeviceInfo;
+import com.leyunone.cloudcloud.bean.info.ThirdPartyCloudConfigInfo;
 import com.leyunone.cloudcloud.dao.ThirdPartyClientRepository;
 import com.leyunone.cloudcloud.dao.entity.ThirdPartyClientDO;
 import com.leyunone.cloudcloud.handler.factory.DeviceReportHandlerFactory;
+import com.leyunone.cloudcloud.service.ThirdPartyConfigService;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,10 +25,8 @@ import java.util.stream.Collectors;
  */
 public abstract class AbstractStatusCommonReportHandler extends AbstractDeviceMessageReportHandler {
 
-    private ThirdPartyClientRepository thirdPartyClientRepository;
-
-    public AbstractStatusCommonReportHandler(DeviceReportHandlerFactory factory) {
-        super(factory);
+    public AbstractStatusCommonReportHandler(DeviceReportHandlerFactory factory, RestTemplate restTemplate, ThirdPartyConfigService thirdPartyConfigService) {
+        super(factory,restTemplate,thirdPartyConfigService);
     }
 
     @Override
@@ -35,7 +36,7 @@ public abstract class AbstractStatusCommonReportHandler extends AbstractDeviceMe
 
         if (CollectionUtil.isEmpty(deviceFunctions)) return;
         String clientId = thirdMapping.getClientId();
-        ThirdPartyClientDO thirdPartyClientDO = thirdPartyClientRepository.selectByClientId(clientId);
+        ThirdPartyCloudConfigInfo config = thirdPartyConfigService.getConfig(clientId);
         DeviceInfo deviceInfo = DeviceInfo.builder()
                 .productId(deviceMessage.getProductId())
                 .deviceId(deviceMessage.getDeviceId())
@@ -45,8 +46,8 @@ public abstract class AbstractStatusCommonReportHandler extends AbstractDeviceMe
                         .timestamp(deviceMessage.getTimestamp())
                         .build()).collect(Collectors.toList()))
                 .build();
-        this.handler2(deviceInfo, thirdPartyClientDO, thirdMapping.getThirdId());
+        this.handler2(deviceInfo, config, thirdMapping);
     }
 
-    public abstract void handler2(DeviceInfo deviceInfo, ThirdPartyClientDO config, String thirdId);
+    public abstract void handler2(DeviceInfo deviceInfo, ThirdPartyCloudConfigInfo config, DeviceCloudInfo.ThirdMapping thirdMapping);
 }

@@ -1,6 +1,6 @@
 package com.leyunone.cloudcloud.handler.protocol.alexa;
 
-import com.leyunone.cloudcloud.bean.alexa.AlexaHeader;
+import com.leyunone.cloudcloud.bean.third.alexa.AlexaHeader;
 import com.leyunone.cloudcloud.handler.factory.CloudProtocolHandlerFactory;
 import com.leyunone.cloudcloud.handler.protocol.AbstractStrategyProtocolHandler;
 import com.leyunone.cloudcloud.mangaer.DeviceRelationManager;
@@ -23,6 +23,7 @@ public abstract class AbstractStrategyAlexaHandler<P, R> extends AbstractStrateg
                 .name("Response")
                 .messageId(header.getMessageId())
                 .payloadVersion(header.getPayloadVersion())
+                .correlationToken(header.getCorrelationToken())
                 .build();
     }
 }

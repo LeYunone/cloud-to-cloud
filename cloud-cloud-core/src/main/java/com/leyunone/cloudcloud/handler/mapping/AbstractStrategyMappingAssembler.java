@@ -5,7 +5,6 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.leyunone.cloudcloud.bean.enums.ConvertFunctionEnum;
 import com.leyunone.cloudcloud.bean.mapping.ActionMapping;
 import com.leyunone.cloudcloud.bean.mapping.ProductMapping;
 import com.leyunone.cloudcloud.bean.mapping.StatusMapping;
@@ -13,12 +12,12 @@ import com.leyunone.cloudcloud.dao.FunctionMappingRepository;
 import com.leyunone.cloudcloud.dao.entity.ActionMappingDO;
 import com.leyunone.cloudcloud.dao.entity.FunctionMappingDO;
 import com.leyunone.cloudcloud.handler.factory.MappingAssemblerFactory;
-import com.leyunone.cloudcloud.handler.factory.StrategyFactory;
 import com.leyunone.cloudcloud.mangaer.CacheManager;
 import com.leyunone.cloudcloud.strategy.AbstractStrategyAutoRegisterComponent;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -51,7 +50,7 @@ public abstract class AbstractStrategyMappingAssembler<R extends ProductMapping>
                 .stream()
                 .map(fm -> {
                     StatusMapping statusMapping = new StatusMapping();
-                    BeanUtil.copyProperties(fm,statusMapping);
+                    BeanUtil.copyProperties(fm, statusMapping, "valueMapping");
                     String valueMapping = fm.getValueMapping();
                     Map<String, Object> map = new HashMap<>();
                     if (StrUtil.isNotBlank(valueMapping)) {
@@ -81,7 +80,7 @@ public abstract class AbstractStrategyMappingAssembler<R extends ProductMapping>
                 .collect(Collectors.toList());
 
         Optional<List<R>> rs = cacheManager.getData(cacheKeys,
-                null,
+                3L, TimeUnit.MINUTES,
                 (hit) -> {
                     List<String> missPidList = new ArrayList<>();
                     if (CollectionUtils.isEmpty(hit)) {
@@ -111,7 +110,8 @@ public abstract class AbstractStrategyMappingAssembler<R extends ProductMapping>
         return actionMappingDos
                 .stream()
                 .map(am -> {
-                    ActionMapping actionMapping = ActionMapping.Converter.INSTANCE.convert(am);
+                    ActionMapping actionMapping = new ActionMapping();
+                    BeanUtil.copyProperties(am,actionMapping,"valueMapping");
                     String valueMapping = am.getValueMapping();
                     if (!org.springframework.util.StringUtils.isEmpty(valueMapping)) {
                         JSONObject jsonObject = JSON.parseObject(valueMapping);

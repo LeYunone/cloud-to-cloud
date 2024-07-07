@@ -19,7 +19,7 @@ public class CollectionFunctionUtils {
      * @param <R>
      * @return
      */
-    public static <T, R> Map<R, T> mapTo(List<T> ls, Function<T, R> rule) {
+    public static <T, R> Map<R, T>mapTo(List<T> ls, Function<T, R> rule) {
         if (ls == null || ls.size() == 0) {
             return new HashMap<>();
         }

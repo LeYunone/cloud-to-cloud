@@ -2,14 +2,18 @@ package com.leyunone.cloudcloud.mangaer.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.leyunone.cloudcloud.bean.info.AccessTokenInfo;
 import com.leyunone.cloudcloud.bean.info.ThirdPartyCloudConfigInfo;
 import com.leyunone.cloudcloud.dao.UserAuthorizeRepository;
 import com.leyunone.cloudcloud.dao.entity.ThirdPartyClientDO;
 import com.leyunone.cloudcloud.dao.entity.UserAuthorizeDO;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
+import com.leyunone.cloudcloud.exception.ResultCode;
+import com.leyunone.cloudcloud.exception.ServiceException;
 import com.leyunone.cloudcloud.mangaer.AccessTokenManager;
 import com.leyunone.cloudcloud.mangaer.CacheManager;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -59,16 +63,15 @@ public class AccessTokenManagerImpl implements AccessTokenManager {
 
     @Override
     public String generateOAuthCode(String clientId, String userId, ThirdPartyCloudConfigInfo cloudServiceConfig) {
-        UserAuthorizeDO userAuthorizeDO = userAuthorizeRepository.selectByUserIdAndThirdPartyCloud(userId, cloudServiceConfig.getThirdPartyCloudEnum());
+        UserAuthorizeDO userAuthorizeDO = userAuthorizeRepository.selectByUserIdAndThirdPartyCloud(userId, cloudServiceConfig.getThirdPartyCloud());
         if (null == userAuthorizeDO) {
             userAuthorizeDO = new UserAuthorizeDO()
                     .setUserId(userId)
-                    .setThirdPartyCloud(cloudServiceConfig.getThirdPartyCloudEnum().name())
+                    .setThirdPartyCloud(cloudServiceConfig.getThirdPartyCloud())
                     .setClientId(cloudServiceConfig.getClientId())
                     .setCreateTime(LocalDateTime.now());
             userAuthorizeRepository.save(userAuthorizeDO);
         }
-        int retry = 3;
         String code = UUID.randomUUID().toString();
         AccessTokenInfo.User user = new AccessTokenInfo.User();
         BeanUtil.copyProperties(userAuthorizeDO, user);
@@ -84,11 +87,12 @@ public class AccessTokenManagerImpl implements AccessTokenManager {
             /**
              * TODO 用户不存在 说明用户登录鉴权失败
              */
+            throw new ServiceException(ResultCode.FORBIDDEN);
         }
         cacheManager.deleteData(generateCodeKey(code));
         //查询用户是否已有token
         String userId = userAuthorize.getUserId();
-        AccessTokenInfo oldAccessToken = cacheManager.getData(generateUserTokenKey(userId, userAuthorize.getThirdPartyCloudEnum()), AccessTokenInfo.class);
+        AccessTokenInfo oldAccessToken = cacheManager.getData(generateUserTokenKey(userId, userAuthorize.getThirdPartyCloud()), AccessTokenInfo.class);
         if (ObjectUtil.isNull(oldAccessToken)) {
             cacheManager.deleteData(generateAccessTokenKey(oldAccessToken.getAccessToken()));
             cacheManager.deleteData(generateRefreshTokenKey(oldAccessToken.getRefreshToken()));
@@ -102,10 +106,36 @@ public class AccessTokenManagerImpl implements AccessTokenManager {
         accessTokenInfo.setClientId(clientId);
         accessTokenInfo.setUser(userAuthorize);
         accessTokenInfo.setTokenType("bearer");
-        cacheManager.addData(generateUserTokenKey(userId, userAuthorize.getThirdPartyCloudEnum()), accessTokenInfo, TOKEN_EFFICIENT_TIME);
+        cacheManager.addData(generateUserTokenKey(userId, userAuthorize.getThirdPartyCloud()), accessTokenInfo, TOKEN_EFFICIENT_TIME);
         cacheManager.addData(generateAccessTokenKey(accessToken), accessTokenInfo, TOKEN_EFFICIENT_TIME);
         cacheManager.addData(generateRefreshTokenKey(refreshToken), accessToken, REFRESH_TOKEN_EFFICIENT_TIME);
         return accessTokenInfo;
+    }
+
+    @Override
+    public AccessTokenInfo generateAccessTokenByRefreshToken(String refreshToken, String clientId) {
+        String accessToken = cacheManager.getData(generateRefreshTokenKey(refreshToken), String.class);
+        if(StrUtil.isBlank(accessToken)){
+            throw new ServiceException(ResultCode.FORBIDDEN);
+        }
+        AccessTokenInfo accessTokenEntity = cacheManager.getData(generateAccessTokenKey(accessToken), AccessTokenInfo.class);
+        if(ObjectUtil.isNull(accessTokenEntity)) {
+            throw new ServiceException(ResultCode.FORBIDDEN);
+        }
+
+        AccessTokenInfo newAccessTokenEntity = AccessTokenInfo
+                .builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .expiresIn(TOKEN_EFFICIENT_TIME)
+                .clientId(clientId)
+                .user(accessTokenEntity.getUser())
+                .tokenType("bearer")
+                .build();
+        cacheManager.addData(generateUserTokenKey(accessTokenEntity.getUser().getUserId(),accessTokenEntity.getUser().getThirdPartyCloud()),newAccessTokenEntity,TOKEN_EFFICIENT_TIME);
+        cacheManager.addData(generateAccessTokenKey(accessToken),newAccessTokenEntity,TOKEN_EFFICIENT_TIME);
+        cacheManager.addData(generateRefreshTokenKey(refreshToken),accessToken,REFRESH_TOKEN_EFFICIENT_TIME);
+        return newAccessTokenEntity;
     }
 
     @Override
@@ -116,13 +146,23 @@ public class AccessTokenManagerImpl implements AccessTokenManager {
             /**
              * TODO 密钥不存在 说明密钥过期
              */
+            throw new ServiceException(ResultCode.FORBIDDEN);
         }
-        UserAuthorizeDO userAuthorizeDO = userAuthorizeRepository.selectByUserIdAndThirdPartyCloud(accessTokenEntity.getUser().getUserId(), accessTokenEntity.getUser().getThirdPartyCloudEnum());
+        UserAuthorizeDO userAuthorizeDO = userAuthorizeRepository.selectByUserIdAndThirdPartyCloud(accessTokenEntity.getUser().getUserId(), accessTokenEntity.getUser().getThirdPartyCloud());
         AccessTokenInfo.User user = new AccessTokenInfo.User();
         BeanUtil.copyProperties(userAuthorizeDO, user);
         accessTokenEntity.setUser(user);
         //刷新token
         cacheManager.addData(generateAccessTokenKey(accessToken), accessTokenEntity, TOKEN_EFFICIENT_TIME);
+        return accessTokenEntity;
+    }
+
+    @Override
+    public AccessTokenInfo getAccessToken(String token) {
+        AccessTokenInfo accessTokenEntity = cacheManager.getData(generateAccessTokenKey(token), AccessTokenInfo.class);
+        if (null == accessTokenEntity) {
+            throw new ServiceException(ResultCode.FORBIDDEN);
+        }
         return accessTokenEntity;
     }
 

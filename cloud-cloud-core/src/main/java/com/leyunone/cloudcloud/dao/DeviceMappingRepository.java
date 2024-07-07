@@ -2,6 +2,7 @@ package com.leyunone.cloudcloud.dao;
 
 import com.leyunone.cloudcloud.dao.base.iservice.IBaseRepository;
 import com.leyunone.cloudcloud.dao.entity.DeviceMappingDO;
+import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 
 import java.util.List;
 
@@ -14,16 +15,16 @@ import java.util.List;
  */
 public interface DeviceMappingRepository extends IBaseRepository<DeviceMappingDO> {
 
-    List<DeviceMappingDO> selectByDeviceIds(List<Long> deviceIds);
+    List<DeviceMappingDO> selectByDeviceIds(List<String> deviceIds);
 
-    List<DeviceMappingDO> selectByUserIdAndCloudId(String userId,String cloud);
+    List<DeviceMappingDO> selectByUserIdAndCloudId(String userId, ThirdPartyCloudEnum cloud);
 
-    List<DeviceMappingDO> selectByDeviceId(Long deviceId);
+    List<DeviceMappingDO> selectByDeviceId(String deviceId);
 
     void updateByDeviceIdAndCloudAndUserId(DeviceMappingDO deviceMappingDO);
 
     void updateBatchByDeviceIdAndCloudAndUserId(List<DeviceMappingDO> dos);
 
-    void deleteByCloudAndUserId(String userId,String cloud);
+    void deleteByCloudAndUserId(String userId,ThirdPartyCloudEnum cloud);
 
 }

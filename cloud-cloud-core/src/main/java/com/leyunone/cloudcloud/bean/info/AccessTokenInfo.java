@@ -1,9 +1,7 @@
 package com.leyunone.cloudcloud.bean.info;
 
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -15,6 +13,9 @@ import java.time.LocalDateTime;
  * @date 2024/1/25
  */
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class AccessTokenInfo {
 
     private String accessToken;
@@ -43,10 +44,6 @@ public class AccessTokenInfo {
 
         private String thirdInfo;
 
-        private ThirdPartyCloudEnum thirdPartyCloudEnum;
-
-        private LocalDateTime createTime;
-
-        private LocalDateTime updateTime;
+        private ThirdPartyCloudEnum thirdPartyCloud;
     }
 }

@@ -1,6 +1,6 @@
 package com.leyunone.cloudcloud.support;
 
-import com.leyunone.cloudcloud.service.report.DeviceMessageReportShuntHandler;
+import com.leyunone.cloudcloud.service.report.ReportMessageReportShuntHandler;
 import com.rabbitmq.client.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,23 +14,24 @@ import java.io.IOException;
 
 /**
  * :)
- *  仅处理设备[属性]上报
+ * 仅处理设备[属性]上报
+ *
  * @Author leyunone
  * @Date 2023/12/15 10:44
  */
 @Component
 @RabbitListener(bindings = @QueueBinding(
-        value = @Queue(value = "toc.device.shadow", durable = "true"),
+        value = @Queue(value = "cloud.device.shadow", durable = "true"),
         exchange = @Exchange(value = "device.shadow.topic", type = ExchangeTypes.TOPIC),
-        key = {"device.shadow.toc"}
+        key = {"cloud.shadow.toc"}
 ))
 public class DeviceMessageConsumer {
 
     private static final Logger log = LoggerFactory.getLogger(DeviceMessageConsumer.class);
 
-    private final DeviceMessageReportShuntHandler shuntHandler;
+    private final ReportMessageReportShuntHandler shuntHandler;
 
-    public DeviceMessageConsumer(DeviceMessageReportShuntHandler shuntHandler) {
+    public DeviceMessageConsumer(ReportMessageReportShuntHandler shuntHandler) {
         this.shuntHandler = shuntHandler;
     }
 

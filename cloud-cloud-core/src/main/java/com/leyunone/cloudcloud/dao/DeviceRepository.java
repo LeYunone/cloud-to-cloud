@@ -15,4 +15,11 @@ import java.util.List;
  */
 public interface DeviceRepository extends IBaseRepository<DeviceDO> {
 
+    List<DeviceDO> selectByThirdDeviceIdsClient(String clientId, List<String> thirdDeviceIds);
+
+    List<DeviceDO> selectByClientId(String clientId);
+
+    List<DeviceDO> selectByTokenKey(String tokenKey);
+
+    List<DeviceDO> selectByRefreshKeys(List<String> refreshTokenKeys);
 }

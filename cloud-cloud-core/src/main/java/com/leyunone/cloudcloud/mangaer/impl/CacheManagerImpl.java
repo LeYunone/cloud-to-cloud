@@ -1,16 +1,14 @@
 package com.leyunone.cloudcloud.mangaer.impl;
 
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.leyunone.cloudcloud.mangaer.CacheManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -25,6 +23,54 @@ import java.util.stream.Collectors;
  */
 @Service
 public class CacheManagerImpl implements CacheManager {
+
+    @Override
+    public boolean addListValue(String key, List<String> value) {
+        if (key.isEmpty()) {
+            return false;
+        }
+        redisTemplate.opsForSet().add(key, value);
+        return true;
+    }
+
+
+    @Override
+    public boolean addListValue(String key, List<String> value, Long time, TimeUnit timeUnit) {
+        if (key.isEmpty()) {
+            return false;
+        }
+        value.forEach(v -> redisTemplate.opsForSet().add(key, v));
+        redisTemplate.expire(key, time, timeUnit);
+        return true;
+    }
+
+    @Override
+    public boolean addListValue(String key, String value) {
+        if (key.isEmpty()) {
+            return false;
+        }
+        redisTemplate.opsForSet().add(key, value);
+        return true;
+    }
+
+    @Override
+    public boolean addListValue(String key, String value, Long time, TimeUnit timeUnit) {
+        if (key.isEmpty()) {
+            return false;
+        }
+        redisTemplate.opsForSet().add(key, value);
+        redisTemplate.expire(key, time, timeUnit);
+        return true;
+    }
+
+
+    @Override
+    public Set<Object> getSetValue(String key) {
+        if (StringUtils.isBlank(key)) {
+            return new HashSet<>();
+        }
+        return redisTemplate.opsForSet().members(key);
+    }
 
     @Autowired
     private RedisTemplate<Object, Object> redisTemplate;
@@ -146,5 +192,24 @@ public class CacheManagerImpl implements CacheManager {
         }
         redisTemplate.delete(key);
         return true;
+    }
+
+    /**
+     * 判断key是否存在
+     *
+     * @param key
+     * @return
+     */
+    @Override
+    public boolean exists(String key) {
+        return redisTemplate.hasKey(key);
+    }
+
+    /**
+     * 计数
+     */
+    @Override
+    public void count(String key, int count) {
+        redisTemplate.opsForValue().increment(key, count);
     }
 }

@@ -24,7 +24,7 @@ public class MyCompanyIotDeviceInfo implements Serializable {
     /**
      * 设备唯一标识
      */
-    private Long deviceId;
+    private String deviceId;
 
     /**
      * 设备型号

@@ -10,7 +10,7 @@ import java.io.Serializable;
  */
 public class MyCompanyCommand implements Serializable {
 
-    private Long deviceId;
+    private String deviceId;
 
     private Object value;
 
@@ -18,11 +18,11 @@ public class MyCompanyCommand implements Serializable {
 
     private Integer functionId;
 
-    public Long getDeviceId() {
+    public String getDeviceId() {
         return deviceId;
     }
 
-    public MyCompanyCommand setDeviceId(Long deviceId) {
+    public MyCompanyCommand setDeviceId(String deviceId) {
         this.deviceId = deviceId;
         return this;
     }

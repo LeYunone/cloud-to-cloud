@@ -31,7 +31,7 @@ public class DeviceManagerImpl implements DeviceManager {
     }
 
     @Override
-    public DeviceCloudInfo selectByDeviceId(Long deviceId) {
+    public DeviceCloudInfo selectByDeviceId(String deviceId) {
         return null;
     }
 

@@ -17,7 +17,7 @@ public class DeviceCommandDTO implements Serializable {
     /**
      * 设备Id
      */
-    private Long deviceId;
+    private String deviceId;
 
 
     @EqualsAndHashCode(callSuper = true)

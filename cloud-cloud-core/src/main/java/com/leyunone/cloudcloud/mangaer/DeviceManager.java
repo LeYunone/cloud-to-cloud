@@ -30,7 +30,7 @@ public interface DeviceManager {
      * @param deviceId
      * @return
      */
-    DeviceCloudInfo selectByDeviceId(Long deviceId);
+    DeviceCloudInfo selectByDeviceId(String deviceId);
 
     void updateDeviceMappingByCloudAndUserIdAndDeviceId(List<DeviceCloudInfo> entities);
 }

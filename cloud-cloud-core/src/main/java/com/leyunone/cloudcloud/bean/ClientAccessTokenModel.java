@@ -27,4 +27,8 @@ public class ClientAccessTokenModel {
     private String businessId;
     
     private Integer appId;
+
+    private String accessTokenKey;
+
+    private String refreshTokenKey;
 }

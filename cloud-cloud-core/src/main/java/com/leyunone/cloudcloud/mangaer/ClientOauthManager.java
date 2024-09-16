@@ -1,7 +1,11 @@
 package com.leyunone.cloudcloud.mangaer;
 
+import com.leyunone.cloudcloud.bean.ClientAccessTokenModel;
+import com.leyunone.cloudcloud.bean.RefreshTokenModel;
 import com.leyunone.cloudcloud.bean.dto.RequestTokenDTO;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * :)
@@ -12,8 +16,6 @@ import org.springframework.stereotype.Service;
 @Service
 public interface ClientOauthManager {
 
-    void requestExchangeAccessToken(RequestTokenDTO requestTokenModel);
-
     /**
      * 对方从我方获取token
      * @param clientId 客户端id
@@ -22,4 +24,18 @@ public interface ClientOauthManager {
      * @return
      */
     String getAccessToken(String clientId,String userId,Integer appId);
+
+    ClientAccessTokenModel requestExchangeAccessToken(RequestTokenDTO requestTokenModel);
+
+    void timingRefreshUserAccessToken(RefreshTokenModel refreshTokenModel, String messageId);
+
+    void requestRefreshAccessTokenByKeys(List<String> refreshTokenKey);
+
+    void requestRefreshAccessTokenByDeviceIds(List<Long> deviceIds);
+
+    String getRefreshToken(String clientId, String businessId, Integer appId);
+
+    void removeToken(String clientId, String businessId, Integer appId);
+
+    String getAccessToken(String tokenKey,boolean exception);
 }

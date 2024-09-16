@@ -17,7 +17,7 @@ import java.util.List;
 @Builder
 public class DeviceShadowModel extends SceneModel {
 
-    private Long deviceId;
+    private String deviceId;
 
     private String productId;
 

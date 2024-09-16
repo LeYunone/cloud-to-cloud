@@ -2,12 +2,23 @@ package com.leyunone.cloudcloud.mangaer;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 public interface CacheManager {
 
+
+    boolean addListValue(String key, List<String> value);
+
+    boolean addListValue(String key, List<String> value,Long time,TimeUnit timeUnit);
+
+    boolean addListValue(String key, String value);
+
+    boolean addListValue(String key, String value,Long time,TimeUnit timeUnit);
+
+    Set<Object> getSetValue(String key);
 
     /**
      * String类型查询
@@ -65,5 +76,7 @@ public interface CacheManager {
 
     boolean deleteData(List<Object> key);
 
+    boolean exists(String key);
 
+    void count(String key, int count);
 }

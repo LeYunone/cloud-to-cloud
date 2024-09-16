@@ -36,5 +36,9 @@ public enum ThirdPartyCloudEnum {
      * https://developers.home.google.com/cloud-to-cloud/integration/sync?hl=zh-cn
      */
     GOOGLE,
+
+    YINGSHI,
+
+    PRIVATE
     ;
 }

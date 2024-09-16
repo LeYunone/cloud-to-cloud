@@ -18,18 +18,14 @@ import lombok.ToString;
 public class RequestTokenDTO {
 
     private String clientId;
-    
-    private String code;
-    
-    private String apiId;
 
-    /**
-     * 第三方搜全绑定的业务id 比如用户id
-     */
+    private String code;
+
+    private String apiId;
+    //绑定的业务id
     private String businessId;
 
-    /**
-     * 我方授权的应用id
-     */
     private Integer appId;
+
+    private String redirectUri;
 }

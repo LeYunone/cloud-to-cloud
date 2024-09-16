@@ -22,6 +22,8 @@ public class ThirdPartyCloudConfigInfo {
 
     private String additionalInformation;
 
+    private String redirectUri;
+
     private String reportUrl;
 
     private ThirdPartyCloudEnum thirdPartyCloud;
@@ -34,7 +36,11 @@ public class ThirdPartyCloudConfigInfo {
 
     private String thirdClientId;
 
-    private String apiId;
+    private String authorizationUrl;
 
     private String accessTokenUrl;
+
+    private String apiId;
+
+    private String webServiceUrl;
 }

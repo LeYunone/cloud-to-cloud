@@ -2,6 +2,8 @@ package com.leyunone.cloudcloud.service;
 
 import com.leyunone.cloudcloud.bean.info.ThirdPartyCloudConfigInfo;
 
+import java.util.List;
+
 /**
  * :)
  *
@@ -12,5 +14,7 @@ import com.leyunone.cloudcloud.bean.info.ThirdPartyCloudConfigInfo;
 public interface ThirdPartyConfigService {
 
     ThirdPartyCloudConfigInfo getConfig(String clientId);
+
+    List<ThirdPartyCloudConfigInfo> getConfig(List<String> clientIds);
 }
 

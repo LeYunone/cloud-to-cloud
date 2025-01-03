@@ -79,7 +79,6 @@ public class XiaomiControlConverter extends AbstractXiaomiDataConverterTemplate<
                         if(ObjectUtil.isNotNull(device)){
                             functionCodeCommand.setProductId(device.getProductId());
                         }
-                        functionCodeCommand.setFunctionId(xiaomiFunctionMapping.getFunctionId());
                         functionCodeCommand.setSignCode(xiaomiFunctionMapping.getSignCode());
                         functionCodeCommand.setValue(value.toString());
                         return functionCodeCommand;

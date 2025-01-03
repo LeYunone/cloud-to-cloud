@@ -22,8 +22,6 @@ public class StatusMapping {
     private Map<String,Object> valueMapping;
     
     private String signCode;
-
-    private Integer functionId;
     
     private String thirdSignCode;
 

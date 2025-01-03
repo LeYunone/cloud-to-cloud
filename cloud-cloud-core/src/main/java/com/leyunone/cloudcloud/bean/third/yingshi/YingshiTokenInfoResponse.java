@@ -1,5 +1,6 @@
 package com.leyunone.cloudcloud.bean.third.yingshi;
 
+
 import lombok.Data;
 
 /**

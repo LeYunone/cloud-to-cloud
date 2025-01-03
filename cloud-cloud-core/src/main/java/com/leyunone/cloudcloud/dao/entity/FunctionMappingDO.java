@@ -43,11 +43,6 @@ public class FunctionMappingDO {
     private String signCode;
 
     /**
-     * 功能id
-     */
-    private Integer functionId;
-
-    /**
      * 语音技能枚举 详细请见代码
      */
     private String thirdSignCode;

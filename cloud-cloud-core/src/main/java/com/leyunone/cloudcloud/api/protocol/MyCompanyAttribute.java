@@ -24,6 +24,4 @@ public class MyCompanyAttribute implements Serializable {
     private String value;
     
     private Long timeOfSample;
-    
-    private Integer functionId;
 }

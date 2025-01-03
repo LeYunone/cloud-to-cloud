@@ -44,8 +44,6 @@ public class ActionMappingDO {
 
     private String signCode;
 
-    private Integer functionId;
-
     private String defaultValue;
 
     private Boolean valueOf;

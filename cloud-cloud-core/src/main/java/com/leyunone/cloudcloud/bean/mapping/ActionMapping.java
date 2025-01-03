@@ -37,8 +37,6 @@ public class ActionMapping {
      */
     private String thirdActionCode;
 
-    private Integer functionId;
-
     private String signCode;
 
     /**

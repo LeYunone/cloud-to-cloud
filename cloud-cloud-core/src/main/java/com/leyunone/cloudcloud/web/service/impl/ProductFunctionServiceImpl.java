@@ -52,7 +52,6 @@ public class ProductFunctionServiceImpl implements ProductFunctionService {
             function.setThirdPartyCloud(functionMapping.getThirdPartyCloud());
             function.setId(functionMapping.getId());
             function.setSignCode(functionMapping.getSignCode());
-            function.setFunctionId(functionMapping.getFunctionId());
             function.setThirdSignCode(functionMapping.getThirdSignCode());
             function.setThirdActionCode(functionMapping.getThirdActionCode());
             function.setValueOf(functionMapping.getValueOf());
@@ -126,7 +125,6 @@ public class ProductFunctionServiceImpl implements ProductFunctionService {
             functionMappingDO.setId(f.getId());
             functionMappingDO.setProductId(dto.getProductId());
             functionMappingDO.setSignCode(f.getSignCode());
-            functionMappingDO.setFunctionId(f.getFunctionId());
             try {
                 //找到最终key
                 functionMappingDO.setThirdSignCode(DeepSearchUtils.findDeepestKey(JSONObject.parseObject(f.getThirdSignCode())));

@@ -35,5 +35,10 @@ public class PortalController {
     public String baidu(@RequestBody String payload) {
         return thirdPartyPortalService.portal(payload, ThirdPartyCloudEnum.BAIDU);
     }
+    
+    @PostMapping("xiaomi")
+    public String xiaomi(@RequestBody String payload) {
+        return thirdPartyPortalService.portal(payload, ThirdPartyCloudEnum.XIAOMI);
+    }
 
 }

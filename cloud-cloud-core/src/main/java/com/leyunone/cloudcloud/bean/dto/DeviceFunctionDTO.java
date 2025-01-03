@@ -22,8 +22,6 @@ public class DeviceFunctionDTO {
     private String deviceId;
 
     private String signCode;
-
-    private Integer functionId;
     
     private boolean scene;
 

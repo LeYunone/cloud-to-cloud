@@ -50,7 +50,6 @@ public class BaiduActionConvert extends AbstractBaiduDataConverterTemplate<Devic
         DeviceFunctionDTO deviceFunctionDTO = new DeviceFunctionDTO();
         deviceFunctionDTO.setProductId(actionMapping.getProductId());
         deviceFunctionDTO.setSignCode(actionMapping.getSignCode());
-        deviceFunctionDTO.setFunctionId(actionMapping.getFunctionId());
         deviceFunctionDTO.setDeviceId(payload.getAppliance().getApplianceId());
         deviceFunctionDTO.setValue(value);
         return deviceFunctionDTO;

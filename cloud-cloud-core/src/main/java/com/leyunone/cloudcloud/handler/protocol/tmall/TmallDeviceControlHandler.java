@@ -120,7 +120,6 @@ public class TmallDeviceControlHandler extends AbstractStrategyTmallHandler<Tmal
             BeanUtil.copyProperties(functionCodeCommand, currentDeviceCommand);
             currentDeviceCommand.setDeviceId(deviceId);
             currentDeviceCommand.setSignCode(functionMap.get(deviceId).getSignCode());
-            currentDeviceCommand.setFunctionId(functionMap.get(deviceId).getFunctionId());
             return currentDeviceCommand;
         }).collect(Collectors.toList());
     }

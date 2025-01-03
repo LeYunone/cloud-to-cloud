@@ -53,6 +53,7 @@ public class AlexaDiscoveryHandler extends AbstractStrategyAlexaHandler<AlexaDis
                 .build());
     }
 
+    @Override
     public AlexaHeader buildHeader(AlexaHeader header) {
         return AlexaHeader.builder()
                 .messageId(header.getMessageId())

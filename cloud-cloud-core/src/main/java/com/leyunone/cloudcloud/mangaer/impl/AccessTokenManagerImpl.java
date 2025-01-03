@@ -92,7 +92,7 @@ public class AccessTokenManagerImpl implements AccessTokenManager {
         cacheManager.deleteData(generateCodeKey(code));
         //查询用户是否已有token
         String userId = userAuthorize.getUserId();
-        AccessTokenInfo oldAccessToken = cacheManager.getData(generateUserTokenKey(userId, userAuthorize.getThirdPartyCloud()), AccessTokenInfo.class);
+        AccessTokenInfo oldAccessToken = cacheManager.getData(generateUserTokenKey(userId, clientId), AccessTokenInfo.class);
         if (ObjectUtil.isNull(oldAccessToken)) {
             cacheManager.deleteData(generateAccessTokenKey(oldAccessToken.getAccessToken()));
             cacheManager.deleteData(generateRefreshTokenKey(oldAccessToken.getRefreshToken()));
@@ -106,7 +106,7 @@ public class AccessTokenManagerImpl implements AccessTokenManager {
         accessTokenInfo.setClientId(clientId);
         accessTokenInfo.setUser(userAuthorize);
         accessTokenInfo.setTokenType("bearer");
-        cacheManager.addData(generateUserTokenKey(userId, userAuthorize.getThirdPartyCloud()), accessTokenInfo, TOKEN_EFFICIENT_TIME);
+        cacheManager.addData(generateUserTokenKey(userId, clientId), accessTokenInfo, TOKEN_EFFICIENT_TIME);
         cacheManager.addData(generateAccessTokenKey(accessToken), accessTokenInfo, TOKEN_EFFICIENT_TIME);
         cacheManager.addData(generateRefreshTokenKey(refreshToken), accessToken, REFRESH_TOKEN_EFFICIENT_TIME);
         return accessTokenInfo;
@@ -132,7 +132,7 @@ public class AccessTokenManagerImpl implements AccessTokenManager {
                 .user(accessTokenEntity.getUser())
                 .tokenType("bearer")
                 .build();
-        cacheManager.addData(generateUserTokenKey(accessTokenEntity.getUser().getUserId(),accessTokenEntity.getUser().getThirdPartyCloud()),newAccessTokenEntity,TOKEN_EFFICIENT_TIME);
+        cacheManager.addData(generateUserTokenKey(accessTokenEntity.getUser().getUserId(),clientId),newAccessTokenEntity,TOKEN_EFFICIENT_TIME);
         cacheManager.addData(generateAccessTokenKey(accessToken),newAccessTokenEntity,TOKEN_EFFICIENT_TIME);
         cacheManager.addData(generateRefreshTokenKey(refreshToken),accessToken,REFRESH_TOKEN_EFFICIENT_TIME);
         return newAccessTokenEntity;
@@ -175,8 +175,8 @@ public class AccessTokenManagerImpl implements AccessTokenManager {
         return String.join("_", ACCESS_TOKEN, accessToken);
     }
 
-    private String generateUserTokenKey(String userId, ThirdPartyCloudEnum cloud) {
-        return String.join("_", USER_TOKEN_PREFIX, userId, cloud.name());
+    private String generateUserTokenKey(String userId, String clientId) {
+        return String.join("_", USER_TOKEN_PREFIX, userId, clientId);
     }
 
     private String generateRefreshTokenKey(String refreshToken) {

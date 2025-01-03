@@ -20,29 +20,15 @@ public class DeviceCommandDTO implements Serializable {
     private String deviceId;
 
 
-    @EqualsAndHashCode(callSuper = true)
-    @Data
-    public static class FunctionIdCommand extends DeviceCommandDTO {
-        /**
-         * 值
-         */
-        private String value;
-
-        /**
-         * 功能Id
-         */
-        private Integer functionId;
-
-        /**
-         * 运算 详见#{@link FunctionOperation}
-         */
-        private String operation;
-    }
+    /**
+     * 运算 详见#{@link FunctionOperation}
+     */
+    private String operation;
 
 
     @EqualsAndHashCode(callSuper = true)
     @Data
-    public static class FunctionCodeCommand extends FunctionIdCommand{
+    public static class FunctionCodeCommand extends DeviceCommandDTO{
 
         /**
          *功能标识码，需要与productId确保唯一
@@ -51,6 +37,11 @@ public class DeviceCommandDTO implements Serializable {
         private String signCode;
 
         private boolean isScene;
+
+        /**
+         * 值
+         */
+        private String value;
     }
 
 

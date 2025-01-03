@@ -6,7 +6,6 @@ import com.leyunone.cloudcloud.bean.mapping.ProductMapping;
 import com.leyunone.cloudcloud.bean.mapping.StatusMapping;
 import com.leyunone.cloudcloud.bean.mapping.TmallProductMapping;
 import com.leyunone.cloudcloud.handler.convert.AbstractDataConvertHandler;
-import com.leyunone.cloudcloud.handler.factory.ConvertHandlerFactory;
 import com.leyunone.cloudcloud.service.mapping.ProductMappingService;
 
 import java.util.HashMap;

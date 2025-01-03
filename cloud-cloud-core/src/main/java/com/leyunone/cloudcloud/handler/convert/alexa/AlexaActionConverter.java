@@ -70,7 +70,6 @@ public class AlexaActionConverter extends AbstractAlexaDataConverterTemplate<Lis
                     codeCommand.setProductId(capabilityMapping.getProductId());
                     codeCommand.setSignCode(capabilityMapping.getSignCode());
                     codeCommand.setValue(value);
-                    codeCommand.setFunctionId(capabilityMapping.getFunctionId());
                 }
                 codeCommand.setDeviceId(r.getDirective().getEndpoint().getEndpointId());
                 return codeCommand;

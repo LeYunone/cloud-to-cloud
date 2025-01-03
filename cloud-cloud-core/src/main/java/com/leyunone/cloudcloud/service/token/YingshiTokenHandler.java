@@ -78,7 +78,7 @@ public class YingshiTokenHandler extends AbstractNonStandardTokenHandler {
         }
         ClientAccessTokenModel clientAccessTokenModel = new ClientAccessTokenModel();
         clientAccessTokenModel.setAccessToken(yingShiTokenInfoResponse.getData().getAccessToken());
-        clientAccessTokenModel.setExpiresIn(yingShiTokenInfoResponse.getData().getExpireTime());
+        clientAccessTokenModel.setExpiresIn(System.currentTimeMillis() - yingShiTokenInfoResponse.getData().getExpireTime() - 5000);
         TOKEN_TEMP = clientAccessTokenModel;
         return clientAccessTokenModel;
     }

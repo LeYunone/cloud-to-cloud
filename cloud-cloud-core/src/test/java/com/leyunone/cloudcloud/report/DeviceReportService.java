@@ -36,7 +36,6 @@ public class DeviceReportService {
         DeviceMessageDTO deviceMessageDTO = new DeviceMessageDTO();
         List<DeviceFunctionDTO> functions = new ArrayList<>();
         DeviceFunctionDTO function = new DeviceFunctionDTO();
-        function.setFunctionId(1);
         function.setSignCode("switch");
         function.setValue("0");
         functions.add(function);

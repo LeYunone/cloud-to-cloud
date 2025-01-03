@@ -6,6 +6,7 @@ import com.leyunone.cloudcloud.bean.info.DeviceCloudInfo;
 import com.leyunone.cloudcloud.bean.info.DeviceInfo;
 import com.leyunone.cloudcloud.bean.info.DeviceMappingInfo;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
+import com.leyunone.cloudcloud.handler.factory.CloudProtocolHandlerFactory;
 import com.leyunone.cloudcloud.handler.factory.StrategyFactory;
 import com.leyunone.cloudcloud.mangaer.DeviceRelationManager;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -32,7 +33,7 @@ public abstract class AbstractStrategyProtocolHandler<R,P> extends AbstractStrat
 
     private Class<P> pClass;
 
-    protected AbstractStrategyProtocolHandler(StrategyFactory factory, DeviceRelationManager deviceManager) {
+    protected AbstractStrategyProtocolHandler(CloudProtocolHandlerFactory factory, DeviceRelationManager deviceManager) {
         super(factory);
         this.deviceRelationManager = deviceManager;
         Class<?> clazzz = getClass();

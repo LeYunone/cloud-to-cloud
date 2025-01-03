@@ -65,7 +65,6 @@ public class DeviceServiceHttpManagerImpl implements DeviceServiceHttpManager {
                         .deviceFunctions(CollectionUtil.newArrayList(DeviceFunctionDTO.builder()
                                 .signCode("switch")
                                 .deviceId("1")
-                                .functionId(1)
                                 .value("0")
                                 .build()))
                         .build(),
@@ -79,13 +78,11 @@ public class DeviceServiceHttpManagerImpl implements DeviceServiceHttpManager {
                                         .signCode("switch")
                                         .deviceId("2")
                                         .value("1")
-                                        .functionId(1)
                                         .build(),
                                 DeviceFunctionDTO.builder()
                                         .deviceId("2")
                                         .signCode("rgb")
                                         .value("{\"r\":255,\"g\":255,\"b\":255}")
-                                        .functionId(2)
                                         .build()
                         ))
                         .build(),
@@ -162,7 +159,6 @@ public class DeviceServiceHttpManagerImpl implements DeviceServiceHttpManager {
                             deviceFunctionDTOS.stream().map(dc -> DeviceFunctionDTO.builder()
                                     .signCode(dc.getSignCode())
                                     .deviceId(dc.getDeviceId())
-                                    .functionId(dc.getFunctionId())
                                     .value(dc.getValue())
                                     .build()).collect(Collectors.toList()))
                     .build();

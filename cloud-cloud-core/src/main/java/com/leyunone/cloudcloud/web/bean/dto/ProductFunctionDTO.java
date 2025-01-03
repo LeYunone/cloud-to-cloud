@@ -35,8 +35,6 @@ public class ProductFunctionDTO {
 
         private String signCode;
 
-        private Integer functionId;
-
         private String thirdSignCode;
 
         private String thirdActionCode;

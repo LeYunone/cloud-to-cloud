@@ -81,7 +81,6 @@ public class GoogleControlConvert extends AbstractGoogleDataConverterTemplate<Li
                         DeviceFunctionDTO codeCommand = new DeviceFunctionDTO();
                         codeCommand.setSignCode(actionMapping.getSignCode());
                         codeCommand.setValue(String.valueOf(value));
-                        codeCommand.setFunctionId(actionMapping.getFunctionId());
                         codeCommand.setProductId(actionMapping.getProductId());
                         codeCommand.setOperation(actionMapping.getOperation());
                         codeCommand.setDeviceId(d.getId());

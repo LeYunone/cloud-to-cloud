@@ -50,7 +50,6 @@ public class DeviceServiceHttpManagerImpl implements DeviceServiceHttpManager {
     @Override
     public List<DeviceInfo> getDeviceListByUserId(String userId, ThirdPartyCloudConfigInfo cloudConfig) {
         logger.debug("{}平台：发现设备.请求路由：{}，通过用户id：{}，", cloudConfig.getThirdPartyCloud(), cloudConfig.getMainUrl() + SdkConstants.DISCOVER_INTERFACE, userId);
-
         return new ArrayList<>(getTestDevice());
     }
 
@@ -142,7 +141,6 @@ public class DeviceServiceHttpManagerImpl implements DeviceServiceHttpManager {
      */
     @Override
     public List<DeviceInfo> commands(String userId, List<DeviceFunctionDTO> deviceCommands, ThirdPartyCloudConfigInfo cloudConfig) {
-        this.loadSceneCommand(deviceCommands);
         logger.debug("{}平台：批量控制设备.请求路由：{}，信息为：{}，", cloudConfig.getThirdPartyCloud(), cloudConfig.getMainUrl() + SdkConstants.CONTROL_INTERFACE, CollectionUtil.join(deviceCommands, ","));
         return new ArrayList<>(this.getControlTest(deviceCommands));
     }
@@ -176,14 +174,4 @@ public class DeviceServiceHttpManagerImpl implements DeviceServiceHttpManager {
         return (T) JSON.parseObject(JSON.toJSONString(commonResult), responseType);
     }
 
-    private void loadSceneCommand(List<DeviceFunctionDTO> deviceCommands) {
-        if (CurrentRequestContext.hasSceneData()) {
-            Set<String> sceneData = CurrentRequestContext.getSceneData();
-            deviceCommands.forEach(c -> {
-                if (sceneData.contains(c.getDeviceId())) {
-                    c.setScene(true);
-                }
-            });
-        }
-    }
 }

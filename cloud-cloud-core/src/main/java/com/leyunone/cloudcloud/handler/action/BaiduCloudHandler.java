@@ -52,13 +52,7 @@ public class BaiduCloudHandler extends AbstractCloudCloudHandler {
     }
 
     @Override
-    protected void checkSceneData(String request) {
-        try {
-            BaiduStandardRequest baiduStandardRequest = JSONObject.parseObject(request, BaiduStandardRequest.class);
-            String sceneId = baiduStandardRequest.getPayload().getAppliance().getAdditionalApplianceDetails().get(VoiceConstants.SCENES_KEY);
-            CurrentRequestContext.setSceneData(sceneId);
-        } catch (Exception e) {
-        }
+    protected void extraAction(String request) {
     }
 
     @Override

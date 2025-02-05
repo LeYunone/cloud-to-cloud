@@ -3,7 +3,6 @@ package com.leyunone.cloudcloud.handler.action;
 import com.leyunone.cloudcloud.bean.CurrentRequestContext;
 import com.leyunone.cloudcloud.bean.info.AccessTokenInfo;
 import com.leyunone.cloudcloud.handler.factory.CloudCloudHandlerFactory;
-import com.leyunone.cloudcloud.handler.factory.StrategyFactory;
 import com.leyunone.cloudcloud.mangaer.AccessTokenManager;
 import com.leyunone.cloudcloud.service.ThirdPartyConfigService;
 import com.leyunone.cloudcloud.strategy.AbstractStrategyAutoRegisterComponent;
@@ -32,7 +31,7 @@ public abstract class AbstractCloudCloudHandler extends AbstractStrategyAutoRegi
         try {
             String accessToken = getAccessToken(request);
             AccessTokenInfo authentication = authentication(accessToken);
-            checkSceneData(request);
+            extraAction(request);
             return dispatchHandler(request, authentication);
         } finally {
             CurrentRequestContext.remove();
@@ -63,5 +62,5 @@ public abstract class AbstractCloudCloudHandler extends AbstractStrategyAutoRegi
      * @param request
      * @return
      */
-    protected abstract void checkSceneData(String request);
+    protected abstract void extraAction(String request);
 }

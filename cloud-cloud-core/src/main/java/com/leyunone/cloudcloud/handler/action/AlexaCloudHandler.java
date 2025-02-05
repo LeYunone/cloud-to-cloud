@@ -78,7 +78,7 @@ public class AlexaCloudHandler extends AbstractCloudCloudHandler {
     }
 
     @Override
-    protected void checkSceneData(String request) {
+    protected void extraAction(String request) {
         
     }
 }

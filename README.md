@@ -1,4 +1,4 @@
-# Cloud-to-Cloud(云云接入)
+# Cloud-to-Cloud(云云接入脚手架)
 
 ## 前言
 
@@ -13,14 +13,14 @@
 
 `问：这是什么？`
 
-**答**：对接各大产商云如**小度**、**天猫精灵**，**小爱同学**，**Alexa**等智能语音技能的云云接入协议，是一个全平台通用的中间层物联网设备模型转化平台。
+**答**：对接各大产商云如**小度**、**天猫精灵**，**小爱同学**，**Alexa**等技能协议的云云接入转化器，是一个全平台通用的中间层物联网设备模型转化平台。
 
 `问：有什么用？`
 
 **答**：
 
 1. 自带完整体系的小度、小米、Alexa、Google等主流物联网平台云云接入协议，拆箱即用
-2. 产商云与开发者云的模型转化被数据库配置化，可由页面进行可视化配置他方云模型与我方云模型的转化关系。
+2. 产商云与开发者云的模型转化被数据库配置化，可由页面或数据库操作进行可视化配置他方云协议模型与我方云协议模型的转化关系。
 3. 是物联网云云接入协议技能平台的一个完整（从架构功能，授权到可视化页面）流程的解决方案
 
 `问：定位是什么？`
@@ -69,9 +69,57 @@
 
 数据库见voice_cloud.sql文件
 
-### 以下选读
+## 后言
+
+本项目只是一个云云协议转化的脚手架平台，如果你现在需要：
+
+- 对接某产商的物联网云协议
+- 在某产商的开发平台上创建技能
+- ...
+
+就可以选择该项目作为你需求的基石，希望能帮助到你
+
+## 相关链接
+
+ * 小度  [https://dueros.baidu.com/didp/doc/dueros-bot-platform/dbp-smart-home/protocol/discovery-message_markdown](https://dueros.baidu.com/didp/doc/dueros-bot-platform/dbp-smart-home/protocol/discovery-message_markdown)
+ * 小爱同学 [https://developers.xiaoai.mi.com/documents/Home?type=/api/doc/render_markdown/SkillAccess/skill/CustomSkillsMain](https://developers.xiaoai.mi.com/documents/Home?type=/api/doc/render_markdown/SkillAccess/skill/CustomSkillsMain)
+ * 华为HiLink  [https://developer.huawei.com/consumer/cn/doc/smarthome-Guides/yunaccount-0000001075288087](https://developer.huawei.com/consumer/cn/doc/smarthome-Guides/yunaccount-0000001075288087)
+
+ * 天猫精灵  [https://www.aligenie.com/doc/357554/cmhq2c](https://www.aligenie.com/doc/357554/cmhq2c)
+ * Alexa [https://developer.amazon.com/en-US/docs/alexa/device-apis/alexa-discovery.html](https://developer.amazon.com/en-US/docs/alexa/device-apis/alexa-discovery.html)
+
+ * Google [https://developers.home.google.com/cloud-to-cloud/integration/sync?hl=zh-cn](https://developers.home.google.com/cloud-to-cloud/integration/sync?hl=zh-cn)
+ * [物联网语音云云接入](https://leyunone.com/unidentified-business/iot-cloud-cloud.html)
+ * [云云对接协议中的值组装](https://leyunone.com/Interesting-design/value-assemble.html)
+
+## 以下选读（部署流程）
 
 因为各开发云的业务不同，本平台一定得由使用者进行一定的代码调整，下面将以百度为例进行代码跟踪；
+
+### oauth2授权
+
+授权入口：`OAuthorizeController`
+
+提供服务端授权码
+
+```java
+	@PostMapping("/authorize")    
+	public String authorize(@RequestParam("clientId") String clientId, HttpServletRequest request) {
+        return oAuthService.generateOAuthCode(clientId, request);
+    }
+```
+
+'第三方'请求获取授权码
+
+```java
+@PostMapping("/access_token")
+public AccessTokenVO accessToken(@RequestParam(value = "code", required = false) String code,
+     //.....省略
+```
+
+oauth2的授权过程由于需要前端页面参与，推荐自行消化oauth2授权部分；
+
+### 协议入口
 
 入口：`PortalController`
 
@@ -107,32 +155,14 @@
 }
 ```
 
-执行`BaiduDeviceDiscoveryHandler`类方法
+接下来链路为：
 
-使用者在`DeviceServiceHttpManager`中修改我方云实际发现设备动作的请求，一般为HTTP，也可使用Rpc。
-
-调用修改后的方法拿到设备后，将发现到的设备与本次请求的用户关系存储到数据库中，并且在缓存中建立设备-用户的关系文档
-
-执行`BaiduDeviceConvert`模型转化方法，将发现到的设备通过数据库中配置的模型属性映射关系，变为百度方的设备结构；
-
-组装响应参，返回，结束；
+1. 通过namespace可以找到并执行`BaiduDeviceDiscoveryHandler`类的`action1`方法
+2. 使用者在`DeviceServiceHttpManager`中修改我方协议中实际发现设备动作的请求，已知授权时的token（用户信息，业务信息），本次链路的平台配置和上下文信息。调用修改后的方法拿到设备后，将发现到的设备与本次请求的用户关系存储到数据库中，并且在缓存中建立设备-用户的关系文档。
+3. 执行`BaiduDeviceConvert`模型转化方法，在`BaiduMappingAssembler`类中将发现到的产品通过数据库中配置信息，包装我方-对方的映射关系对象，最终解析将我方的产品变为百度方的产品报文；
+4. 组装响应参，返回，结束；
 
 架构大体上使用策略+抽象工厂的模式搭建，通过上述的路线查看代码，只需要修改`DeviceServiceHttpManager`中实际云通讯部分的代码即可完成部署；
 
 **包括上报、同步、协议对接部分的所有开发云的响应参请以本项目中的DeviceInfo和DeviceFunctionDTO为准**
-
-## 相关链接
-
- * 小度  [https://dueros.baidu.com/didp/doc/dueros-bot-platform/dbp-smart-home/protocol/discovery-message_markdown](https://dueros.baidu.com/didp/doc/dueros-bot-platform/dbp-smart-home/protocol/discovery-message_markdown)
- * 小爱同学 [https://developers.xiaoai.mi.com/documents/Home?type=/api/doc/render_markdown/SkillAccess/skill/CustomSkillsMain](https://developers.xiaoai.mi.com/documents/Home?type=/api/doc/render_markdown/SkillAccess/skill/CustomSkillsMain)
- * 华为HiLink  [https://developer.huawei.com/consumer/cn/doc/smarthome-Guides/yunaccount-0000001075288087](https://developer.huawei.com/consumer/cn/doc/smarthome-Guides/yunaccount-0000001075288087)
-
- * 天猫精灵  [https://www.aligenie.com/doc/357554/cmhq2c](https://www.aligenie.com/doc/357554/cmhq2c)
- * Alexa [https://developer.amazon.com/en-US/docs/alexa/device-apis/alexa-discovery.html](https://developer.amazon.com/en-US/docs/alexa/device-apis/alexa-discovery.html)
-
- * Google [https://developers.home.google.com/cloud-to-cloud/integration/sync?hl=zh-cn](https://developers.home.google.com/cloud-to-cloud/integration/sync?hl=zh-cn)
- * [物联网语音云云接入](https://leyunone.com/unidentified-business/iot-cloud-cloud.html)
- * [云云对接协议中的值组装](https://leyunone.com/Interesting-design/value-assemble.html)
-
-
 

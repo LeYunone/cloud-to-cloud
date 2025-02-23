@@ -1,14 +1,11 @@
 package com.leyunone.cloudcloud.handler.convert.alexa;
 
-import cn.hutool.core.util.ObjectUtil;
-import com.leyunone.cloudcloud.bean.third.alexa.AlexaDeviceProperty;
 import com.leyunone.cloudcloud.bean.dto.DeviceFunctionDTO;
-import com.leyunone.cloudcloud.bean.enums.ConvertFunctionEnum;
 import com.leyunone.cloudcloud.bean.info.DeviceInfo;
 import com.leyunone.cloudcloud.bean.mapping.AlexaFunctionMapping;
 import com.leyunone.cloudcloud.bean.mapping.AlexaProductMapping;
 import com.leyunone.cloudcloud.bean.mapping.ProductMapping;
-import com.leyunone.cloudcloud.bean.mapping.StatusMapping;
+import com.leyunone.cloudcloud.bean.third.alexa.AlexaDeviceProperty;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.service.mapping.ProductMappingService;
 import com.leyunone.cloudcloud.util.CollectionFunctionUtils;

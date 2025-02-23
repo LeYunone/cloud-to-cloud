@@ -12,17 +12,20 @@ import com.leyunone.cloudcloud.dao.entity.FunctionMappingDO;
 import com.leyunone.cloudcloud.dao.entity.ProductTypeMappingDO;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.util.CollectionFunctionUtils;
+import com.leyunone.cloudcloud.util.DaoUtils;
 import com.leyunone.cloudcloud.util.DeepSearchUtils;
 import com.leyunone.cloudcloud.web.bean.dto.ProductFunctionDTO;
 import com.leyunone.cloudcloud.web.bean.query.ProductTypeQuery;
 import com.leyunone.cloudcloud.web.bean.vo.ProductFunctionMappingVO;
 import com.leyunone.cloudcloud.web.bean.vo.ProductFunctionVO;
 import com.leyunone.cloudcloud.web.service.ProductFunctionService;
-import com.leyunone.cloudcloud.util.DaoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**

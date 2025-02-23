@@ -9,7 +9,6 @@ import com.leyunone.cloudcloud.bean.third.tmall.TmallStandardRequest;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.handler.factory.CloudCloudHandlerFactory;
 import com.leyunone.cloudcloud.handler.protocol.AbstractStrategyProtocolHandler;
-import com.leyunone.cloudcloud.handler.protocol.CloudProtocolHandler;
 import com.leyunone.cloudcloud.mangaer.AccessTokenManager;
 import com.leyunone.cloudcloud.service.ThirdPartyConfigService;
 import org.springframework.stereotype.Service;

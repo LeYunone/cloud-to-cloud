@@ -1,6 +1,9 @@
 package com.leyunone.cloudcloud.api;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -10,12 +13,11 @@ import java.util.List;
  * @Author LeYunone
  * @Date 2024/5/27 17:29
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class DeviceShadowModel extends SceneModel {
+public class DeviceShadowModel {
 
     private String deviceId;
 

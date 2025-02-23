@@ -17,6 +17,7 @@ import java.util.UUID;
  * @Author LeYunone
  * @Date 2024/5/11 11:38
  */
+@Deprecated
 public abstract class AbstractProtocolStrategyHandler<R, P> extends AbstractStrategyAutoRegisterComponent implements MyCloudProtocolHandler<R>, InitializingBean {
 
     private Class<P> pClass;

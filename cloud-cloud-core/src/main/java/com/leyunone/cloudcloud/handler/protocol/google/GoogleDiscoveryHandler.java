@@ -1,10 +1,10 @@
 package com.leyunone.cloudcloud.handler.protocol.google;
 
+import com.leyunone.cloudcloud.bean.info.ActionContext;
+import com.leyunone.cloudcloud.bean.info.DeviceInfo;
 import com.leyunone.cloudcloud.bean.third.google.GoogleDevice;
 import com.leyunone.cloudcloud.bean.third.google.GoogleDiscoveryResponse;
 import com.leyunone.cloudcloud.bean.third.google.GoogleStandardRequest;
-import com.leyunone.cloudcloud.bean.info.ActionContext;
-import com.leyunone.cloudcloud.bean.info.DeviceInfo;
 import com.leyunone.cloudcloud.constant.GoogleActionConstants;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.handler.convert.google.GoogleDeviceInfoConvert;
@@ -36,8 +36,7 @@ public class GoogleDiscoveryHandler extends AbstractStrategyGoogleoHandler<Googl
 
     @Override
     protected GoogleDiscoveryResponse action1(GoogleStandardRequest googleStandardRequest, ActionContext context) {
-        List<DeviceInfo> deviceInfos = deviceServiceHttpManager.getDeviceListByUserId(context.getAccessTokenInfo().getUser().getUserId(),
-                context.getThirdPartyCloudConfigInfo());
+        List<DeviceInfo> deviceInfos = deviceServiceHttpManager.getDeviceListByUserId(context);
         List<GoogleDevice> convert = googleDeviceInfoConvert.convert(deviceInfos);
         super.doRelationStore(deviceInfos,
                 context.getAccessTokenInfo().getUser().getUserId(),

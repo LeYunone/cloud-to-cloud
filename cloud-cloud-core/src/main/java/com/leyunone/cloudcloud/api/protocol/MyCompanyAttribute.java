@@ -1,6 +1,5 @@
 package com.leyunone.cloudcloud.api.protocol;
 
-import com.sun.istack.internal.NotNull;
 import lombok.*;
 
 import java.io.Serializable;

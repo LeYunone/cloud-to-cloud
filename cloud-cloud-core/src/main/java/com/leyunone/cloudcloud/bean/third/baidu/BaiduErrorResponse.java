@@ -1,6 +1,8 @@
 package com.leyunone.cloudcloud.bean.third.baidu;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * :)

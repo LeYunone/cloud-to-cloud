@@ -2,9 +2,9 @@ package com.leyunone.cloudcloud.handler.convert.baidu;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
-import com.leyunone.cloudcloud.bean.third.baidu.BaiduAttributes;
 import com.leyunone.cloudcloud.bean.dto.DeviceFunctionDTO;
 import com.leyunone.cloudcloud.bean.mapping.StatusMapping;
+import com.leyunone.cloudcloud.bean.third.baidu.BaiduAttributes;
 import com.leyunone.cloudcloud.handler.convert.AbstractDataConvertHandler;
 import com.leyunone.cloudcloud.service.mapping.ProductMappingService;
 

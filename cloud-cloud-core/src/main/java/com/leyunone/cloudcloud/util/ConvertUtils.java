@@ -1,6 +1,5 @@
 package com.leyunone.cloudcloud.util;
 
-import com.leyunone.cloudcloud.bean.mapping.BaiduProductMapping;
 import com.leyunone.cloudcloud.bean.mapping.ProductMapping;
 
 import java.util.List;

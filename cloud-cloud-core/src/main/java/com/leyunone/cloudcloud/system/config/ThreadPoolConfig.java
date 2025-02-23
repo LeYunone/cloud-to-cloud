@@ -1,8 +1,6 @@
 package com.leyunone.cloudcloud.system.config;
 
 import com.leyunone.cloudcloud.system.properties.ReportThreadProperties;
-import io.netty.util.concurrent.DefaultThreadFactory;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

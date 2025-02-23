@@ -2,7 +2,6 @@ package com.leyunone.cloudcloud.mangaer;
 
 import com.leyunone.cloudcloud.bean.info.AccessTokenInfo;
 import com.leyunone.cloudcloud.bean.info.ThirdPartyCloudConfigInfo;
-import com.leyunone.cloudcloud.dao.entity.ThirdPartyClientDO;
 
 /**
  * :)

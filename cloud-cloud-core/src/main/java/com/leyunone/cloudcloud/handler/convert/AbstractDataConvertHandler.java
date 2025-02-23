@@ -3,8 +3,8 @@ package com.leyunone.cloudcloud.handler.convert;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.leyunone.cloudcloud.bean.enums.ConvertFunctionEnum;
 import com.leyunone.cloudcloud.bean.enums.ActionValueEnum;
+import com.leyunone.cloudcloud.bean.enums.ConvertFunctionEnum;
 import com.leyunone.cloudcloud.bean.mapping.ActionMapping;
 import com.leyunone.cloudcloud.bean.mapping.StatusMapping;
 import com.leyunone.cloudcloud.service.mapping.ProductMappingService;
@@ -41,6 +41,8 @@ public abstract class AbstractDataConvertHandler<R, P> implements ConvertHandler
                 case MAPPING_AFTER:
                     Object o = this.valueMapping(value, mapping);
                     return convertFunctionEnum.convert(o.toString());
+                default:
+                    break;
             }
         }
         return this.valueMapping(value, mapping);

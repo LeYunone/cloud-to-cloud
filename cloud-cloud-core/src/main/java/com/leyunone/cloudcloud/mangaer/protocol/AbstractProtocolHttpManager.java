@@ -9,7 +9,9 @@ import com.leyunone.cloudcloud.handler.factory.DefaultHttpServiceFactory;
 import com.leyunone.cloudcloud.mangaer.ClientOauthManager;
 import com.leyunone.cloudcloud.mangaer.ProtocolServiceHttpManager;
 import com.leyunone.cloudcloud.strategy.AbstractStrategyAutoRegisterComponent;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.client.RestTemplate;
 

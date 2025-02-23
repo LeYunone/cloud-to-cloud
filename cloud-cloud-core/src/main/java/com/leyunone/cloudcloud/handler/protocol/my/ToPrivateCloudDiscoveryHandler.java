@@ -1,23 +1,11 @@
 package com.leyunone.cloudcloud.handler.protocol.my;
 
-import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.util.ObjectUtil;
 import com.leyunone.cloudcloud.api.protocol.MyCompanyProtocolDTO;
-import com.leyunone.cloudcloud.api.protocol.MyCompanyProtocolDiscoveryRequest;
 import com.leyunone.cloudcloud.api.protocol.MyCompanyProtocolDiscoveryResponse;
 import com.leyunone.cloudcloud.bean.enums.ProtocolCommandEnum;
-import com.leyunone.cloudcloud.dao.DeviceRepository;
-import com.leyunone.cloudcloud.dao.entity.DeviceDO;
-import com.leyunone.cloudcloud.handler.factory.IotHttpServiceFactory;
 import com.leyunone.cloudcloud.handler.factory.MyProtocolHandlerFactory;
-import com.leyunone.cloudcloud.mangaer.ClientOauthManager;
-import com.leyunone.cloudcloud.service.ThirdPartyConfigService;
-import com.leyunone.cloudcloud.util.CollectionFunctionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Map;
 
 
 /**

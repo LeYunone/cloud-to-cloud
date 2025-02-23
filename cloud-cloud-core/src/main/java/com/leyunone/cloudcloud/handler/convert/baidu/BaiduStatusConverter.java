@@ -2,9 +2,9 @@ package com.leyunone.cloudcloud.handler.convert.baidu;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
-import com.leyunone.cloudcloud.bean.third.baidu.BaiduAttributes;
 import com.leyunone.cloudcloud.bean.info.DeviceInfo;
 import com.leyunone.cloudcloud.bean.mapping.ProductMapping;
+import com.leyunone.cloudcloud.bean.third.baidu.BaiduAttributes;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.service.mapping.ProductMappingService;
 import org.slf4j.Logger;

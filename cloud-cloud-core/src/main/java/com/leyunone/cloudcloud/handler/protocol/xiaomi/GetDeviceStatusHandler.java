@@ -33,7 +33,7 @@ public class GetDeviceStatusHandler extends AbstractStrategyXiaomiHandler<GetDev
     @Override
     protected GetDeviceStatus.Response action1(GetDeviceStatus.Request getDeviceStatus, ActionContext context) {
         String userId = context.getAccessTokenInfo().getUser().getUserId();
-        List<DeviceInfo> deviceShadowModels = deviceServiceHttpManager.getDevicesStatusByDeviceIds(userId, getDeviceStatus.getDevices(), context.getThirdPartyCloudConfigInfo());
+        List<DeviceInfo> deviceShadowModels = deviceServiceHttpManager.getDevicesStatusByDeviceIds(context, getDeviceStatus.getDevices());
         Map<String, DeviceInfo> deviceShadowModelMap = CollectionFunctionUtils.mapTo(deviceShadowModels, DeviceInfo::getDeviceId);
         List<XiaomiDevice> xiaomiDevices = getDeviceStatus.getDevices()
                 .stream()

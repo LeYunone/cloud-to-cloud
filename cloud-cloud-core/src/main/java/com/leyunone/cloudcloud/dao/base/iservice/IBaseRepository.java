@@ -1,10 +1,6 @@
 package com.leyunone.cloudcloud.dao.base.iservice;
 
-import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.extension.service.IService;
-
-import java.io.Serializable;
-import java.util.List;
 
 /**
  *  * 「使用方法」：

@@ -1,6 +1,5 @@
 package com.leyunone.cloudcloud.web.bean.dto;
 
-import com.leyunone.cloudcloud.bean.enums.ConvertFunctionEnum;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import lombok.Getter;
 import lombok.Setter;

@@ -11,6 +11,7 @@ import com.google.api.services.homegraph.v1.model.ReportStateAndNotificationRequ
 import com.google.api.services.homegraph.v1.model.ReportStateAndNotificationResponse;
 import com.google.api.services.homegraph.v1.model.StateAndNotificationPayload;
 import com.google.auth.http.HttpCredentialsAdapter;
+import com.google.auth.oauth2.GoogleCredentials;
 import com.leyunone.cloudcloud.bean.enums.ReportTypeEnum;
 import com.leyunone.cloudcloud.bean.info.DeviceCloudInfo;
 import com.leyunone.cloudcloud.bean.info.DeviceInfo;
@@ -20,7 +21,6 @@ import com.leyunone.cloudcloud.handler.convert.google.GoogleStatusConvert;
 import com.leyunone.cloudcloud.handler.factory.DeviceReportHandlerFactory;
 import com.leyunone.cloudcloud.service.ThirdPartyConfigService;
 import org.slf4j.Logger;
-import com.google.auth.oauth2.GoogleCredentials;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;

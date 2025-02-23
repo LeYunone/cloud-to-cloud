@@ -2,14 +2,15 @@ package com.leyunone.cloudcloud.handler.action;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.leyunone.cloudcloud.bean.third.alexa.*;
 import com.leyunone.cloudcloud.bean.info.AccessTokenInfo;
 import com.leyunone.cloudcloud.bean.info.ActionContext;
 import com.leyunone.cloudcloud.bean.info.ThirdPartyCloudConfigInfo;
+import com.leyunone.cloudcloud.bean.third.alexa.AlexaDiscoveryResponse;
+import com.leyunone.cloudcloud.bean.third.alexa.AlexaHeader;
+import com.leyunone.cloudcloud.bean.third.alexa.AlexaStandardRequest;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.handler.factory.CloudCloudHandlerFactory;
 import com.leyunone.cloudcloud.handler.protocol.AbstractStrategyProtocolHandler;
-import com.leyunone.cloudcloud.handler.protocol.CloudProtocolHandler;
 import com.leyunone.cloudcloud.mangaer.AccessTokenManager;
 import com.leyunone.cloudcloud.service.ThirdPartyConfigService;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ public class AlexaCloudHandler extends AbstractCloudCloudHandler {
     /**
      * @return 策略key
      */
+    @Override
     protected String getKey() {
         return ThirdPartyCloudEnum.ALEXA.name();
     }

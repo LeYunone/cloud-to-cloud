@@ -35,7 +35,7 @@ public class SetPropertiesHandler extends AbstractStrategyXiaomiHandler<SetPrope
     @Override
     protected SetProperties action1(SetProperties setProperties, ActionContext context) {
         List<DeviceFunctionDTO> functionCodeCommands = xiaomiControlConverter.convert(setProperties.getProperties());
-        deviceServiceHttpManager.commands(context.getAccessTokenInfo().getUser().getUserId(), functionCodeCommands, context.getThirdPartyCloudConfigInfo());
+        deviceServiceHttpManager.commands(context, functionCodeCommands);
         List<XiaomiProperties> properties = setProperties.getProperties().stream().peek(sp -> sp.setStatus(XiaomiResultCode.SUCCESS.getCode())).collect(Collectors.toList());
         setProperties.setProperties(properties);
         return setProperties;

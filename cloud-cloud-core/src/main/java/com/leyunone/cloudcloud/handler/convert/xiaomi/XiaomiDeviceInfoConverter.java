@@ -1,6 +1,5 @@
 package com.leyunone.cloudcloud.handler.convert.xiaomi;
 
-import com.leyunone.cloudcloud.bean.enums.XiaomiIntent;
 import com.leyunone.cloudcloud.bean.info.DeviceInfo;
 import com.leyunone.cloudcloud.bean.mapping.ProductMapping;
 import com.leyunone.cloudcloud.bean.third.xiaomi.XiaomiDevice;

@@ -3,7 +3,6 @@ package com.leyunone.cloudcloud.bean.enums;
 import cn.hutool.core.collection.CollectionUtil;
 import com.leyunone.cloudcloud.bean.mapping.ActionMapping;
 import com.leyunone.cloudcloud.bean.third.alexa.AlexaControlRequest;
-import com.leyunone.cloudcloud.bean.mapping.AlexaProductMapping;
 import com.leyunone.cloudcloud.util.FunctionMethodUtils;
 
 import java.util.HashMap;

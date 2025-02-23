@@ -3,7 +3,6 @@ package com.leyunone.cloudcloud.util;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.leyunone.cloudcloud.dao.base.iservice.IBaseRepository;
-import com.leyunone.cloudcloud.util.CollectionFunctionUtils;
 
 import java.util.ArrayList;
 import java.util.List;

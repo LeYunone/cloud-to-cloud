@@ -1,13 +1,7 @@
 package com.leyunone.cloudcloud.handler.convert.alexa;
 
-import com.leyunone.cloudcloud.bean.mapping.AlexaProductMapping;
-import com.leyunone.cloudcloud.bean.mapping.ProductMapping;
 import com.leyunone.cloudcloud.handler.convert.AbstractDataConvertHandler;
 import com.leyunone.cloudcloud.service.mapping.ProductMappingService;
-
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * :)

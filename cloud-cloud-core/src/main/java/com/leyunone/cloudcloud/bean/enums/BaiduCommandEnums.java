@@ -2,8 +2,8 @@ package com.leyunone.cloudcloud.bean.enums;
 
 import com.alibaba.fastjson.JSON;
 import com.leyunone.cloudcloud.bean.RGBColor;
-import com.leyunone.cloudcloud.bean.third.baidu.DeviceControlRequest;
 import com.leyunone.cloudcloud.bean.mapping.ActionMapping;
+import com.leyunone.cloudcloud.bean.third.baidu.DeviceControlRequest;
 import org.springframework.util.StringUtils;
 
 import java.awt.*;

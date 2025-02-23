@@ -37,7 +37,7 @@ public class TmallDiscoverDeviceHandler extends AbstractStrategyTmallHandler<Tma
     @Override
     protected TmallDiscoverResponse action1(TmallDiscoverRequest tmallDiscoverRequest, ActionContext context) {
         String userId = context.getAccessTokenInfo().getUser().getUserId();
-        List<DeviceInfo> deviceInfos = deviceServiceHttpManager.getDeviceListByUserId(userId, context.getThirdPartyCloudConfigInfo());
+        List<DeviceInfo> deviceInfos = deviceServiceHttpManager.getDeviceListByUserId(context);
         /**
          * 设备关系存储
          */

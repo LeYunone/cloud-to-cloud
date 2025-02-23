@@ -1,6 +1,7 @@
 package com.leyunone.cloudcloud.bean.info;
 
 import com.leyunone.cloudcloud.bean.dto.DeviceFunctionDTO;
+import com.sun.istack.internal.NotNull;
 import lombok.*;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class DeviceInfo {
 
     private String deviceId;
 
+    @NotNull
     private String productId;
 
     private String version;
@@ -34,10 +36,5 @@ public class DeviceInfo {
     private boolean online;
     
     private String groupName;
-
-    /**
-     * 是否为场景设备
-     */
-    private boolean isScene;
     
 }

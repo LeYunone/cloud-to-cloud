@@ -1,8 +1,9 @@
 package com.leyunone.cloudcloud.bean.mapping;
 
 import com.alibaba.fastjson.JSONObject;
-import com.leyunone.cloudcloud.enums.OperationEnum;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.HashMap;

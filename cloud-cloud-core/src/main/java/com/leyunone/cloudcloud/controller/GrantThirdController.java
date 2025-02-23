@@ -1,10 +1,10 @@
 package com.leyunone.cloudcloud.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.leyunone.cloudcloud.bean.info.AccessTokenInfo;
 import com.leyunone.cloudcloud.bean.third.alexa.AlexaGetTokenResponse;
 import com.leyunone.cloudcloud.bean.third.alexa.AlexaHeader;
 import com.leyunone.cloudcloud.bean.third.alexa.AlexaTokenDTO;
-import com.leyunone.cloudcloud.bean.info.AccessTokenInfo;
 import com.leyunone.cloudcloud.mangaer.AccessTokenManager;
 import com.leyunone.cloudcloud.mangaer.impl.AlexaTokenManager;
 import org.springframework.web.bind.annotation.PostMapping;

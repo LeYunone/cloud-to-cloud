@@ -34,7 +34,7 @@ public class GetDevicesHandler extends AbstractStrategyXiaomiHandler<GetDevices,
     @Override
     protected GetDevices action1(GetDevices getDevices, ActionContext context) {
         String userId = context.getAccessTokenInfo().getUser().getUserId();
-        List<DeviceInfo> deviceShadowModels = deviceServiceHttpManager.getDeviceListByUserId(userId, context.getThirdPartyCloudConfigInfo());
+        List<DeviceInfo> deviceShadowModels = deviceServiceHttpManager.getDeviceListByUserId(context);
         super.doRelationStore(deviceShadowModels, userId, context.getAccessTokenInfo().getClientId(), ThirdPartyCloudEnum.XIAOMI, (m) -> {
 
         });

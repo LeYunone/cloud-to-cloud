@@ -1,6 +1,5 @@
 package com.leyunone.cloudcloud.api;
 
-import com.sun.istack.internal.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -8,8 +7,8 @@ import java.io.Serializable;
 
 /**
  * 设备控制
- * @author Yelandu
- * @date 2020/11/24
+ * @Author LeYunone
+ * @Date 2024/1/18 10:53
 **/
 @Data
 public class DeviceCommandDTO implements Serializable {
@@ -35,8 +34,6 @@ public class DeviceCommandDTO implements Serializable {
          */
 
         private String signCode;
-
-        private boolean isScene;
 
         /**
          * 值

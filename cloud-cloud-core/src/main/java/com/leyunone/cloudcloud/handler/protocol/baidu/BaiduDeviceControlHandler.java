@@ -44,7 +44,7 @@ public class BaiduDeviceControlHandler extends AbstractStrategyBaiduHandler<Devi
     @Override
     protected DeviceControlResponse action1(DeviceControlRequest request, ActionContext context) {
         DeviceFunctionDTO convert = baiduActionConvert.convert(request);
-        DeviceInfo deviceInfo = deviceServiceHttpManager.command(context.getAccessTokenInfo().getUser().getUserId(), convert, context.getThirdPartyCloudConfigInfo());
+        DeviceInfo deviceInfo = deviceServiceHttpManager.command(context, convert);
         List<BaiduAttributes> baiduAttributes = baiduStatusConverter.convert(deviceInfo);
         String name = request.getHeader().getName();
         String action = name.replaceAll("request", "");

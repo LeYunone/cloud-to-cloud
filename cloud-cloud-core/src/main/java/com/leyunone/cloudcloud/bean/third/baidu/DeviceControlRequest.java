@@ -1,7 +1,9 @@
 package com.leyunone.cloudcloud.bean.third.baidu;
 
 import com.alibaba.fastjson.JSONObject;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Map;
 

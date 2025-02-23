@@ -56,7 +56,7 @@ public class TmallDeviceControlHandler extends AbstractStrategyTmallHandler<Tmal
     protected TmallControlResponse action1(TmallControlRequest tmallControlRequest, ActionContext context) {
 
         List<DeviceFunctionDTO> functionCodeCommands = this.buildParams(tmallControlRequest);
-        List<DeviceInfo> commands = deviceServiceHttpManager.commands(context.getAccessTokenInfo().getUser().getUserId(), functionCodeCommands, context.getThirdPartyCloudConfigInfo());
+        List<DeviceInfo> commands = deviceServiceHttpManager.commands(context, functionCodeCommands);
         Map<String, DeviceInfo> deviceResult = CollectionFunctionUtils.mapTo(commands, DeviceInfo::getDeviceId);
         /**
          * 封装结果集

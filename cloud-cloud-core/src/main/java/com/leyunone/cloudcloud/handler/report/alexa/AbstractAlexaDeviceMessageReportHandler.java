@@ -1,14 +1,12 @@
 package com.leyunone.cloudcloud.handler.report.alexa;
 
+import com.leyunone.cloudcloud.bean.info.DeviceCloudInfo;
+import com.leyunone.cloudcloud.bean.info.DeviceInfo;
 import com.leyunone.cloudcloud.bean.info.ThirdPartyCloudConfigInfo;
 import com.leyunone.cloudcloud.bean.third.alexa.AlexaDeviceProperty;
 import com.leyunone.cloudcloud.bean.third.alexa.AlexaDeviceReportBean;
 import com.leyunone.cloudcloud.bean.third.alexa.AlexaEndpoint;
 import com.leyunone.cloudcloud.bean.third.alexa.AlexaHeader;
-import com.leyunone.cloudcloud.bean.info.DeviceCloudInfo;
-import com.leyunone.cloudcloud.bean.info.DeviceInfo;
-import com.leyunone.cloudcloud.dao.ThirdPartyClientRepository;
-import com.leyunone.cloudcloud.dao.entity.ThirdPartyClientDO;
 import com.leyunone.cloudcloud.handler.factory.DeviceReportHandlerFactory;
 import com.leyunone.cloudcloud.handler.report.AbstractStatusCommonReportHandler;
 import com.leyunone.cloudcloud.service.ThirdPartyConfigService;

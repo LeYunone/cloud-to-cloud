@@ -1,14 +1,5 @@
 package com.leyunone.cloudcloud.bean;
 
-import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.util.ObjectUtil;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-
 /**
  * :)
  *
@@ -17,4 +8,10 @@ import java.util.Set;
  */
 public class CurrentRequestContext {
 
+    private static final ThreadLocal<Object> current = new ThreadLocal<>();
+
+    public static void remove() {
+        current.remove();
+    }
 }
+

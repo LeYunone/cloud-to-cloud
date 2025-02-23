@@ -1,7 +1,6 @@
 package com.leyunone.cloudcloud.system.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 
 /**
  * :)

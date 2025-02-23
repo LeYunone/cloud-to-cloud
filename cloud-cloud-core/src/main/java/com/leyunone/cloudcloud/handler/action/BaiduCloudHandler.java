@@ -1,17 +1,14 @@
 package com.leyunone.cloudcloud.handler.action;
 
 import com.alibaba.fastjson.JSONObject;
-import com.leyunone.cloudcloud.bean.CurrentRequestContext;
-import com.leyunone.cloudcloud.bean.third.baidu.BaiduHeader;
-import com.leyunone.cloudcloud.bean.third.baidu.BaiduStandardRequest;
 import com.leyunone.cloudcloud.bean.info.AccessTokenInfo;
 import com.leyunone.cloudcloud.bean.info.ActionContext;
 import com.leyunone.cloudcloud.bean.info.ThirdPartyCloudConfigInfo;
-import com.leyunone.cloudcloud.constant.VoiceConstants;
+import com.leyunone.cloudcloud.bean.third.baidu.BaiduHeader;
+import com.leyunone.cloudcloud.bean.third.baidu.BaiduStandardRequest;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.handler.factory.CloudCloudHandlerFactory;
 import com.leyunone.cloudcloud.handler.protocol.AbstractStrategyProtocolHandler;
-import com.leyunone.cloudcloud.handler.protocol.CloudProtocolHandler;
 import com.leyunone.cloudcloud.mangaer.AccessTokenManager;
 import com.leyunone.cloudcloud.service.ThirdPartyConfigService;
 import org.springframework.stereotype.Service;

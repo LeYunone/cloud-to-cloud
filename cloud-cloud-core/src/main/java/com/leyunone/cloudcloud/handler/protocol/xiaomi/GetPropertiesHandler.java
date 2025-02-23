@@ -42,7 +42,7 @@ public class GetPropertiesHandler extends AbstractStrategyXiaomiHandler<GetPrope
                 .map(XiaomiProperties::getDid)
                 .distinct()
                 .collect(Collectors.toList());
-        List<DeviceInfo> devicesStatus = deviceServiceHttpManager.getDevicesStatusByDeviceIds(context.getAccessTokenInfo().getUser().getUserId(), deviceIds, context.getThirdPartyCloudConfigInfo());
+        List<DeviceInfo> devicesStatus = deviceServiceHttpManager.getDevicesStatusByDeviceIds(context, deviceIds);
         List<XiaomiProperties> statusProperties = xiaomiStatusConverter.convert(devicesStatus);
         Map<String, Map<String, XiaomiProperties>> groupStatusByDeviceId = statusProperties
                 .stream()

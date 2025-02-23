@@ -1,14 +1,10 @@
 package com.leyunone.cloudcloud.handler.protocol.my;
 
-import cn.hutool.core.collection.CollectionUtil;
 import com.leyunone.cloudcloud.api.protocol.MyCompanyProtocolDTO;
 import com.leyunone.cloudcloud.bean.enums.ProtocolCommandEnum;
-import com.leyunone.cloudcloud.dao.entity.DeviceDO;
 import com.leyunone.cloudcloud.handler.factory.MyProtocolHandlerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 
 /**

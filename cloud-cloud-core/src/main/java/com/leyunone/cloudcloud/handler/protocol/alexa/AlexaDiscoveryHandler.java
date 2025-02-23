@@ -1,11 +1,11 @@
 package com.leyunone.cloudcloud.handler.protocol.alexa;
 
+import com.leyunone.cloudcloud.bean.info.ActionContext;
+import com.leyunone.cloudcloud.bean.info.DeviceInfo;
 import com.leyunone.cloudcloud.bean.third.alexa.AlexaDevice;
 import com.leyunone.cloudcloud.bean.third.alexa.AlexaDiscoveryRequest;
 import com.leyunone.cloudcloud.bean.third.alexa.AlexaDiscoveryResponse;
 import com.leyunone.cloudcloud.bean.third.alexa.AlexaHeader;
-import com.leyunone.cloudcloud.bean.info.ActionContext;
-import com.leyunone.cloudcloud.bean.info.DeviceInfo;
 import com.leyunone.cloudcloud.constant.AlexaActionConstants;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.handler.convert.alexa.AlexaDeviceInfoConverter;
@@ -39,7 +39,7 @@ public class AlexaDiscoveryHandler extends AbstractStrategyAlexaHandler<AlexaDis
     @Override
     protected AlexaDiscoveryResponse action1(AlexaDiscoveryRequest alexaDiscoveryRequest, ActionContext context) {
         List<DeviceInfo> deviceInfos = deviceServiceHttpManager
-                .getDeviceListByUserId(context.getAccessTokenInfo().getUser().getUserId(), context.getThirdPartyCloudConfigInfo());
+                .getDeviceListByUserId(context);
         super.doRelationStore(deviceInfos,
                 context.getAccessTokenInfo().getUser().getUserId(),
                 context.getThirdPartyCloudConfigInfo().getClientId(), ThirdPartyCloudEnum.ALEXA, (thirdMapping -> {

@@ -1,8 +1,8 @@
 package com.leyunone.cloudcloud.handler.protocol.alexa;
 
-import com.leyunone.cloudcloud.bean.third.alexa.*;
 import com.leyunone.cloudcloud.bean.info.ActionContext;
 import com.leyunone.cloudcloud.bean.info.DeviceInfo;
+import com.leyunone.cloudcloud.bean.third.alexa.*;
 import com.leyunone.cloudcloud.constant.AlexaActionConstants;
 import com.leyunone.cloudcloud.handler.convert.alexa.AlexaStatusConverter;
 import com.leyunone.cloudcloud.handler.factory.CloudProtocolHandlerFactory;
@@ -34,8 +34,7 @@ public class AlexaStateReportHandler extends AbstractStrategyAlexaHandler<AlexaS
     @Override
     protected AlexaStateReportResponse action1(AlexaStateReportRequest alexaStateReportRequest, ActionContext context) {
         String deviceId = alexaStateReportRequest.getDirective().getEndpoint().getEndpointId();
-        DeviceInfo deviceInfo = deviceServiceHttpManager.getDeviceStatusByDeviceId(context.getAccessTokenInfo().getUser().getUserId(),
-                deviceId, context.getThirdPartyCloudConfigInfo());
+        DeviceInfo deviceInfo = deviceServiceHttpManager.getDeviceStatusByDeviceId(context, deviceId);
         List<AlexaDeviceProperty> properties = alexaStatusConverter.convert(deviceInfo);
         return new AlexaStateReportResponse(AlexaStateReportResponse.Event.builder()
                 .header(

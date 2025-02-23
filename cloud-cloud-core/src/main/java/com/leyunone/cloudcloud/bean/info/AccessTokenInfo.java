@@ -3,8 +3,6 @@ package com.leyunone.cloudcloud.bean.info;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import lombok.*;
 
-import java.time.LocalDateTime;
-
 /**
  * :)
  *
@@ -30,6 +28,10 @@ public class AccessTokenInfo {
     private Long expiresIn;
 
     private String tokenType;
+    /**
+     * 业务id
+     */
+    private String businessId;
 
     private User user;
 

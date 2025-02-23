@@ -39,7 +39,7 @@ public abstract class AbstractStrategyAutoRegisterComponent implements Initializ
 
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         getKeys().forEach(key -> factory.register(key, this));
     }
 }

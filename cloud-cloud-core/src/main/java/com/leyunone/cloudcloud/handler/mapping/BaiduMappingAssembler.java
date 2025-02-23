@@ -1,6 +1,5 @@
 package com.leyunone.cloudcloud.handler.mapping;
 
-import cn.hutool.core.util.ObjectUtil;
 import com.leyunone.cloudcloud.bean.mapping.BaiduProductMapping;
 import com.leyunone.cloudcloud.dao.ActionMappingRepository;
 import com.leyunone.cloudcloud.dao.FunctionMappingRepository;
@@ -12,8 +11,6 @@ import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.handler.factory.MappingAssemblerFactory;
 import com.leyunone.cloudcloud.mangaer.CacheManager;
 import com.leyunone.cloudcloud.util.CollectionFunctionUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Map;

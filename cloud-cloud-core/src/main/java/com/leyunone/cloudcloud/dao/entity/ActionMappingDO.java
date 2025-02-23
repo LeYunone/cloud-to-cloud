@@ -1,7 +1,6 @@
 package com.leyunone.cloudcloud.dao.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.leyunone.cloudcloud.bean.enums.ConvertFunctionEnum;
 import com.leyunone.cloudcloud.enums.OperationEnum;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
@@ -9,7 +8,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**

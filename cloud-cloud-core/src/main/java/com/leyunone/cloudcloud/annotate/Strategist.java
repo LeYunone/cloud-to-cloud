@@ -1,6 +1,5 @@
 package com.leyunone.cloudcloud.annotate;
 
-import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.stereotype.Component;
 

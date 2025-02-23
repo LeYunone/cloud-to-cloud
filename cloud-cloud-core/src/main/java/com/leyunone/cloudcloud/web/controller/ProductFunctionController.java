@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.leyunone.cloudcloud.bean.DataResponse;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.web.bean.dto.ProductFunctionDTO;
-import com.leyunone.cloudcloud.web.bean.query.ProductFunctionQuery;
 import com.leyunone.cloudcloud.web.bean.query.ProductTypeQuery;
 import com.leyunone.cloudcloud.web.bean.vo.ProductFunctionMappingVO;
 import com.leyunone.cloudcloud.web.bean.vo.ProductFunctionVO;

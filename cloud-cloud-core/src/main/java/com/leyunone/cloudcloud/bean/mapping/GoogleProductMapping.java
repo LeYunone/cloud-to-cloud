@@ -1,6 +1,5 @@
 package com.leyunone.cloudcloud.bean.mapping;
 
-import com.alibaba.fastjson.JSONObject;
 import lombok.Getter;
 import lombok.Setter;
 

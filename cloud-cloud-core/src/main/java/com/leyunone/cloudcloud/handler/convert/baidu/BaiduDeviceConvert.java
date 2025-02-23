@@ -1,13 +1,12 @@
 package com.leyunone.cloudcloud.handler.convert.baidu;
 
 import cn.hutool.core.collection.CollectionUtil;
-import com.leyunone.cloudcloud.bean.third.baidu.BaiduAttributes;
-import com.leyunone.cloudcloud.bean.third.baidu.BaiduDevice;
 import com.leyunone.cloudcloud.bean.info.DeviceInfo;
 import com.leyunone.cloudcloud.bean.mapping.ActionMapping;
 import com.leyunone.cloudcloud.bean.mapping.BaiduProductMapping;
 import com.leyunone.cloudcloud.bean.mapping.ProductMapping;
-import com.leyunone.cloudcloud.constant.VoiceConstants;
+import com.leyunone.cloudcloud.bean.third.baidu.BaiduAttributes;
+import com.leyunone.cloudcloud.bean.third.baidu.BaiduDevice;
 import com.leyunone.cloudcloud.enums.ThirdPartyCloudEnum;
 import com.leyunone.cloudcloud.service.mapping.ProductMappingService;
 import com.leyunone.cloudcloud.util.ConvertUtils;
@@ -43,14 +42,6 @@ public class BaiduDeviceConvert extends AbstractBaiduDataConverterTemplate<List<
                 .map(d -> {
                     String productId = d.getProductId();
                     Map<String, String> additionalApplianceDetails = new HashMap<>(16);
-                    if(d.isScene()) {
-                        productId = VoiceConstants.SCENE_PRODUCT_ID;
-                        /**
-                         * 场景设备
-                         * 百度特指 productId = scene
-                         */
-                        additionalApplianceDetails.put(VoiceConstants.SCENES_KEY,String.valueOf(d.getDeviceId()));
-                    }
                     additionalApplianceDetails.put("productId", d.getProductId());
                     BaiduProductMapping baiduProductMapping = baiduProductMappingMap.get(productId);
                     if (null == baiduProductMapping) {
